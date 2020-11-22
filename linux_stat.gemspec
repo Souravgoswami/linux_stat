@@ -10,9 +10,9 @@ Gem::Specification.new do |spec|
   spec.description   = %q{Efficient linux system reporting gem. Linux Only | Efficient | Reliable}
   spec.homepage      = "https://github.com/Souravgoswami/linux_stat/"
   spec.license       = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.4.0")
+  spec.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
 
-  spec.metadata["allowed_push_host"] = "https://github.com/Souravgoswami/linux_stat'"
+  # spec.metadata["allowed_push_host"] = "https://github.com/Souravgoswami/linux_stat'"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/Souravgoswami/linux_stat/"

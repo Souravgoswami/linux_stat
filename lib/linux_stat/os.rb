@@ -11,6 +11,40 @@ module LinuxStat
 				@@lsb_release ||= File.readable?('/etc/lsb-release') ? release('/etc/lsb-release') : {}
 			end
 
+			def distribution
+				@@distribution ||= if os_release.key?(:NAME)
+					os_release[:NAME]
+				else
+					v = lsb_release
+
+					if v.key?(:DISTRIB_DESCRIPTION)
+						v[:DISTRIB_DESCRIPTION]
+					elsif v.key?(:DISTRIB_ID)
+						v[:DISTRIB_ID]
+					elsif File.readable?('/etc/issue')
+						IO.read('/etc/issue').strip
+					else
+						'Unknown'.freeze
+					end
+				end
+			end
+
+			def hostname
+				@@hostname ||= if File.exist?('/etc/hostname')
+					IO.read('/etc/hostname').strip
+				else
+					'localhost'
+				end
+			end
+
+			def bits
+				@@bits ||= if RbConfig::CONFIG['host_cpu'].end_with?('64') || RUBY_PLATFORM[/x86_64/]
+					64
+				else
+					32
+				end
+			end
+
 			def uptime
 				raise StatUnavailable, 'Cannot read /proc/uptime' unless uptime_readable?
 
@@ -39,8 +73,10 @@ module LinuxStat
 					key = splitted[0].to_s.strip
 					value = splitted[1..-1].join(?=).to_s.strip
 
-					dumped = value[0] == ?" && value[-1] == ?"
-					h.merge!( key.to_sym => dumped ? value.undump : value )
+					value[0] = '' if value[0] == ?"
+					value[-1] = '' if value[-1] == ?"
+
+					h.merge!( key.to_sym => value )
 				}
 			end
 

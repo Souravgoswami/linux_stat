@@ -1,6 +1,6 @@
 # count idle list names running sleeping types zombie
 
-RSpec.describe LinuxStat do
+RSpec.describe LinuxStat::Process do
 	it "count returns an Integer" do
 		expect(LinuxStat::Process.count.class).to be Integer
 	end

@@ -1,6 +1,6 @@
 # available list stat total used
 
-RSpec.describe LinuxStat do
+RSpec.describe LinuxStat::Swap do
 	it "available returns an Integer" do
 		expect(LinuxStat::Swap.available.class).to be Integer
 	end

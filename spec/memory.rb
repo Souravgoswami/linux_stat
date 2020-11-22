@@ -1,6 +1,6 @@
 # total meminfo? available used percent_used percent_available
 
-RSpec.describe LinuxStat do
+RSpec.describe LinuxStat::Memory do
 	it "total returns an Integer" do
 		expect(LinuxStat::Memory.total.class).to be Integer
 	end

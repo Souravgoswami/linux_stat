@@ -1,7 +1,7 @@
 # LinuxStat
 ![logo](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/logo/logo.jpg)
 
-LinuxStat lets you read statistics of a Linux system. It can show you cpu stats and usages, memory stats and usages, swap stats and usages, battery usage, bios info,  kernel details, local ip, os details and parse os-release + lsb-release, etc.
+LinuxStat lets you read status of a Linux system. It can show you cpu stats and usages, memory stats and usages, swap stats and usages, battery usage, bios info,  kernel details, local ip, os details and parse os-release + lsb-release, etc.
 
 It only works for Linux, and detecting the OS is upto the user of this gem.
 

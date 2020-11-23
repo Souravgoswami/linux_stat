@@ -42,7 +42,7 @@ module LinuxStat
 
 					time = splitted.each_slice(8).find do |x|
 						x.each(&:strip!)
-						p Time.strptime(x.join(?\s.freeze), '%d %b %Y %H:%M:%S %z'.freeze) rescue nil
+						Time.strptime(x.join(?\s.freeze), '%d %b %Y %H:%M:%S %z'.freeze) rescue nil
 					end
 
 					time ? Time.strptime(time.join(?\s.freeze), "%d %b %Y %H:%M:%S %z") : Time.new(0)

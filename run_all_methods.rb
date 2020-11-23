@@ -1,20 +1,19 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
 require 'linux_stat'
-require 'io/console'
+
+$-v = true
 
 # Print time each method takes unless --no-time or -nt option is passed
 MARKDOWN = ARGV.any? { |x| x[/^\-\-markdown$/] || x[/^\-md$/] }
 PRINT_TIME = MARKDOWN ? false : !ARGV.any? { |x| x[/^\-\-no-time$/] || x[/^\-nt$/] }
-
-$-v = true
 
 LinuxStat.constants.sort.each do |c|
 	e = eval("LinuxStat::#{c}")
 
 	next if e.class != Module && e.class != Class
 
-	meths = e.methods(false)
+	meths = e.methods(false).sort
 
 	if meths.length > 0
 		if MARKDOWN
@@ -26,13 +25,13 @@ LinuxStat.constants.sort.each do |c|
 
 	meths.each do |meth|
 		time = Time.now
-		v = e.send(meth).to_s
+		v = e.send(meth).inspect
 		time = Time.now.-(time).*(1000).round(3)
 
 		dis = v.length > 253 ? v[0..250].strip + '...'.freeze : v
 
 		if MARKDOWN
-			puts "#{e}.#{meth}\n=> #{dis}"
+			puts "#{e}.#{meth}\n=> #{dis.inspect}"
 		else
 			puts "\e[1;38;2;80;80;255m#{e}.#{meth}\e[0m\n=> #{dis}"
 		end

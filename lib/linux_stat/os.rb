@@ -64,7 +64,7 @@ module LinuxStat
 
 			private
 			def release(file)
-				IO.readlines(file).reduce({}) { |h, x|
+				IO.readlines(file, 3000).reduce({}) { |h, x|
 					x.strip!
 					next h if x.empty?
 

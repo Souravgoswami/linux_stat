@@ -21,6 +21,21 @@ module LinuxStat
 				end
 			end
 
+			def total_usage(sleep = 0.075)
+				return {} unless stat?
+
+				data = IO.foreach('/proc/stat').first.split.tap(&:shift).map!(&:to_f)
+				sleep(sleep)
+				data2 = IO.foreach('/proc/stat').first.split.tap(&:shift).map!(&:to_f)
+
+				user, nice, sys, idle, iowait, irq, softirq, steal = *data
+				user2, nice2, sys2, idle2, iowait2, irq2, softirq2, steal2 = *data2
+
+				idle_then, idle_now  = idle + iowait, idle2 + iowait2
+				totald = idle_now.+(user2 + nice2 + sys2 + irq2 + softirq2 + steal2) - idle_then.+(user + nice + sys + irq + softirq + steal)
+				totald.-(idle_now - idle_then).fdiv(totald).*(100).round(2).abs
+			end
+
 			def count
 				# CPU count can change during the program runtime
 				cpuinfo.count { |x| x.start_with?('processor') }
@@ -49,6 +64,9 @@ module LinuxStat
 				@@max_freqs ||= Dir["/sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_max_freq"]
 				@@max_freqs.map { |x| IO.read(x).to_i }
 			end
+
+			alias usages stat
+			alias usage total_usage
 
 			private
 			def cpuinfo

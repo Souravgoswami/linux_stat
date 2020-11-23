@@ -24,22 +24,25 @@ Or install it yourself as:
 ## Usage
 ### LinuxStat::BIOS
 ```
+LinuxStat::BIOS.date
+=> "04/10/2017"
+
 LinuxStat::BIOS.model
-=> Inspiron 5567
+=> "Inspiron 5567"
 
 LinuxStat::BIOS.vendor
-=> Dell Inc.
-
-LinuxStat::BIOS.date
-=> 04/10/2017
+=> "Dell Inc."
 
 LinuxStat::BIOS.version
-=> 1.1.2
+=> "1.1.2"
 
 ```
 
 ### LinuxStat::Battery
 ```
+LinuxStat::Battery.charge
+=> 100.0
+
 LinuxStat::Battery.charging?
 => true
 
@@ -49,8 +52,11 @@ LinuxStat::Battery.discharging?
 LinuxStat::Battery.full?
 => true
 
-LinuxStat::Battery.status
-=> Full
+LinuxStat::Battery.manufacturer
+=> "Samsung SDI"
+
+LinuxStat::Battery.model
+=> "DELL CYMGM77"
 
 LinuxStat::Battery.present?
 => true
@@ -58,17 +64,11 @@ LinuxStat::Battery.present?
 LinuxStat::Battery.stat
 => {:model=>"DELL CYMGM77", :manufacturer=>"Samsung SDI", :technology=>"Li-ion", :status=>"Full", :charge=>100.0, :charging=>true, :discharging=>false, :full=>true}
 
-LinuxStat::Battery.model
-=> DELL CYMGM77
-
-LinuxStat::Battery.manufacturer
-=> Samsung SDI
+LinuxStat::Battery.status
+=> "Full"
 
 LinuxStat::Battery.technology
-=> Li-ion
-
-LinuxStat::Battery.charge
-=> 100.0
+=> "Li-ion"
 
 ```
 
@@ -77,62 +77,78 @@ LinuxStat::Battery.charge
 LinuxStat::CPU.count
 => 4
 
-LinuxStat::CPU.stat
-=> {0=>3.33, 1=>0.0, 2=>0.0, 3=>0.0, 4=>12.5}
-
-LinuxStat::CPU.model
-=> Intel(R) Core(TM) i3-6006U CPU @ 2.00GHz
-
 LinuxStat::CPU.cur_freq
-=> [2000064, 2000098, 2000049, 2000091]
+=> [1998356, 1999492, 1936622, 1963919]
 
 LinuxStat::CPU.max_freq
 => [2000000, 2000000, 2000000, 2000000]
+
+LinuxStat::CPU.model
+=> "Intel(R) Core(TM) i3-6006U CPU @ 2.00GHz"
+
+LinuxStat::CPU.stat
+=> {0=>0.0, 1=>0.0, 2=>0.0, 3=>0.0, 4=>0.0}
+
+LinuxStat::CPU.total_usage
+=> 6.45
+
+LinuxStat::CPU.usage
+=> 7.14
+
+LinuxStat::CPU.usages
+=> {0=>3.33, 1=>0.0, 2=>0.0, 3=>0.0, 4=>0.0}
 
 ```
 
 ### LinuxStat::Kernel
 ```
-LinuxStat::Kernel.compiler
-=> [:gcc, "10.2.0"]
-
-LinuxStat::Kernel.string
-=> Linux version 5.9.1-xanmod1-1 (souravgoswami@archlinux) (gcc (GCC) 10.2.0, GNU ld (GNU Binutils) 2.35.1) #1 SMP PREEMPT Wed, 21 Oct 2020 01:11:20 +0000
-
+2020-10-21 01:11:20 +0000
 LinuxStat::Kernel.build_date
 => 2020-10-21 01:11:20 +0000
 
+LinuxStat::Kernel.build_user
+=> "souravgoswami@archlinux"
+
+LinuxStat::Kernel.compiler
+=> [:gcc, "10.2.0"]
+
+LinuxStat::Kernel.compiler_version
+=> "10.2.0"
+
+LinuxStat::Kernel.string
+=> "Linux version 5.9.1-xanmod1-1 (souravgoswami@archlinux) (gcc (GCC) 10.2.0, GNU ld (GNU Binutils) 2.35.1) #1 SMP PREEMPT Wed, 21 Oct 2020 01:11:20 +0000"
+
 LinuxStat::Kernel.version
-=> 5.9.1-xanmod1-1
+=> "5.9.1-xanmod1-1"
 
 ```
 
 ### LinuxStat::Memory
 ```
-LinuxStat::Memory.percent_available
-=> 15.52
-
-LinuxStat::Memory.stat
-=> {:total=>3836256, :used=>3240812, :available=>595444, :percent_used=>84.48, :percent_available=>15.52}
-
-LinuxStat::Memory.total
-=> 3836256
-
 LinuxStat::Memory.available
-=> 595444
+=> 565044
 
-LinuxStat::Memory.used
-=> 3240812
+LinuxStat::Memory.percent_available
+=> 14.73
 
 LinuxStat::Memory.percent_used
-=> 84.48
+=> 85.27
+
+LinuxStat::Memory.stat
+=> {:total=>3836264, :used=>3271220, :available=>565044, :percent_used=>85.27, :percent_available=>14.73}
+
+LinuxStat::Memory.total
+=> 3836264
+
+LinuxStat::Memory.used
+=> 3271220
 
 ```
 
 ### LinuxStat::Net
 ```
 LinuxStat::Net.ipv4_private
-=> 192.168.0.106
+=> "192.168.0.106"
 
 ```
 
@@ -141,73 +157,73 @@ LinuxStat::Net.ipv4_private
 LinuxStat::OS.bits
 => 64
 
-LinuxStat::OS.uptime
-=> {:hour=>10, :minute=>42, :second=>33.85}
+LinuxStat::OS.distribution
+=> "Arch Linux"
 
-LinuxStat::OS.os_release
-=> {:NAME=>"Arch Linux", :PRETTY_NAME=>"Arch Linux", :ID=>"arch", :BUILD_ID=>"rolling", :ANSI_COLOR=>"38;2;23;147;209", :HOME_URL=>"https://www.archlinux.org/", :DOCUMENTATION_URL=>"https://wiki.archlinux.org/", :SUPPORT_URL=>"https://bbs.archlinux.org/"...
+LinuxStat::OS.hostname
+=> "archlinux"
 
 LinuxStat::OS.lsb_release
 => {:LSB_VERSION=>"1.4", :DISTRIB_ID=>"Arch", :DISTRIB_RELEASE=>"rolling", :DISTRIB_DESCRIPTION=>"Arch Linux"}
 
-LinuxStat::OS.hostname
-=> archlinux
+LinuxStat::OS.os_release
+=> {:NAME=>"Arch Linux", :PRETTY_NAME=>"Arch Linux", :ID=>"arch", :BUILD_ID=>"rolling", :ANSI_COLOR=>"38;2;23;147;209", :HOME_URL=>"https://www.archlinux.org/", :DOCUMENTATION_URL=>"https://wiki.archlinux.org/", :SUPPORT_URL=>"https://bbs.archlinux.org/"...
 
-LinuxStat::OS.distribution
-=> Arch Linux
+LinuxStat::OS.uptime
+=> {:hour=>11, :minute=>24, :second=>20.34}
 
 ```
 
 ### LinuxStat::Process
 ```
 LinuxStat::Process.count
-=> 213
+=> 212
+
+LinuxStat::Process.idle
+=> [3, 4, 6, 9, 12, 23, 30, 37, 39, 49, 102, 103, 104, 106, 107, 108, 109, 110, 117, 118, 119, 121, 131, 134, 140, 152, 153, 170, 172, 174, 177, 179, 180, 184, 185, 186, 187, 188, 189, 227, 274, 285, 293, 316, 1918, 1919, 1920, 1921, 1922, 1923, 59157, 5...
+
+LinuxStat::Process.list
+=> [1, 2, 3, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 46, 47, 48, 49, 50, 51, 52, 102, 103, 104, 106, 107, 108, 109, 110, 111, 114, 115, 117, 118, 119, 121, 131, 134,...
+
+LinuxStat::Process.names
+=> {1=>"systemd", 2=>"kthreadd", 3=>"rcu_gp", 4=>"rcu_par_gp", 6=>"kworker/0:0H", 9=>"mm_percpu_wq", 10=>"ksoftirqd/0", 11=>"rcuc/0", 12=>"rcu_preempt", 13=>"rcub/0", 14=>"migration/0", 15=>"idle_inject/0", 16=>"cpuhp/0", 17=>"cpuhp/1", 18=>"idle_inject/...
+
+LinuxStat::Process.running
+=> [63506]
+
+LinuxStat::Process.sleeping
+=> [1, 2, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 38, 40, 41, 42, 46, 47, 48, 50, 51, 52, 111, 114, 115, 169, 171, 190, 217, 228, 284, 291, 311, 322, 334, 335, 336, 346, 349, 350, 353, 362, 365, 367, 369, 382,...
 
 LinuxStat::Process.types
 => {1=>:sleeping, 2=>:sleeping, 3=>:idle, 4=>:idle, 6=>:idle, 9=>:idle, 10=>:sleeping, 11=>:sleeping, 12=>:idle, 13=>:sleeping, 14=>:sleeping, 15=>:sleeping, 16=>:sleeping, 17=>:sleeping, 18=>:sleeping, 19=>:sleeping, 20=>:sleeping, 21=>:sleeping, 23=>:i...
 
-LinuxStat::Process.names
-=> {1=>"systemd", 2=>"kthreadd", 3=>"rcu_gp", 4=>"rcu_par_gp", 6=>"kworker/0:0H-kblockd", 9=>"mm_percpu_wq", 10=>"ksoftirqd/0", 11=>"rcuc/0", 12=>"rcu_preempt", 13=>"rcub/0", 14=>"migration/0", 15=>"idle_inject/0", 16=>"cpuhp/0", 17=>"cpuhp/1", 18=>"idle...
-
-LinuxStat::Process.idle
-=> [3, 4, 6, 9, 12, 23, 30, 37, 39, 49, 102, 103, 104, 106, 107, 108, 109, 110, 117, 118, 119, 121, 131, 134, 140, 152, 153, 168, 170, 172, 173, 177, 181, 182, 183, 184, 185, 186, 220, 225, 271, 322, 326, 329, 333, 2914, 2915, 2916, 2917, 2918, 2919, 289...
-
-LinuxStat::Process.list
-=> [1, 2, 3, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 46, 47, 48, 49, 50, 51, 52, 102, 103, 104, 106, 107, 108, 109, 110, 112, 114, 115, 117, 118, 119, 121, 131, 134,...
-
-LinuxStat::Process.sleeping
-=> [1, 2, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 38, 40, 41, 42, 46, 47, 48, 50, 51, 52, 112, 114, 115, 167, 169, 187, 214, 229, 314, 316, 317, 318, 319, 324, 325, 327, 340, 361, 362, 363, 364, 372, 375, 378,...
-
 LinuxStat::Process.zombie
 => []
-
-LinuxStat::Process.running
-=> [32117]
 
 ```
 
 ### LinuxStat::Swap
 ```
+LinuxStat::Swap.available
+=> 3287712
+
+LinuxStat::Swap.list
+=> {"/dev/zram0"=>[:partition, 4194300, 906588, -2]}
+
 LinuxStat::Swap.percent_available
-=> 68.07
+=> 78.39
+
+LinuxStat::Swap.percent_used
+=> 21.61
 
 LinuxStat::Swap.stat
-=> {:total=>4194300, :used=>1339328, :available=>2854972, :percent_used=>31.93, :percent_available=>68.07}
+=> {:total=>4194300, :used=>906588, :available=>3287712, :percent_used=>21.61, :percent_available=>78.39}
 
 LinuxStat::Swap.total
 => 4194300
 
-LinuxStat::Swap.list
-=> {"/dev/zram0"=>[:partition, 4194300, 1339328, -2]}
-
-LinuxStat::Swap.available
-=> 2854972
-
 LinuxStat::Swap.used
-=> 1339328
-
-LinuxStat::Swap.percent_used
-=> 31.93
+=> 906588
 
 ```
 

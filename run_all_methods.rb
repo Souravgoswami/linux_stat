@@ -31,7 +31,7 @@ LinuxStat.constants.sort.each do |c|
 		dis = v.length > 253 ? v[0..250].strip + '...'.freeze : v
 
 		if MARKDOWN
-			puts "#{e}.#{meth}\n=> #{dis.inspect}"
+			puts "#{e}.#{meth}\n=> #{dis}"
 		else
 			puts "\e[1;38;2;80;80;255m#{e}.#{meth}\e[0m\n=> #{dis}"
 		end

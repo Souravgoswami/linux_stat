@@ -78,7 +78,7 @@ LinuxStat::CPU.count
 => 4
 
 LinuxStat::CPU.cur_freq
-=> [1998356, 1999492, 1936622, 1963919]
+=> [1973525, 2000029, 2000168, 2000152]
 
 LinuxStat::CPU.max_freq
 => [2000000, 2000000, 2000000, 2000000]
@@ -87,22 +87,21 @@ LinuxStat::CPU.model
 => "Intel(R) Core(TM) i3-6006U CPU @ 2.00GHz"
 
 LinuxStat::CPU.stat
-=> {0=>0.0, 1=>0.0, 2=>0.0, 3=>0.0, 4=>0.0}
+=> {0=>6.45, 1=>12.5, 2=>0.0, 3=>0.0, 4=>12.5}
 
 LinuxStat::CPU.total_usage
-=> 6.45
+=> 6.67
 
 LinuxStat::CPU.usage
-=> 7.14
+=> 0.0
 
 LinuxStat::CPU.usages
-=> {0=>3.33, 1=>0.0, 2=>0.0, 3=>0.0, 4=>0.0}
+=> {0=>9.68, 1=>0.0, 2=>12.5, 3=>0.0, 4=>12.5}
 
 ```
 
 ### LinuxStat::Kernel
 ```
-2020-10-21 01:11:20 +0000
 LinuxStat::Kernel.build_date
 => 2020-10-21 01:11:20 +0000
 
@@ -126,22 +125,22 @@ LinuxStat::Kernel.version
 ### LinuxStat::Memory
 ```
 LinuxStat::Memory.available
-=> 565044
+=> 496044
 
 LinuxStat::Memory.percent_available
-=> 14.73
+=> 12.93
 
 LinuxStat::Memory.percent_used
-=> 85.27
+=> 87.07
 
 LinuxStat::Memory.stat
-=> {:total=>3836264, :used=>3271220, :available=>565044, :percent_used=>85.27, :percent_available=>14.73}
+=> {:total=>3836264, :used=>3340220, :available=>496044, :percent_used=>87.07, :percent_available=>12.93}
 
 LinuxStat::Memory.total
 => 3836264
 
 LinuxStat::Memory.used
-=> 3271220
+=> 3340220
 
 ```
 
@@ -170,7 +169,7 @@ LinuxStat::OS.os_release
 => {:NAME=>"Arch Linux", :PRETTY_NAME=>"Arch Linux", :ID=>"arch", :BUILD_ID=>"rolling", :ANSI_COLOR=>"38;2;23;147;209", :HOME_URL=>"https://www.archlinux.org/", :DOCUMENTATION_URL=>"https://wiki.archlinux.org/", :SUPPORT_URL=>"https://bbs.archlinux.org/"...
 
 LinuxStat::OS.uptime
-=> {:hour=>11, :minute=>24, :second=>20.34}
+=> {:hour=>11, :minute=>33, :second=>52.62}
 
 ```
 
@@ -180,7 +179,7 @@ LinuxStat::Process.count
 => 212
 
 LinuxStat::Process.idle
-=> [3, 4, 6, 9, 12, 23, 30, 37, 39, 49, 102, 103, 104, 106, 107, 108, 109, 110, 117, 118, 119, 121, 131, 134, 140, 152, 153, 170, 172, 174, 177, 179, 180, 184, 185, 186, 187, 188, 189, 227, 274, 285, 293, 316, 1918, 1919, 1920, 1921, 1922, 1923, 59157, 5...
+=> [3, 4, 6, 9, 12, 23, 30, 37, 39, 49, 102, 103, 104, 106, 107, 108, 109, 110, 117, 118, 119, 121, 131, 134, 140, 152, 153, 170, 172, 174, 177, 179, 180, 184, 185, 186, 187, 188, 189, 227, 274, 285, 293, 316, 1918, 1919, 1920, 1921, 1922, 1923, 62565, 6...
 
 LinuxStat::Process.list
 => [1, 2, 3, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 46, 47, 48, 49, 50, 51, 52, 102, 103, 104, 106, 107, 108, 109, 110, 111, 114, 115, 117, 118, 119, 121, 131, 134,...
@@ -189,7 +188,7 @@ LinuxStat::Process.names
 => {1=>"systemd", 2=>"kthreadd", 3=>"rcu_gp", 4=>"rcu_par_gp", 6=>"kworker/0:0H", 9=>"mm_percpu_wq", 10=>"ksoftirqd/0", 11=>"rcuc/0", 12=>"rcu_preempt", 13=>"rcub/0", 14=>"migration/0", 15=>"idle_inject/0", 16=>"cpuhp/0", 17=>"cpuhp/1", 18=>"idle_inject/...
 
 LinuxStat::Process.running
-=> [63506]
+=> [64200]
 
 LinuxStat::Process.sleeping
 => [1, 2, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 38, 40, 41, 42, 46, 47, 48, 50, 51, 52, 111, 114, 115, 169, 171, 190, 217, 228, 284, 291, 311, 322, 334, 335, 336, 346, 349, 350, 353, 362, 365, 367, 369, 382,...
@@ -205,25 +204,25 @@ LinuxStat::Process.zombie
 ### LinuxStat::Swap
 ```
 LinuxStat::Swap.available
-=> 3287712
+=> 3142816
 
 LinuxStat::Swap.list
-=> {"/dev/zram0"=>[:partition, 4194300, 906588, -2]}
+=> {"/dev/zram0"=>[:partition, 4194300, 1051484, -2]}
 
 LinuxStat::Swap.percent_available
-=> 78.39
+=> 74.93
 
 LinuxStat::Swap.percent_used
-=> 21.61
+=> 25.07
 
 LinuxStat::Swap.stat
-=> {:total=>4194300, :used=>906588, :available=>3287712, :percent_used=>21.61, :percent_available=>78.39}
+=> {:total=>4194300, :used=>1051484, :available=>3142816, :percent_used=>25.07, :percent_available=>74.93}
 
 LinuxStat::Swap.total
 => 4194300
 
 LinuxStat::Swap.used
-=> 906588
+=> 1051484
 
 ```
 

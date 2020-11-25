@@ -1,6 +1,9 @@
 module LinuxStat
 	module BIOS
 		class << self
+			# Returns the model of the BIOS.
+			# If the information is not available it will return a frozen empty string.
+			# The output is also cached ; as changing the value in runtime is unexpected.
 			def model
 				# Cached ; as changing the value in runtime is unexpected
 				@@model ||= if File.readable?('/sys/devices/virtual/dmi/id/product_name')
@@ -12,6 +15,9 @@ module LinuxStat
 				end
 			end
 
+			# Returns the vendor of the BIOS.
+			# If the information is not available it will return a frozen empty string.
+			# The output is also cached ; as changing the value in runtime is unexpected.
 			def vendor
 				# Cached ; as changing the value in runtime is unexpected
 				@@vendor ||= if File.readable?('/sys/devices/virtual/dmi/id/bios_vendor')
@@ -21,8 +27,10 @@ module LinuxStat
 				end
 			end
 
+			# Returns the version of the BIOS.
+			# If the information is not available it will return a frozen empty string.
+			# The output is also cached ; as changing the value in runtime is unexpected.
 			def version
-				# Cached ; as changing the value in runtime is unexpected
 				@@version ||= if File.readable?('/sys/devices/virtual/dmi/id/bios_version')
 					IO.read('/sys/devices/virtual/dmi/id/bios_version').tap(&:strip!)
 				else
@@ -30,8 +38,10 @@ module LinuxStat
 				end
 			end
 
+			# Returns the date of the BIOS.
+			# If the information is not available it will return a frozen empty string.
+			# The output is also cached ; as changing the value in runtime is unexpected.
 			def date
-				# Cached ; as changing the value in runtime is unexpected
 				@@date ||= if File.readable?('/sys/devices/virtual/dmi/id/bios_date')
 					IO.read('/sys/devices/virtual/dmi/id/bios_date').tap(&:strip!)
 				else

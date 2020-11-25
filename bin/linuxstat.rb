@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby
-require 'bundler/setup'
-require 'linux_stat'
+begin
+	require 'linux_stat'
+rescue LoadError
+	require 'bundler/setup'
+	require 'linux_stat'
+end
 
 $-v = true
 
@@ -8,7 +12,18 @@ $-v = true
 MARKDOWN = ARGV.any? { |x| x[/^\-\-markdown$/] || x[/^\-md$/] }
 PRINT_TIME = MARKDOWN ? false : !ARGV.any? { |x| x[/^\-\-no-time$/] || x[/^\-nt$/] }
 
-LinuxStat.constants.sort.each do |c|
+%w(--markdown -md --no-time -nt).each(&ARGV.method(:delete))
+
+# Run only desired classes / modules
+constants = LinuxStat.constants
+
+execute = constants.map(&:downcase).map.with_index { |x, i|
+	constants[i] if ARGV.find { |y| y.downcase.to_sym == x }
+}.compact
+
+execute.replace(constants) if execute.empty?
+
+execute.sort.each do |c|
 	e = eval("LinuxStat::#{c}")
 
 	next if e.class != Module && e.class != Class
@@ -25,9 +40,10 @@ LinuxStat.constants.sort.each do |c|
 
 	meths.each do |meth|
 		time = Time.now
-		v = e.send(meth).inspect
-		time = Time.now.-(time).*(1000).round(3)
+		v = e.send(meth)
+		time = Time.now.-(time).*(1_000_000).round(3)
 
+		v = v.inspect
 		dis = v.length > 253 ? v[0..250].strip + '...'.freeze : v
 
 		if MARKDOWN
@@ -37,13 +53,13 @@ LinuxStat.constants.sort.each do |c|
 		end
 
 		puts( "(" +
-			if time > 10
-				"\e[1;38;2;255;80;80m"
-			elsif time > 5
+			if time > 10_000
+				"\e[1;38;2;255;50;50m"
+			elsif time > 5_000
 				"\e[1;38;2;255;170;0m"
 			else
 				"\e[1;38;2;0;170;0m"
-			end + "Time taken: #{time}ms\e[0m)"
+			end + "Time taken: #{time}\u03BCs\e[0m)"
 		) if PRINT_TIME
 
 		puts

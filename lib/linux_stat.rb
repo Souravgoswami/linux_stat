@@ -1,8 +1,6 @@
 require "linux_stat/version"
 
 module LinuxStat
-	class StatUnavailable < StandardError
-	end
 end
 
 require "linux_stat/battery"

@@ -1,6 +1,15 @@
 module LinuxStat
 	module CPU
 		class << self
+			# Returns the cpu usage of all threads.
+			#
+			# The first one is aggregated CPU usage reported by the Linux kernel.
+			# And the consecutive ones are the real core usages.
+			#
+			# On a system with 4 threads, the output will be like::
+			# {0=>84.38, 1=>100.0, 2=>50.0, 3=>87.5, 4=>87.5}
+			#
+			# If the information is not available, it will return an empty Hash
 			def stat(sleep = 0.075)
 				return {} unless stat?
 
@@ -21,8 +30,12 @@ module LinuxStat
 				end
 			end
 
+			# Returns the total cpu usage.
+			# It's like running LinuxStat::CPU.stat[0] but it's much more efficient and calculates just the aggregated usage which is available at the top of the /proc/stat file.
+			#
+			# If the information is not available, it will return nil.
 			def total_usage(sleep = 0.075)
-				return {} unless stat?
+				return nil unless stat?
 
 				data = IO.foreach('/proc/stat').first.split.tap(&:shift).map!(&:to_f)
 				sleep(sleep)
@@ -36,31 +49,30 @@ module LinuxStat
 				totald.-(idle_now - idle_then).fdiv(totald).*(100).round(2).abs
 			end
 
+			# Returns the total number of CPU threads.
+			# If the information isn't available, it will return 0.
 			def count
 				# CPU count can change during the program runtime
 				cpuinfo.count { |x| x.start_with?('processor') }
 			end
 
+			# Returns the model of processor.
+			# If the information isn't available, it will return en empty string.
+			# The output is also cached ; as changing the value in runtime is unexpected.
 			def model
-				# Cached ; as changing the value in runtime is unexpected ; nobody is going
-				# to add/remove CPUs during program runtime
 				@@name ||= cpuinfo.find { |x| x.start_with?('model name') }.to_s.split(?:)[-1].to_s.strip
 			end
 
-			# Returns an array with current core frequencies corresponding to the usages
+			# Returns an array with current core frequencies corresponding to the usages.
+			# If the information isn't available, it will return an empty array.
 			def cur_freq
-				# Cached ; as changing the value in runtime is unexpected ; nobody is going
-				# to add/remove CPUs during program runtime
-
 				@@cpu_freqs ||= Dir["/sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_cur_freq"]
 				@@cpu_freqs.map { |x| IO.read(x).to_i }
 			end
 
-			# Returns an array with max core frequencies corresponding to the usages
+			# Returns an array with max core frequencies corresponding to the usages.
+			# If the information isn't available, it will return an empty array.
 			def max_freq
-				# Cached ; as changing the value in runtime is unexpected ; nobody is going
-				# to add/remove CPUs during program runtime
-
 				@@max_freqs ||= Dir["/sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_max_freq"]
 				@@max_freqs.map { |x| IO.read(x).to_i }
 			end

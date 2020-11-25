@@ -73,15 +73,15 @@ module LinuxStat
 						joined = x.each(&:strip!).join(?\s.freeze)
 
 						# Match 21 Oct 2020 01:11:20 +0000
-						if joined[/^\d{2}\s\w{3}\s\d{4}\s\d{2}:\d{2}:\d{2}\s\+\d*$/]
+						if joined[/^\d{1,2}\s\w{3}\s\d{4}\s\d{1,2}:\d{1,2}:\d{1,2}\s\+\d*$/]
 							Time.strptime(joined, '%d %b %Y %H:%M:%S %Z') rescue nil
 
 						# Match Aug 25 17:23:54 UTC 2020
-						elsif joined[/^\w{3}\s\d{2}\s\d{2}:\d{2}:\d{2}\s\w+\s\d*$/]
+						elsif joined[/^\w{3}\s\d{1,2}\s\d{1,2}:\d{1,2}:\d{2}\s\w+\s\d*$/]
 							Time.strptime(joined, '%b %d %H:%M:%S %z %Y') rescue nil
 
 						# Match 2017-09-19
-						elsif joined[/\d{4}-\d{2}-\d{2}/]
+						elsif joined[/\d{4}-\d{1,2}-\d{1,2}/]
 							Time.strptime(joined[/\d{4}-\d{2}-\d{2}/] + " +00:00", '%Y-%m-%d %z') rescue nil
 
 						else
@@ -118,13 +118,13 @@ module LinuxStat
 						joined = x.each(&:strip!).join(?\s.freeze)
 
 						# Match 21 Oct 2020 01:11:20 +0000
-						if (joined[/^\d{2}\s\w{3}\s\d{4}\s\d{2}:\d{2}:\d{2}\s\+\d*$/] && (Time.strptime(joined, '%d %b %Y %H:%M:%S %Z') rescue nil)) ||
+						if (joined[/^\d{1,2}\s\w{3}\s\d{4}\s\d{1,2}:\d{1,2}:\d{1,2}\s\+\d*$/] && (Time.strptime(joined, '%d %b %Y %H:%M:%S %Z') rescue nil)) ||
 
 						# Match Aug 25 17:23:54 UTC 2020
-						(joined[/^\w{3}\s\d{2}\s\d{2}:\d{2}:\d{2}\s\w+\s\d*$/] && (Time.strptime(joined, '%b %d %H:%M:%S %z %Y') rescue nil)) ||
+						(joined[/^\w{3}\s\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}\s\w+\s\d*$/] && (Time.strptime(joined, '%b %d %H:%M:%S %z %Y') rescue nil)) ||
 
 						# Match 2017-09-19
-						(joined[/\d{4}-\d{2}-\d{2}/] && (Time.strptime(joined[/\d{4}-\d{2}-\d{2}/] + " +00:00", '%Y-%m-%d %z') rescue nil))
+						(joined[/\d{4}-\d{1,2}-\d{1,2}/] && (Time.strptime(joined[/\d{4}-\d{2}-\d{2}/] + " +00:00", '%Y-%m-%d %z') rescue nil))
 							joined
 						else
 							nil

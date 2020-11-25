@@ -232,14 +232,16 @@ LinuxStat::Swap.used
 
 ```
 
-### Return Types:
-In general, if a method returns either a Float or a Integer or a Time, it will return float. But if the status isn't available, it will return nil.
-If the method returns a Hash / Array, it will return return Hash. If the status isn't available, it will return an empty Hash / Array.
-If the method returns a String, it will return return Hash. If the status isn't available, it will return an empty *frozen* String.
+## Return Types:
++ In general, if a method returns either a Float or a Integer or a Time, it will return a Float or Time in all cases. But if the status isn't available, it will return nil.
 
-It doesn't have implementation of any Error that gets raised in runtime for the ease of use.
-If you need to check some stat that returns an integer or float, and you get nil, you know it's not available, so you can work accordingly.
-But if you need the integer or float value in 0 to whatever format, you can use the .to_i or .to_f method on the object, nil will get converted to number then.
++ If the method returns a Hash / Array, it will return return Hash / Array in all cases. If the status isn't available, it will return an empty Hash / Array.
+
++ If the method returns a String, it will return return String in all cases. If the status isn't available, it will return an empty *frozen* String.
+
++ It doesn't have implementation of any Error that gets raised in runtime for the ease of use.
+
++ If you need to check some stat that returns an integer or float, and you get nil, you know it's not available, so you can work accordingly. But if you need the integer or float value in 0 to whatever format, you can use the .to_i or .to_f method on the object, nil will get converted to number then.
 
 If some error is *raised* it should be reported as a bug.
 

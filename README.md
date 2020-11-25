@@ -1,7 +1,7 @@
 # LinuxStat
 ![logo](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/logo/logo.jpg)
 
-LinuxStat lets you read statistics of a Linux system. It can show you cpu stats and usages, memory stats and usages, swap stats and usages, battery usage, bios info,  kernel details, local ip, os details and parse os-release + lsb-release, etc.
+LinuxStat lets you read status of a Linux system. It can show you cpu stats and usages, memory stats and usages, swap stats and usages, battery usage, bios info,  kernel details, local ip, os details and parse os-release + lsb-release, etc.
 
 It only works for Linux, and detecting the OS is upto the user of this gem.
 
@@ -276,7 +276,7 @@ This is not a valid module and can't be run.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/linux_stat. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[Souravgoswami]/linux_stat/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/Souravgoswami/linux_stat. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/Souravgoswami/linux_stat/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -284,4 +284,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the LinuxStat project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/linux_stat/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the LinuxStat project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/Souravgoswami/linux_stat/blob/master/CODE_OF_CONDUCT.md).

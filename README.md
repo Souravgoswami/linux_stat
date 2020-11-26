@@ -256,19 +256,19 @@ Like other gems, this doesn't have a test like RSpec. We suggest using the bin/l
 If you need to test a specific module, say the CPU, just run it like this:
 
 ```
-ruby bin/linuxstat.rb CPU
+$ ruby bin/linuxstat.rb CPU
 ```
 
 Or:
 ```
-ruby bin/linuxstat.rb cpu
+$ ruby bin/linuxstat.rb cpu
 ```
 
 That is, the argument passed is not case-sensitive.
-But if the method passed isn't available and outright wrong, it will run all the module methods. For example, you can't do:
+But if the argument passed isn't available and outright wrong, it will run all the module methods. For example, you can't do:
 
 ```
-ruby bin/linuxstat.rb upc
+$ ruby bin/linuxstat.rb upc
 ```
 This is not a valid module and can't be run.
 

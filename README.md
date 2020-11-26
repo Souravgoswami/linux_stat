@@ -233,7 +233,7 @@ LinuxStat::Swap.used
 ```
 
 ## Return Types:
-+ In general, if a method returns either a Float or a Integer or a Time, it will return a Float or Time in all cases. But if the status isn't available, it will return nil.
++ In general, if a method returns either a Float or a Integer or a Time, it will return a Float or Integer or Time in all cases. But if the status isn't available, it will return nil.
 
 + If the method returns a Hash / Array, it will return return Hash / Array in all cases. If the status isn't available, it will return an empty Hash / Array.
 
@@ -275,16 +275,10 @@ This is not a valid module and can't be run.
 You can run `rake` to test all the modules.
 You can also use `rake cpu` to test the CPU module or `rake memory` to test the memory module. But this is case-sensitive.
 
-
-
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/Souravgoswami/linux_stat. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/Souravgoswami/linux_stat/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/Souravgoswami/linux_stat.
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the LinuxStat project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/Souravgoswami/linux_stat/blob/master/CODE_OF_CONDUCT.md).

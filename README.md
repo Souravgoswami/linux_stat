@@ -270,11 +270,12 @@ But if the method passed isn't available and outright wrong, it will run all the
 ```
 ruby bin/linuxstat.rb upc
 ```
+This is not a valid module and can't be run.
 
 You can run `rake` to test all the modules.
 You can also use `rake cpu` to test the CPU module or `rake memory` to test the memory module. But this is case-sensitive.
 
-This is not a valid module and can't be run.
+
 
 ## Contributing
 

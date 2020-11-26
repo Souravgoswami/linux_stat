@@ -41,7 +41,8 @@ execute.sort.each do |c|
 	meths.each do |meth|
 		time = Time.now
 		v = e.send(meth)
-		time = Time.now.-(time).*(1_000_000).round(3)
+		time2 = Time.now
+		time = time2.-(time).*(1_000_000).round(3)
 
 		v = v.inspect
 		dis = v.length > 253 ? v[0..250].strip + '...'.freeze : v

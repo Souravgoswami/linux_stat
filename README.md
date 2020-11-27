@@ -232,7 +232,7 @@ LinuxStat::Swap.used
 
 ```
 
-## Return Types:
+## Return Types
 + In general, if a method returns either a Float or a Integer or a Time, it will return a Float or Integer or Time in all cases. But if the status isn't available, it will return nil.
 
 + If the method returns a Hash / Array, it will return return Hash / Array in all cases. If the status isn't available, it will return an empty Hash / Array.
@@ -244,6 +244,24 @@ LinuxStat::Swap.used
 + If you need to check some stat that returns an integer or float, and you get nil, you know it's not available, so you can work accordingly. But if you need the integer or float value in 0 to whatever format, you can use the .to_i or .to_f method on the object, nil will get converted to number then.
 
 If some error is *raised* it should be reported as a bug.
+
+## Ruby on Rails
+
+1. Just add `gem linux_stat`:
+
+```
+bundle add linux_stat
+```
+
+You can use LinuxStat directly in rails.
+![RailsApp](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/logo/rails.gif)
+
+
+Don't need to worry about versions if you are using anything > 0.2.1.
+
+Newer versions will have bug fixes, performance improvements and new features but the return types of old methods will always be the same across upgrades > 0.2.1.
+
+Even if we remove something, there will be always a deprecation warning for some months or for even a year before we actually remove it.
 
 ## Development
 

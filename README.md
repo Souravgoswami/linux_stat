@@ -254,8 +254,8 @@ bundle add linux_stat
 ```
 
 You can use LinuxStat directly in rails.
-![RailsApp](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/logo/rails.gif)
 
+![RailsApp](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/logo/rails.gif)
 
 Don't need to worry about versions if you are using anything > 0.2.1.
 

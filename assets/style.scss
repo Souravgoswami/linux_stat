@@ -323,6 +323,18 @@ body {
 		width: 100% ;
 	}
 
+	code {
+		color: #666 ;
+		font-size: 12px ;
+		margin: 0 4px ;
+		transition: all 0.25s ease ;
+
+		&:hover {
+			color: #333 ;
+			text-decoration: underline ;
+		}
+	}
+
 	pre {
 		margin: 12px 0 ;
 		text-align: justify ;

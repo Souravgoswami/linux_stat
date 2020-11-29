@@ -1,0 +1,63 @@
+<!Doctype HTML>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<meta name="description" content="{{ page.description }}">
+		<meta name="author" content="Sourav Goswami">
+		<meta name="keywords=" content="" lang="en-GB">
+		<meta name="revisit-after" content="3days">
+		<meta name="robots" content="all">
+		<meta name="title" content="{{ page.title }}">
+		<meta property="og:description" content="{{ page.description }}">
+		<meta property="og:title" content="{{ page.title }}">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="https://souravgoswami.github.io/linux_stat/">
+		<meta property="og:image" itemprop="image" content="https://souravgoswami.github.io/linux_stat/assets/logo.png">
+
+		<link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+		<title>{{ page.title }}</title>
+
+		{% include loaderCSS.css.html %}
+
+		<link rel="preload" as="style" href="/assets/style.css">
+		<link rel="preload" as="script" href="/assets/script.js">
+		<link rel="stylesheet" href="/assets/style.css">
+	</head>
+
+	<body>
+		<div id="loader-head">
+			<div id="loader">
+				<div class="loaders" style="animation-delay: 0ms"></div>
+				<div class="loaders" style="animation-delay: 700ms"></div>
+				<div class="loaders" style="animation-delay: 1400ms"></div>
+			</div>
+
+			<p>Loading...</p>
+
+			<div id="loaderHider">
+				{% include arrow_down.svg.html %}
+			</div>
+		</div>
+
+		<noscript>
+			This website depends on JavaScript, quite heavily...
+			Please make sure it's enabled and I promise there will be no ads...
+		</noscript>
+
+		<script>
+			let lh = document.getElementById('loader-head')
+			document.getElementById('loaderHider').onclick = function() { lh.remove() }
+			window.onload = function() { if (lh) lh.remove() }
+		</script>
+
+		<div id="container">
+			{{ page.content }}
+		</div>
+
+		{% include footer.html %}
+
+		<script src="/assets/script.js"></script>
+	</body>
+</html>

@@ -1,0 +1,378 @@
+---
+---
+
+:focus {
+	outline: none ;
+}
+
+@font-face {
+	font-family: 'Alice' ;
+	font-style: normal ;
+	font-weight: 400 ;
+	font-display: swap ;
+	src: local('Alice Regular'), local('Alice-Regular'), url('/assets/fonts/alice.woff2') format('woff2');
+}
+
+html, body {
+	padding: 0 ;
+	margin: 0 ;
+	height: 100% ;
+}
+
+body {
+	font-family: 'Alice' ;
+	display: flex ;
+	flex-direction: column ;
+	background-color: #fff ;
+	// color: #fff ;
+}
+
+#container {
+	flex: 1 ;
+}
+
+#footer {
+	background-color: #111 ;
+	color: #fff ;
+	padding: 24px ;
+	z-index: 1 ;
+	position: relative ;
+
+	.floaters {
+		display: grid ;
+		grid-template-columns: 1fr 1fr 1fr ;
+	}
+
+	.sm-flex-center {
+		display: flex ;
+		align-items: center ;
+		flex-direction: row ;
+	}
+
+	ul {
+		margin: 0 ;
+		padding: 0 ;
+		display: inline-flex ;
+		justify-content: center ;
+		align-items: center ;
+
+		li {
+			list-style: none ;
+			color: #444 ;
+			font-size: 24px ;
+			font-family: 'Alice' ;
+		}
+	}
+
+	#gems {
+		margin: 4px ;
+		width: 40px ;
+		position: relative ;
+	}
+
+	.gem:last-child {
+		position: absolute ;
+		top: 0 ;
+		left: 0 ;
+		z-index: -1 ;
+		filter: blur(4px) ;
+	}
+
+	$sleep: 1s ;
+	@for $i from 1 through 4 {
+		.spark#{$i} {
+			animation: blink 0.5s linear infinite $sleep / #{$i} ;
+		}
+	}
+
+	p.footer-glow {
+		filter: drop-shadow(0px 0px 2px #fff) ;
+	}
+
+	.icon24 {
+		width: 24px ;
+		height: 24px ;
+		display: inline-block ;
+		padding: 0 ;
+		margin: 0 ;
+	}
+
+	.divider-horizontal {
+		position: relative ;
+		display: inline-block ;
+		height: 100% ;
+		width: 100% ;
+
+		& .line {
+			position: absolute ;
+			display: inline-block ;
+			left: 50% ;
+			top: 0 ;
+			bottom: 0 ;
+			transform: translate(-50%) ;
+			width: 2px ;
+			height: 100% ;
+			background: #fff ;
+			filter: drop-shadow(0 0 4px #fff) ;
+		}
+	}
+
+	.icon-h-36 {
+		height: 36px ;
+	}
+
+}
+
+@media(max-width: 768px) {
+	#footer .divider-horizontal .line {
+		width: 100% ;
+		height: 2px ;
+	}
+
+	#footer {
+		.floaters {
+			display: block ;
+		}
+
+		.sm-flex-center {
+			display: flex ;
+			align-items: center ;
+			justify-content: center ;
+			flex-direction: row ;
+		}
+	}
+}
+
+.btn-blade-anim {
+	text-decoration: none !important ;
+	padding: 4px 6px ;
+	border: 3px solid #fa0 ;
+	position: relative ;
+	display: inline-block ;
+	overflow: hidden ;
+	transition: all 0.125s linear 0.25s, filter 3s ease !important;
+	border-radius: 6px ;
+	cursor: pointer ;
+	user-select: none ;
+
+	& .text {
+		transition: all 0.25s ease 0.25s ;
+		color: #fa0 !important ;
+	}
+
+	&::before {
+		content: '' ;
+		background-color: #fff ;
+		position: absolute ;
+		top: 0 ;
+		left: 0 ;
+		width: 200% ;
+		height: 50% ;
+		filter: drop-shadow(0 0 8px #fff) ;
+		transform: translateX(-100%) rotate(45deg) ;
+		transition: all 0.25s linear ;
+	}
+
+	&:hover::before {
+		transform: translateX(100%) rotate(45deg) ;
+	}
+
+	&:hover {
+		background-color: #fa0 ;
+		box-shadow: 2px 3px 6px #0007 ;
+		transition-delay: 0s !important ;
+
+		& .text {
+			filter: drop-shadow(0 0 4px #ffff) ;
+			color: #fff !important ;
+			transition-delay: 0s ;
+		}
+	}
+
+	&:active {
+		box-shadow: 2px 3px 4px #0007 ;
+	}
+
+	&:active .text {
+		filter: drop-shadow(0 0 2px #ffff) ;
+		color: #fff !important ;
+	}
+}
+
+@keyframes lighting1 {
+	0% {
+		color: #444 ;
+		text-shadow: none ;
+	}
+
+	100% {
+		color: #0FE4F8 ;
+		text-shadow: 0 0 12px #EEF, 0 0 12px #AAF, 0 0 40px #0FE4F8, 0 0 40px #0FDDFF ;
+	}
+}
+
+@keyframes lighting2 {
+	0% {
+		color: #444 ;
+		text-shadow: none ;
+	}
+
+	100% {
+		color: #2FBA6B ;
+		text-shadow: 0 0 12px #5a0, 0 0 12px #5a5, 0 0 40px #2FBA6B, 0 0 40px #0a0 ;
+	}
+}
+
+@keyframes blink {
+	0%, 100% {
+		opacity: 0 ;
+	}
+
+	50% {
+		opacity: 1 ;
+	}
+}
+
+#container {
+	margin: 0 ;
+}
+
+#header {
+	background-color: #222 ;
+	height: 300px ;
+	color: #fff ;
+	position: relative ;
+	display: block ;
+	margin: 0 ;
+
+	#content {
+		position: relative ;
+		z-index: 10 !important ;
+		height: 100% ;
+		display: flex ;
+		justify-content: center ;
+		text-align: center ;
+		align-items: center ;
+		flex-direction: column ;
+		width: 100% ;
+	}
+
+	#content .main {
+		font-size: 48px ;
+		display: flex ;
+		align-items: center ;
+		justify-content: center ;
+		user-select: none ;
+
+		.p1 {
+			text-shadow: 0 0 12px #FAA, 0 0 12px #F88, 0 0 40px #FFE408, 0 0 40px #FFDD0F ;
+		}
+
+		.p2 {
+			text-shadow: 0 0 12px #5a0, 0 0 12px #5a5, 0 0 40px #2FBA6B, 0 0 40px #0a0 ;
+		}
+	}
+}
+
+#header::before, #header::after {
+	content: '' ;
+	height: 100% ;
+	width: 100% ;
+	position: absolute ;
+	top: 0 ;
+	left: 0 ;
+	background: transparent url("/assets/bg.svg") no-repeat center center ;
+	background-size: fill ;
+}
+
+#header::before {
+	filter: blur(3px) ;
+}
+
+#info {
+	width: 80% ;
+	font-size: 20px ;
+	margin: 24px auto ;
+	margin-top: 0 ;
+	line-height: 40px ;
+
+	.title {
+		font-size: 40px ;
+		color: #159957 ;
+	}
+
+	.head {
+		margin-top: 16px ;
+		margin-bottom: 4px ;
+		font-size: 30px;
+		color: #55f ;
+		display: block ;
+		font-weight: normal ;
+	}
+
+	break {
+		display: block ;
+		margin: 24px ;
+	}
+
+	img {
+		width: 100% ;
+	}
+
+	pre {
+		margin: 12px 0 ;
+		text-align: justify ;
+		padding: 6px ;
+		max-height: 400px ;
+		background-color: #efefef ;
+		line-height: 150% ;
+		border-radius: 6px ;
+		overflow: auto ;
+
+		code {
+			counter-increment: listing ;
+			overflow: auto ;
+
+			&::before {
+				content: counter(listing) '. ' ;
+				display: inline-block ;
+			}
+		}
+
+		file {
+			display: block ;
+			color: #000 ;
+			font-size: 12px ;
+			width: 100%;
+			font-weight: bold ;
+			position: relative ;
+		}
+
+		file::before {
+			content: '' ;
+			background: url("/assets/text-x-generic.svg") no-repeat ;
+			background-size: cover ;
+			height: 24px ;
+			width: 24px ;
+			filter: drop-shadow(3px 3px 1px #0003) ;
+			margin: 0 8px 16px 0 ;
+			display: inline-flex ;
+			align-items: center ;
+			user-select: none ;
+		}
+
+		dollar, hash {
+			display: block ;
+		}
+
+		dollar::before {
+			content: '$ ' ;
+			user-select: none ;
+		}
+
+		hash::before {
+			content: '# ' ;
+			user-select: none ;
+		}
+	}
+}

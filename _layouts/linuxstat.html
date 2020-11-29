@@ -17,7 +17,7 @@
 		<meta property="og:image" itemprop="image" content="https://souravgoswami.github.io/linux_stat/assets/logo.png">
 
 		<link rel="shortcut icon" type="image/png" href="{{ site.baseurl }}/assets/favicon.png">
-		<title>{{ page.title }}</title>
+		<title>LinuxStat Ruby Gem</title>
 
 		{% include loaderCSS.css.html %}
 
@@ -33,18 +33,11 @@
 				<div class="loaders" style="animation-delay: 700ms"></div>
 				<div class="loaders" style="animation-delay: 1400ms"></div>
 			</div>
-
 			<p>Loading...</p>
-
-			<div id="loaderHider">
-				{% include arrow_down.svg.html %}
-			</div>
+			<div id="loaderHider">{% include arrow_down.svg.html %}</div>
 		</div>
 
-		<noscript>
-			This website depends on JavaScript, quite heavily...
-			Please make sure it's enabled and I promise there will be no ads...
-		</noscript>
+		<noscript>This website requires JavaScript.</noscript>
 
 		<script>
 			let lh = document.getElementById('loader-head')
@@ -52,12 +45,8 @@
 			window.onload = function() { if (lh) lh.remove() }
 		</script>
 
-		<div id="container">
-			{{ page.content }}
-		</div>
-
+		<div id="container">{{ page.content }}</div>
 		{% include footer.html %}
-
 		<script src="{{ site.baseurl }}/assets/script.js"></script>
 	</body>
 </html>

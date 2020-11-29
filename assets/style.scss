@@ -10,7 +10,7 @@
 	font-style: normal ;
 	font-weight: 400 ;
 	font-display: swap ;
-	src: local('Alice Regular'), local('Alice-Regular'), url('{{ site.baseurl }}/assets/fonts/alice.woff2') format('woff2');
+	src: local('Alice Regular'), local('Alice-Regular'), url('{{ site.baseurl }}/assets/alice.woff2') format('woff2');
 }
 
 html, body {
@@ -24,12 +24,16 @@ body {
 	display: flex ;
 	flex-direction: column ;
 	background-color: #fff ;
-	// color: #fff ;
 }
 
 #container {
 	flex: 1 ;
 }
+
+.spark1 { animation: blink 0.5s linear infinite 0.1s ; }
+.spark2 { animation: blink 0.5s linear infinite ; }
+.spark3 { animation: blink 0.5s linear infinite 0.2s ; }
+.spark4 { animation: blink 0.5s linear infinite 0.3s ; }
 
 #footer {
 	background-color: #111 ;
@@ -76,13 +80,6 @@ body {
 		left: 0 ;
 		z-index: -1 ;
 		filter: blur(4px) ;
-	}
-
-	$sleep: 1s ;
-	@for $i from 1 through 4 {
-		.spark#{$i} {
-			animation: blink 0.5s linear infinite $sleep / #{$i} ;
-		}
 	}
 
 	p.footer-glow {
@@ -265,6 +262,10 @@ body {
 		align-items: center ;
 		justify-content: center ;
 		user-select: none ;
+
+		#logo {
+			width: 156px ;
+		}
 
 		.p1 {
 			text-shadow: 0 0 12px #FAA, 0 0 12px #F88, 0 0 40px #FFE408, 0 0 40px #FFDD0F ;

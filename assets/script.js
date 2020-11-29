@@ -1,5 +1,3 @@
-console.log('hi')
-
 const footerGlowAnim = document.querySelectorAll('.footer-glow-anim')
 
 let observer = new IntersectionObserver(e => {
@@ -11,7 +9,5 @@ let observer = new IntersectionObserver(e => {
 
 footerGlowAnim.forEach(_i => observer.observe(_i))
 
-// Stripped pre and code tags
-for(let i of document.querySelectorAll('pre')) {
+for(let i of document.querySelectorAll('pre'))
 	i.innerHTML = i.innerHTML.split('\n').map(x => x.trim() + "\n").join('').trim()
-}

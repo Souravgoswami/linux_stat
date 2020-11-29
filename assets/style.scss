@@ -244,6 +244,7 @@ body {
 	position: relative ;
 	display: block ;
 	margin: 0 ;
+	overflow: auto ;
 
 	#content {
 		position: relative ;
@@ -291,6 +292,7 @@ body {
 
 #info {
 	width: 80% ;
+	max-width: 900px ;
 	font-size: 20px ;
 	margin: 24px auto ;
 	margin-top: 0 ;
@@ -328,6 +330,7 @@ body {
 		line-height: 150% ;
 		border-radius: 6px ;
 		overflow: auto ;
+		font-size: 14px ;
 
 		code {
 			counter-increment: listing ;

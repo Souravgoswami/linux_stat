@@ -5,25 +5,25 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<meta name="description" content="{{ page.description }}">
-		<meta name="author" content="Sourav Goswami">
+		<meta name="author" content="LinuxStat">
 		<meta name="keywords=" content="" lang="en-GB">
 		<meta name="revisit-after" content="3days">
 		<meta name="robots" content="all">
-		<meta name="title" content="{{ page.title }}">
-		<meta property="og:description" content="{{ page.description }}">
-		<meta property="og:title" content="{{ page.title }}">
+		<meta name="title" content="LinuxStat">
+		<meta property="og:title" content="LinuxStat">
+		<meta property="og:description" content="About LinuxStat Ruby Gem">
 		<meta property="og:type" content="website">
 		<meta property="og:url" content="https://souravgoswami.github.io/linux_stat/">
-		<meta property="og:image" itemprop="image" content="https://souravgoswami.github.io/linux_stat/assets/logo.png">
+		<meta property="og:image" itemprop="image" content="https://souravgoswami.github.io/linux_stat/assets/logo.jpg">
 
-		<link rel="shortcut icon" type="image/png" href="/assets/favicon.png">
+		<link rel="shortcut icon" type="image/png" href="{{ site.baseurl }}/assets/favicon.png">
 		<title>{{ page.title }}</title>
 
 		{% include loaderCSS.css.html %}
 
-		<link rel="preload" as="style" href="/assets/style.css">
-		<link rel="preload" as="script" href="/assets/script.js">
-		<link rel="stylesheet" href="/assets/style.css">
+		<link rel="preload" as="style" href="{{ site.baseurl }}/assets/style.css">
+		<link rel="preload" as="script" href="{{ site.baseurl }}/assets/script.js">
+		<link rel="stylesheet" href="{{ site.baseurl }}/assets/style.css">
 	</head>
 
 	<body>
@@ -58,6 +58,6 @@
 
 		{% include footer.html %}
 
-		<script src="/assets/script.js"></script>
+		<script src="{{ site.baseurl }}/assets/script.js"></script>
 	</body>
 </html>

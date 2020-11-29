@@ -10,7 +10,7 @@
 	font-style: normal ;
 	font-weight: 400 ;
 	font-display: swap ;
-	src: local('Alice Regular'), local('Alice-Regular'), url('/assets/fonts/alice.woff2') format('woff2');
+	src: local('Alice Regular'), local('Alice-Regular'), url('{{ site.baseurl }}/assets/fonts/alice.woff2') format('woff2');
 }
 
 html, body {
@@ -281,7 +281,7 @@ body {
 	position: absolute ;
 	top: 0 ;
 	left: 0 ;
-	background: transparent url("/assets/bg.svg") no-repeat center center ;
+	background: transparent url("{{ site.baseurl }}/assets/bg.svg") no-repeat center center ;
 	background-size: fill ;
 }
 
@@ -350,7 +350,7 @@ body {
 
 		file::before {
 			content: '' ;
-			background: url("/assets/text-x-generic.svg") no-repeat ;
+			background: url("{{ site.baseurl }}/assets/text-x-generic.svg") no-repeat ;
 			background-size: cover ;
 			height: 24px ;
 			width: 24px ;

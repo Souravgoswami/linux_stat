@@ -44,7 +44,6 @@ Or install it yourself as:
 
 ## Usage
 ### LinuxStat::BIOS
-### LinuxStat::BIOS
 ```
 LinuxStat::BIOS.date
 => "04/10/2017"

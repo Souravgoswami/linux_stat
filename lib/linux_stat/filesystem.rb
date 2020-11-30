@@ -17,7 +17,6 @@ module LinuxStat
 			# {:total=>119981191168, :free=>43155574784, :used=>76825616384, :available=>43155574784}
 			#
 			# If the stat can't be acquired, this method will return an empty Hash.
-
 			def stat(fs = ?/.freeze)
 				s = stat_raw(fs)
 				return {} if s.empty?

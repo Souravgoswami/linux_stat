@@ -1,7 +1,9 @@
 module LinuxStat
 	module CPU
 		class << self
-			# Returns the cpu usage of all threads.
+			# stat(sleep = 0.075)
+			# Where sleep is the delay to gather the data.
+			# This method returns the cpu usage of all threads.
 			#
 			# The first one is aggregated CPU usage reported by the Linux kernel.
 			# And the consecutive ones are the real core usages.
@@ -30,7 +32,10 @@ module LinuxStat
 				end
 			end
 
-			# Returns the total cpu usage.
+			# total_usage(sleep = 0.075)
+			# Where sleep is the delay to gather the data.
+			# This method returns the cpu usage of all threads.
+			#
 			# It's like running LinuxStat::CPU.stat[0] but it's much more efficient and calculates just the aggregated usage which is available at the top of the /proc/stat file.
 			#
 			# If the information is not available, it will return nil.

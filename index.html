@@ -27,25 +27,40 @@ layout: linuxstat
 
 	It only works for Linux, and detecting the OS is upto the user of this gem.
 
+	<h3>Dependencies:</h3>
+	<ul>
+	<li>You need to have the C compile to be able to compile the C extension.</li>
+
+	<break></break>
+	> On Arch Linux:
+	<pre>
+		<hash>pacman -S gcc</hash>
+	</pre>
+
+	> On Debian based systems:
+	<pre>
+		<hash>apt install gcc</hash>
+	</pre>
+
+	<li>You might also require ruby-dev in Debian based systems which provides support for ruby.h header file:</li>
+	<pre>
+		<hash>apt install ruby-dev</hash>
+	</pre>
+
+	<break></break>
+	Once your are done, and you can compile the C file, you can follow the installation!
+
 	<span class="head">Installation</span>
+	&#x2022;&nbsp;Add this line to your application's Gemfile:
+	<pre>
+		<file>Gemfile</file>
+		gem 'linux_stat'
+	</pre>
 
-	<ol>
-		<li>
-			Add this line to your application's Gemfile:
-
-			<pre>
-				<file>Gemfile</file>
-				gem 'linux_stat'
-			</pre>
-		</li>
-
-		<li>
-			And then execute:
-			<pre>
-				<dollar>bundle install</dollar>
-			</pre>
-		</li>
-	</ol>
+	&#x2022;&nbsp;And then execute:
+	<pre>
+		<dollar>bundle install</dollar>
+	</pre>
 
 	Or install it yourself as:
 	<pre>

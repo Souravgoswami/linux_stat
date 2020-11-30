@@ -1,6 +1,4 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 layout: linuxstat
 ---
 
@@ -131,6 +129,28 @@ layout: linuxstat
 		=> {0=>33.33, 1=>50.0, 2=>28.57, 3=>28.57, 4=>16.67}
 	</pre>
 
+	<h3>LinuxStat::Filesystem</h3>
+
+	<pre>
+		LinuxStat::Filesystem.available
+		=> 43155402752
+
+		LinuxStat::Filesystem.free
+		=> 43155402752
+
+		LinuxStat::Filesystem.stat
+		=> {:total=>119981191168, :free=>43155402752, :used=>76825788416}
+
+		LinuxStat::Filesystem.stat_raw
+		=> {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>10535987, :block_avail_unpriv=>10535987, :inodes=>58612160, :free_inodes=>56718515, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
+
+		LinuxStat::Filesystem.total
+		=> 119981191168
+
+		LinuxStat::Filesystem.used
+		=> 76825788416
+	</pre>
+
 	<h3>LinuxStat::Kernel</h3>
 	<pre>
 		LinuxStat::Kernel.build_date
@@ -174,6 +194,25 @@ layout: linuxstat
 
 		LinuxStat::Memory.used
 		=> 3431244
+	</pre>
+
+	<h3>LinuxStat::Mounts</h3>
+
+	<pre>
+		LinuxStat::Mounts.list
+		=> ["proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0", "sys /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0", "dev /dev devtmpfs rw,nosuid,relatime,size=1891796k,nr_inodes=472949,mode=755 0 0", "run /run tmpfs rw,nosuid,nodev,relatime,mode=755 0 0", "...
+
+		LinuxStat::Mounts.root
+		=> "/dev/sda2"
+
+		LinuxStat::Mounts.root_fs
+		=> "xfs"
+
+		LinuxStat::Mounts.root_mount_options
+		=> "rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota"
+
+		LinuxStat::Mounts.tmpfs
+		=> {"/dev/shm"=>"tmpfs /dev/shm tmpfs rw,nosuid,nodev 0 0", "/sys/fs/cgroup"=>"tmpfs /sys/fs/cgroup tmpfs ro,nosuid,nodev,noexec,size=4096k,nr_inodes=1024,mode=755 0 0", "/ramdisk"=>"tmpfs /ramdisk tmpfs rw,nosuid,nodev,relatime,size=6291456k 0 0", "/tmp...
 	</pre>
 
 	<h3>LinuxStat::Net</h3>
@@ -320,12 +359,6 @@ layout: linuxstat
 	</pre>
 
 	This is not a valid module and can't be run.
-
-	<break></break>
-	You can run <code>rake</code> to test all the modules.
-
-	<break></break>
-	You can also use <code>rake cpu</code> to test the CPU module or <code>rake memory</code> to test the memory module. But this is case-sensitive.
 
 	<span class="head">Contributing</span>
 

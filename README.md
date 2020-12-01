@@ -1,5 +1,5 @@
 # LinuxStat
-![logo](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/logo/logo.jpg)
+![logo](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/images/logo.jpg)
 
 For reading the HTML version, visit [linux_stat](https://souravgoswami.github.io/linux_stat/).
 
@@ -317,7 +317,7 @@ bundle add linux_stat
 
 You can use LinuxStat directly in rails.
 
-![RailsApp](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/logo/rails.gif)
+![RailsApp](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/images/rails.gif)
 
 Don't need to worry about versions if you are using anything > 0.2.1.
 

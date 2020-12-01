@@ -1,5 +1,7 @@
 #include <sys/utsname.h>
 #include "ruby.h"
+#pragma GCC optimize ("O3")
+#pragma clang optimize on
 
 static struct utsname buf ;
 static VALUE machine, nodename ;

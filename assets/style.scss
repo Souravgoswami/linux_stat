@@ -1,6 +1,9 @@
 ---
 ---
 
+$width: 80% ;
+$max-width: 900px ;
+
 :focus {
 	outline: none ;
 }
@@ -243,6 +246,9 @@ body {
 	display: block ;
 	margin: 0 ;
 	overflow: auto ;
+	width: $width ;
+	max-width: $max-width ;
+	margin: 0 auto ;
 
 	#content {
 		position: relative ;
@@ -293,8 +299,8 @@ body {
 }
 
 #info {
-	width: 80% ;
-	max-width: 900px ;
+	width: $width ;
+	max-width: $max-width ;
 	font-size: 20px ;
 	margin: 24px auto ;
 	margin-top: 0 ;
@@ -404,5 +410,11 @@ body {
 			content: '# ' ;
 			user-select: none ;
 		}
+	}
+}
+
+@media(max-width: $max-width) {
+	#header {
+		width: 100% ;
 	}
 }

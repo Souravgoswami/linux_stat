@@ -72,14 +72,26 @@ module LinuxStat
 			# If the information isn't available, it will return an empty array.
 			def cur_freq
 				@@cpu_freqs ||= Dir["/sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_cur_freq"]
-				@@cpu_freqs.map { |x| IO.read(x).to_i }
+				@@cur_freqs_readable ||= @@cpu_freqs.all?(&File.method(:readable?))
+
+				if @@cur_freqs_readable
+					@@cpu_freqs.map { |x| IO.read(x).to_i }
+				else
+					[]
+				end
 			end
 
 			# Returns an array with max core frequencies corresponding to the usages.
 			# If the information isn't available, it will return an empty array.
 			def max_freq
 				@@max_freqs ||= Dir["/sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_max_freq"]
-				@@max_freqs.map { |x| IO.read(x).to_i }
+				@@max_freqs_readable ||= @@max_freqs.all?(&File.method(:readable?))
+
+				if @@max_freqs_readable
+					@@max_freqs.map { |x| IO.read(x).to_i }
+				else
+					[]
+				end
 			end
 
 			alias usages stat

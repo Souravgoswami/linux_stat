@@ -325,6 +325,17 @@ Newer versions will have bug fixes, performance improvements and new features bu
 
 Even if we remove something, there will be always a deprecation warning for some months or for even a year before we actually remove it.
 
+
+## Android
+
+LinuxStat does support Android OS. But it's not rigorously tested on all device like android apps.
+
+But in Termux you can just run LinuxStat without facing issues.
+
+![termux](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/images/termux.webp)
+
+Issues regarding running LinuxStat on termux are also welcomed.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

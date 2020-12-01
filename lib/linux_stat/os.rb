@@ -1,5 +1,7 @@
 module LinuxStat
 	module OS
+		prepend Uname
+
 		class << self
 			# Reads /etc/os-release and returns a Hash. For example:
 			# {:NAME=>"Arch Linux", :PRETTY_NAME=>"Arch Linux", :ID=>"arch", :BUILD_ID=>"rolling", :ANSI_COLOR=>"38;2;23;147;209", :HOME_URL=>"https://www.archlinux.org/", :DOCUMENTATION_URL=>"https://wiki.archlinux.org/", :SUPPORT_URL=>"https://bbs.archlinux.org/", :BUG_REPORT_URL=>"https://bugs.archlinux.org/", :LOGO=>"archlinux"}
@@ -51,6 +53,18 @@ module LinuxStat
 				end
 			end
 
+			# Uses utsname.h to determine the machine
+			# It returns a String but if the info isn't available, it will return an empty String
+			def machine
+				@@machine ||= Uname.machine
+			end
+
+			# Uses utsname.h to determine the system nodename
+			# It returns String but if the info isn't available, it will return an empty String
+			def nodename
+				@@nodename ||= Uname.nodename
+			end
+
 			# Reads /etc/hostname and returns the hostname.
 			# The return type is String.
 			# If the info info isn't available, it will return 'localhost'.
@@ -62,10 +76,13 @@ module LinuxStat
 				end
 			end
 
-			# Reads ruby configuration and tries to guess if the system is 32 bit or 64 bit.
-			# The return type is Integer.
+			# Reads ruby configuration and tries to guess if the system is 64 bit.
+			# If it fails then it runs utsname.h to guess the machine.
+			# It the machine is 64 bits, it will return 64, else it returns 32.
+			#
+			# The return type is strictly Integer and doesn't fail.
 			def bits
-				@@bits ||= if RbConfig::CONFIG['host_cpu'].end_with?('64') || RUBY_PLATFORM[/x86_64/]
+				@@bits ||= if RbConfig::CONFIG['host_cpu'].end_with?('64') || RUBY_PLATFORM.end_with?('64') || machine.end_with?('64')
 					64
 				else
 					32

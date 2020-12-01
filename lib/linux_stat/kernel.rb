@@ -133,6 +133,8 @@ module LinuxStat
 				end
 			end
 
+			alias release version
+
 			# Reads maximum 1024 bytes from /proc/version and returns the string.
 			# The output is also cached ; as changing the value in runtime is unexpected.
 			def string

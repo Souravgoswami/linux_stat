@@ -1,8 +1,6 @@
-# require 'linux_stat/fs_stat'
-
 module LinuxStat
 	module Filesystem
-		extend FS
+		prepend FS
 
 		class << self
 			# stat(fs = '/')
@@ -29,7 +27,7 @@ module LinuxStat
 				}
 			end
 
-			# stat(fs = '/')
+			# total(fs = '/')
 			# Where fs is the directory of the file system (like / or /tmp/ or /run/media/thumbdrive).
 			# It returns the total size of a given disk in bytes.
 			#
@@ -41,7 +39,7 @@ module LinuxStat
 				s[:block_size] * s[:blocks]
 			end
 
-			# stat(fs = '/')
+			# free(fs = '/')
 			# Where fs is the directory of the file system (like / or /tmp/ or /run/media/thumbdrive).
 			# It returns the total free space in a disk in bytes.
 			# It is to be noted that free is not same as available.
@@ -55,7 +53,7 @@ module LinuxStat
 				s[:block_size] * s[:block_free]
 			end
 
-			# stat(fs = '/')
+			# used(fs = '/')
 			# Where fs is the directory of the file system (like / or /tmp/ or /run/media/thumbdrive).
 			# It returns the used space of a given disk in bytes.
 			#
@@ -67,7 +65,7 @@ module LinuxStat
 				s[:blocks].-(s[:block_free]) * s[:block_size]
 			end
 
-			# stat(fs = '/')
+			# available(fs = '/')
 			# Where fs is the directory of the file system (like / or /tmp/ or /run/media/thumbdrive).
 			# It returns the total free space in a disk in bytes.
 			# It is to be noted that free is not same as available.
@@ -81,7 +79,7 @@ module LinuxStat
 				s[:block_size] * s[:block_avail_unpriv]
 			end
 
-			# stat(fs = '/')
+			# stat_raw(fs = '/')
 			# Where fs is the directory of the file system (like / or /tmp/ or /run/media/thumbdrive).
 			#
 			# It returns a Hash with the following data (for example):

@@ -145,12 +145,15 @@ body {
 
 .btn-blade-anim {
 	text-decoration: none !important ;
-	padding: 0 4px ;
+	padding: 8px ;
 	font-size: 16px ;
-	border: 2px solid #f66 ;
+	border: 2px solid #f55 ;
 	position: relative ;
 	display: inline-block ;
 	overflow: hidden ;
+	background: linear-gradient(45deg, #f55, #55f, #222, #222) ;
+	background-size: 400% ;
+	background-position: 100% ;
 	transition: all 0.125s linear 0.25s, filter 3s ease !important;
 	border-radius: 6px ;
 	cursor: pointer ;
@@ -158,13 +161,13 @@ body {
 
 	& .text {
 		transition: all 0.25s ease 0.25s ;
-		color: #f66 !important ;
+		color: #f55 !important ;
 	}
 
 	&::before {
 		content: '' ;
-		background-color: #fff ;
 		position: absolute ;
+		background-color: #fff ;
 		top: 0 ;
 		left: 0 ;
 		width: 200% ;
@@ -179,7 +182,8 @@ body {
 	}
 
 	&:hover {
-		background-color: #f66 ;
+		background-position: 0% ;
+		border-color: #f22 ;
 		box-shadow: 2px 3px 6px #f557 ;
 		transition-delay: 0s !important ;
 

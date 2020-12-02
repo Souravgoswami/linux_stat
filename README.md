@@ -312,7 +312,7 @@ If some error is *raised* it should be reported as a bug.
 1. Just add `gem linux_stat`:
 
 ```
-bundle add linux_stat
+$ bundle add linux_stat
 ```
 
 You can use LinuxStat directly in rails.

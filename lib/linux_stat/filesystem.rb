@@ -1,7 +1,5 @@
 module LinuxStat
 	module Filesystem
-		prepend FS
-
 		class << self
 			# stat(fs = '/')
 			# Where fs is the directory of the file system (like / or /tmp/ or /run/media/thumbdrive).
@@ -12,7 +10,7 @@ module LinuxStat
 			# 3. used space (in kilobytes)
 			#
 			# In a hash format:
-			# {:total=>119981191168, :free=>43155574784, :used=>76825616384, :available=>43155574784}
+			#    {:total=>119981191168, :free=>43155574784, :used=>76825616384, :available=>43155574784}
 			#
 			# If the stat can't be acquired, this method will return an empty Hash.
 			def stat(fs = ?/.freeze)
@@ -23,7 +21,7 @@ module LinuxStat
 				{
 					total: s[:block_size] * s[:blocks],
 					free: s[:block_size] * s[:block_free],
-					used: s[:blocks].-(s[:block_free]) * s[:block_size],
+					used: s[:blocks].-(s[:block_free]) * s[:block_size]
 				}
 			end
 
@@ -83,11 +81,11 @@ module LinuxStat
 			# Where fs is the directory of the file system (like / or /tmp/ or /run/media/thumbdrive).
 			#
 			# It returns a Hash with the following data (for example):
-			# {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>10535967, :block_avail_unpriv=>10535967, :inodes=>58612160, :free_inodes=>56718550, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
+			#    {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>10535967, :block_avail_unpriv=>10535967, :inodes=>58612160, :free_inodes=>56718550, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
 			#
 			# If the stat can't be acquired, this method will return an empty Hash.
-			def stat_raw(fs = '/'.freeze)
-				FS.stat(fs)
+			def stat_raw(fs = ?/.freeze)
+				LinuxStat::FS.stat(fs)
 			end
 		end
 	end

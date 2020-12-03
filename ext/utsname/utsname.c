@@ -23,7 +23,8 @@ static VALUE getNodename(VALUE obj) {
 void Init_utsname() {
 	init_buf() ;
 
-	VALUE _uname = rb_define_module("Uname") ;
+	VALUE _linux_stat = rb_define_module("LinuxStat") ;
+	VALUE _uname = rb_define_module_under(_linux_stat, "Uname") ;
 	rb_define_module_function(_uname, "machine", getMachine, 0) ;
 	rb_define_module_function(_uname, "nodename", getNodename, 0) ;
 }

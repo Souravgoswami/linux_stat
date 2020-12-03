@@ -21,6 +21,7 @@ module LinuxStat
 
 			# Show aggregated used and available swap.
 			# The values are in kilobytes.
+			#
 			# The return type is Hash.
 			# If the info isn't available, the return type is an empty Hash.
 			def stat
@@ -44,6 +45,7 @@ module LinuxStat
 
 			# Show total amount of swap.
 			# The value is in kilobytes.
+			#
 			# The return type is a Integer but if the info isn't available, it will return nil.
 			def total
 				return nil unless swaps_readable?
@@ -52,6 +54,7 @@ module LinuxStat
 
 			# Show total amount of available swap.
 			# The value is in kilobytes.
+			#
 			# The return type is a Integer but if the info isn't available, it will return nil.
 			def available
 				return nil unless swaps_readable?
@@ -61,6 +64,7 @@ module LinuxStat
 
 			# Show total amount of used swap.
 			# The value is in kilobytes.
+			#
 			# The return type is a Integer but if the info isn't available, it will return nil.
 			def used
 				return nil unless swaps_readable?
@@ -79,7 +83,8 @@ module LinuxStat
 				values_t[-1].sum.*(100).fdiv(total).round(2)
 			end
 
-			# Show percentage of swap available.
+			# Shows the percentage of swap available.
+			#
 			# The return type is a Float but if the info isn't available, it will return nil.
 			def percent_available
 				return nil unless swaps_readable?

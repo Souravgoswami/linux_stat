@@ -2,9 +2,10 @@ module LinuxStat
 	module Memory
 		class << self
 			# Returns the memory details reported by /proc/meminfo. In this format:
-			# {:total=>3836264, :used=>3097952, :available=>738312, :percent_used=>80.75, :percent_available=>19.25}
+			#    {:total=>3836264, :used=>3097952, :available=>738312, :percent_used=>80.75, :percent_available=>19.25}
 			#
-			# The value is in Kilobyte.
+			# The values are in Kilobyte.
+			#
 			# If the statistics is not available, it will return an empty Hash.
 			def stat
 				return {} unless meminfo?
@@ -31,6 +32,7 @@ module LinuxStat
 
 			# Returns the total memory details reported by /proc/meminfo.
 			# The value is in Kilobyte.
+			#
 			# It retuns an Integer but if the info is not available, it will return nil.
 			def total
 				return nil unless meminfo?
@@ -39,6 +41,7 @@ module LinuxStat
 
 			# Returns the total memory details reported by /proc/meminfo.
 			# The value is in Kilobyte.
+			#
 			# It retuns an Integer but if the info is not available, it will return nil
 			def available
 				return nil unless meminfo?
@@ -47,6 +50,7 @@ module LinuxStat
 
 			# Returns the amount of memory used reported by /proc/meminfo.
 			# The value is in Kilobyte.
+			#
 			# It retuns an Integer but if the info is not available, it will return nil.
 			def used
 				return nil unless meminfo?
@@ -55,6 +59,7 @@ module LinuxStat
 			end
 
 			# Returns the percentage of memory used reported by /proc/meminfo.
+			#
 			# It retuns an Integer but if the info is not available, it will return nil
 			def percent_used
 				return nil unless meminfo?
@@ -64,6 +69,7 @@ module LinuxStat
 			end
 
 			# Returns the percentage of memory used reported by /proc/meminfo.
+			#
 			# It retuns an Integer but if the info is not available,  it will return nil
 			def percent_available
 				return nil unless meminfo?

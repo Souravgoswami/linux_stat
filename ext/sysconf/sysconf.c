@@ -14,6 +14,7 @@ static VALUE getTick(VALUE obj) {
 void Init_sysconf() {
 	set_ticks() ;
 
-	VALUE _sysconf = rb_define_module("Sysconf") ;
+	VALUE _linux_stat = rb_define_module("LinuxStat") ;
+	VALUE _sysconf = rb_define_module_under(_linux_stat, "Sysconf") ;
 	rb_define_module_function(_sysconf, "sc_clk_tck", getTick, 0) ;
 }

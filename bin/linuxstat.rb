@@ -29,6 +29,7 @@ execute.sort.each do |c|
 	next if e.class != Module && e.class != Class
 
 	meths = e.methods(false).sort
+	next if meths.any? { |a| e.method(a).arity > 0 }
 
 	if meths.length > 0
 		if MARKDOWN

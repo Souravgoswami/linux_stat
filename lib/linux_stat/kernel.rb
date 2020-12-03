@@ -3,7 +3,7 @@ module LinuxStat
 		class << self
 			# Returns the Linux Kernel version.
 			# If the information isn't available, it will return a frozen empty string.
-			# The output is also cached ; as changing the value in runtime is unexpected.
+			# The output is also cached (memoized) ; as changing the value in runtime is unexpected.
 			def version
 				return ''.freeze if string.empty?
 				@@version ||= splitted[2]
@@ -11,7 +11,7 @@ module LinuxStat
 
 			# Returns the name of the user who built the kernel using KBUILD_FLAGS.
 			# If the information isn't available, it will return a frozen empty string.
-			# The output is also cached ; as changing the value in runtime is unexpected.
+			# The output is also cached (memoized) ; as changing the value in runtime is unexpected.
 			def build_user
 				@@build_user ||= string.split(/(\(.+\))/).each(&:strip!)
 					.reject(&:empty?).find { |x| x[/^\(.+\)$/] }.to_s
@@ -20,7 +20,7 @@ module LinuxStat
 
 			# Returns the compiler used to compile the Linux Kernel.
 			# If the information isn't available, it will return a frozen empty string.
-			# The output is also cached ; as changing the value in runtime is unexpected.
+			# The output is also cached (memoized) ; as changing the value in runtime is unexpected.
 			def compiler
 				return ''.freeze if string.empty?
 
@@ -39,7 +39,7 @@ module LinuxStat
 
 			# Returns the compiler version used to compile the Linux Kernel.
 			# If the information isn't available, it will return a frozen empty string.
-			# The output is also cached ; as changing the value in runtime is unexpected.
+			# The output is also cached (memoized) ; as changing the value in runtime is unexpected.
 			def compiler_version
 				@@compiler_version ||= string.split(/(\(.+?\))/).each(&:strip!)
 					.reject(&:empty?)[2..4].to_a
@@ -62,7 +62,7 @@ module LinuxStat
 			# You have to use regexp yourself to get the proper zone.
 			# Use LinuxStat::Kernel.build_date_string to get the original string if you need that.
 			#
-			# The output is also cached ; as changing the value in runtime is unexpected.
+			# The output is also cached  (memoized) ; as changing the value in runtime is unexpected.
 			def build_date
 				return nil if splitted.empty?
 
@@ -107,7 +107,7 @@ module LinuxStat
 			# You have to use regexp yourself to get the proper zone.
 			# Use LinuxStat::Kernel.build_date_string to get the original string if you need that.
 			#
-			# The output is also cached ; as changing the value in runtime is unexpected.
+			# The output is also cached (memoized) ; as changing the value in runtime is unexpected.
 			def build_date_string
 				return nil if splitted.empty?
 
@@ -145,7 +145,7 @@ module LinuxStat
 			# Also, clk_tck is an alias of this method.
 			# The output is also cached ; as changing the value in runtime is unexpected.
 			def ticks
-				@@tick ||= Sysconf.sc_clk_tck
+				@@tick ||= LinuxStat::Sysconf.sc_clk_tck
 			end
 
 			alias clk_tck ticks

@@ -25,6 +25,7 @@ static VALUE statfs(VALUE obj, VALUE dir) {
 }
 
 void Init_fs_stat() {
-	VALUE fs = rb_define_module("FS") ;
+	VALUE _linux_stat = rb_define_module("LinuxStat") ;
+	VALUE fs = rb_define_module_under(_linux_stat, "FS") ;
 	rb_define_module_function(fs, "stat", statfs, 1) ;
 }

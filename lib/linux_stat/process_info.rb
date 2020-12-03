@@ -165,7 +165,7 @@ module LinuxStat
 				_vm_rss ? _vm_rss.split[1].to_i : nil
 			end
 
-			# cpu_stat(pid = $$)
+			# cpu_stat(pid: $$, sleep: 0.05)
 			# Where pid is the process ID and sleep time is the interval between measurements.
 			# By default it is the id of the current process ($$), and sleep is 0.05
 			#
@@ -197,7 +197,7 @@ module LinuxStat
 			#
 			# The :last_executed_cpu also returns an Integer indicating
 			# the last executed cpu of the process.
-			def cpu_stat(pid = $$, sleep = 0.05)
+			def cpu_stat(pid: $$, sleep: 0.05)
 				file = "/proc/#{pid}/stat"
 				return {} unless File.readable?(file)
 
@@ -229,7 +229,7 @@ module LinuxStat
 				}
 			end
 
-			# cpu_usage(pid = $$, sleep = 0.05)
+			# cpu_usage(pid: $$, sleep: 0.05)
 			# Where pid is the process ID and sleep time is the interval between measurements.
 			# By default it is the id of the current process ($$), and sleep is 0.05
 			#
@@ -241,7 +241,7 @@ module LinuxStat
 			# But if the info isn't available, it will return nil.
 			#
 			# This method is more efficient than running LinuxStat::ProcessInfo.cpu_stat()
-			def cpu_usage(pid = $$, sleep = 0.05)
+			def cpu_usage(pid: $$, sleep: 0.05)
 				file = "/proc/#{pid}/stat"
 				return nil unless File.readable?(file)
 

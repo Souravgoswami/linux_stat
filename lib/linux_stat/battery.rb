@@ -9,7 +9,7 @@ module LinuxStat
 			end
 
 			# Returns the details of the battery.
-			#If the battery is not present it will return an empty Hash.
+			# If the battery is not present it will return an empty Hash.
 			def stat
 				st = status.downcase
 				return {} unless present?
@@ -27,7 +27,7 @@ module LinuxStat
 			end
 
 			# Returns the model of the battery.
-			#If the battery is not present or the information isn't available it will return an empty String.
+			# If the battery is not present or the information isn't available it will return an empty String.
 			def model
 				return ''.freeze unless model_readable?
 				IO.read(File.join(PATH, 'model_name')).tap(&:strip!)

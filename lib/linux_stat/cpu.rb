@@ -63,7 +63,8 @@ module LinuxStat
 
 			# Returns the model of processor.
 			# If the information isn't available, it will return en empty string.
-			# The output is also cached ; as changing the value in runtime is unexpected.
+			#
+			# The output is also cached (memoized) ; as changing the value in runtime is unexpected.
 			def model
 				@@name ||= cpuinfo.find { |x| x.start_with?('model name') }.to_s.split(?:)[-1].to_s.strip
 			end

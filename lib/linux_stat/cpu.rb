@@ -19,7 +19,14 @@ module LinuxStat
 				sleep(sleep)
 				data2 = IO.readlines('/proc/stat').select! { |x| x[/^cpu\d*/] }.map! { |x| x.split.map!(&:to_f) }
 
-				data.size.times.reduce({}) do |h, x|
+				# On devices like android, the core count can change anytime.
+				# I had crashes on Termux.
+				# So better just count the min number of CPU and iterate over that
+				# If data.length is smaller than data2.length, we don't have enough data to compare.
+				dl, d2l = data.length, data2.length
+				min = dl > d2l ? d2l : dl
+
+				min.times.reduce({}) do |h, x|
 					user, nice, sys, idle, iowait, irq, softirq, steal = *data[x].drop(1)
 					user2, nice2, sys2, idle2, iowait2, irq2, softirq2, steal2 = *data2[x].drop(1)
 

@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
 	s.metadata["homepage_uri"] = s.homepage
 	s.metadata["source_code_uri"] = "https://github.com/Souravgoswami/linux_stat"
 	s.metadata["changelog_uri"] = "https://github.com/Souravgoswami/linux_stat/commits/master"
-	s.files = Dir.glob(%w(lib/**/** ext/**/** bin/** README.md LICENCE))
+	s.files = Dir.glob(%w(lib/**/** ext/**/*.{c,rb} bin/** README.md LICENCE))
 	s.bindir = "exe"
 	s.executables = s.files.grep(%r{^exe/}) { |f| File.basename(f) }
 	s.extensions = Dir.glob("ext/**/extconf.rb")

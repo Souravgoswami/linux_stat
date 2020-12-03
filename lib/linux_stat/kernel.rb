@@ -141,6 +141,15 @@ module LinuxStat
 				@@string ||= File.readable?('/proc/version') ? IO.read('/proc/version', 1024).tap(&:strip!) : ''
 			end
 
+			# Returns the sc_clk_tck or the same output from command `getconf CLK_TCK`.
+			# Also, clk_tck is an alias of this method.
+			# The output is also cached ; as changing the value in runtime is unexpected.
+			def ticks
+				@@tick ||= Sysconf.sc_clk_tck
+			end
+
+			alias clk_tck ticks
+
 			private
 			def splitted
 				@@string_splitted ||= string.split

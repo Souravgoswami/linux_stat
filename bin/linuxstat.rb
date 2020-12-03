@@ -2,17 +2,45 @@
 begin
 	require 'linux_stat'
 rescue LoadError
-	require 'bundler/setup'
-	require 'linux_stat'
+	puts "The Gem needs to be installed before this test can be run!"
 end
 
 $-v = true
 
 # Print time each method takes unless --no-time or -nt option is passed
-MARKDOWN = ARGV.any? { |x| x[/^\-\-markdown$/] || x[/^\-md$/] }
-PRINT_TIME = MARKDOWN ? false : !ARGV.any? { |x| x[/^\-\-no-time$/] || x[/^\-nt$/] }
+markdown = ARGV.any? { |x| x[/^\-(\-markdown|md)$/] }
+html = ARGV.any? { |x| x[/^\-(\-html|html)$/] }
 
-%w(--markdown -md --no-time -nt).each(&ARGV.method(:delete))
+# Check which conflicting argument (e.g., `-md -html` together) is passed last
+# Always use the last argument
+conflicting, hash = [
+	"markdown|html", /^\-(\-markdown|md)$/, /^\-(\-html|html)$/
+].each_slice(3).to_a, {}
+
+conflicting.each do |x, y, z|
+	o1, o2 = *x.split(?|.freeze).map(&:to_sym)
+	m1, m2 = ARGV.any? { |_x| _x[y] }, ARGV.any? { |_x| _x[z] }
+
+	if m1 && m2
+		rev = ARGV.reverse
+
+		if rev.index { |_x| _x[y] } < rev.index { |_x| _x[z] }
+			hash.merge!(o1 => true)
+		else
+			hash.merge!(o2 => true)
+		end
+	elsif m1
+		hash.merge!(o1 => true)
+	elsif m2
+		hash.merge!(o2 => true)
+	end
+end
+
+MARKDOWN, HTML = hash[:markdown], hash[:html]
+
+PRINT_TIME = (MARKDOWN || HTML) ? false : !ARGV.any? { |x| x[/^\-\-no-time$/] || x[/^\-nt$/] }
+
+%w(--markdown -md --no-time -nt --html -html).each(&ARGV.method(:delete))
 
 # Run only desired classes / modules
 constants = LinuxStat.constants
@@ -34,6 +62,8 @@ execute.sort.each do |c|
 	if meths.length > 0
 		if MARKDOWN
 			puts "### LinuxStat::#{c}\n```"
+		elsif HTML
+			puts "<h3>LinuxStat::#{c}</h3>\n<pre>"
 		else
 			puts "\e[1;4;38;2;255;240;0mLinuxStat::#{c}\e[0m"
 		end
@@ -49,6 +79,8 @@ execute.sort.each do |c|
 		dis = v.length > 253 ? v[0..250].strip + '...'.freeze : v
 
 		if MARKDOWN
+			puts "#{e}.#{meth}\n=> #{dis}"
+		elsif HTML
 			puts "#{e}.#{meth}\n=> #{dis}"
 		else
 			puts "\e[1;38;2;80;80;255m#{e}.#{meth}\e[0m\n=> #{dis}"
@@ -67,5 +99,10 @@ execute.sort.each do |c|
 		puts
 	end
 
-	puts "```\n\n" if MARKDOWN && meths.length > 0
+	meths.length > 0
+		if MARKDOWN
+			puts "```\n\n"
+		elsif HTML
+			puts "</pre>"
+		end
 end

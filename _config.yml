@@ -1,14 +1,11 @@
 title: LinuxStat
 email: souravgoswami@protonmail.com
-description: >- # this means to ignore newlines until "baseurl:"
+description: >-
   Efficient linux system reporting gem. Linux Only | Efficient | Reliable
 
-baseurl: "/linux_stat" # the subpath of your site, e.g. /blog
-url: "https://souravgoswami.github.io/" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/linux_stat"
+url: "https://souravgoswami.github.io/"
 github_username:  souravgoswami
-
-plugins:
-  - jekyll-feed
 
 sass:
   style: compressed

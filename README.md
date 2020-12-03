@@ -312,18 +312,12 @@ If some error is *raised* it should be reported as a bug.
 1. Just add `gem linux_stat`:
 
 ```
-bundle add linux_stat
+$ bundle add linux_stat
 ```
 
 You can use LinuxStat directly in rails.
 
 ![RailsApp](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/images/rails.gif)
-
-Don't need to worry about versions if you are using anything > 0.2.1.
-
-Newer versions will have bug fixes, performance improvements and new features but the return types of old methods will always be the same across upgrades > 0.2.1.
-
-Even if we remove something, there will be always a deprecation warning for some months or for even a year before we actually remove it.
 
 
 ## Android

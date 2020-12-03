@@ -362,11 +362,12 @@ body {
 		margin: 12px 0 ;
 		text-align: justify ;
 		padding: 6px ;
-		max-height: 400px ;
+		width: 100% ;
+		white-space: pre-wrap ;
+		word-break: break-all ;
 		background-color: #efefef ;
 		line-height: 150% ;
 		border-radius: 6px ;
-		overflow: auto ;
 		font-size: 14px ;
 
 		code {

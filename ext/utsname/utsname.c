@@ -4,19 +4,19 @@
 #pragma clang optimize on
 
 static struct utsname buf ;
-static VALUE machine, nodename ;
+static short status ;
 
 void init_buf() {
-	short status = uname(&buf) ;
-	machine = status < 0 ? rb_str_new_cstr("") : rb_str_new_cstr(buf.machine) ;
-	nodename = status < 0 ? rb_str_new_cstr("") : rb_str_new_cstr(buf.nodename) ;
+	status = uname(&buf) ;
 }
 
 static VALUE getMachine(VALUE obj) {
+	VALUE machine = status < 0 ? rb_str_new_cstr("") : rb_str_new_cstr(buf.machine) ;
 	return machine ;
 }
 
 static VALUE getNodename(VALUE obj) {
+	VALUE nodename = status < 0 ? rb_str_new_cstr("") : rb_str_new_cstr(buf.nodename) ;
 	return nodename ;
 }
 

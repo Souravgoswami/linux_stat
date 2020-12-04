@@ -7,6 +7,8 @@ LinuxStat lets you read status of a Linux system. It can show you cpu stats and 
 
 It only works for Linux, and detecting the OS is upto the user of this gem.
 
+---
+
 ## Dependencies:
 + You need to have the C compile to be able to compile the C extension.
 On Arch Linux:
@@ -25,6 +27,8 @@ On Debian based systems:
 ```
 
 + Once your are done, and you can compile the C file, you can follow the installation!
+
+---
 
 ## Installation
 
@@ -395,6 +399,121 @@ LinuxStat::Uname.version
 => "#1 SMP PREEMPT Wed, 21 Oct 2020 01:11:20 +0000"
 
 ```
+---
+
+## Note 1: Filesystem
+
+Filesystem can take arguments. By default it's '/' or the root of the system...
+
+But for the sake of example, to get the free disk space of /, you do:
+
+```
+$ irb
+irb(main):001:0> require 'linux_stat'
+=> true
+
+irb(main):002:0> LinuxStat::Filesystem.free('/').fdiv(1024 ** 3).to_s << " GiB"
+=> "35.666873931884766 GiB"
+```
+
+To see the free and total space of a thumbdrive:
+
+```
+$ irb
+irb(main):001:0> require 'linux_stat'
+=> true
+
+irb(main):002:0> LinuxStat::Mounts.list.find { |x| x.include?('/run/media/sourav') }.split[1]
+=> "/run/media/sourav/5c2b7af7-d4c3-4ab4-a035-06d18ffc8e6f"
+
+irb(main):003:0> thumbdrive = _
+=> "/run/media/sourav/5c2b7af7-d4c3-4ab4-a035-06d18ffc8e6f"
+
+irb(main):004:0> LinuxStat::Filesystem.free(thumbdrive).fdiv(1024 ** 3).to_s << " GiB"
+=> "2.504791259765625 GiB"
+
+irb(main):005:0> LinuxStat::Filesystem.total(thumbdrive).fdiv(1024 ** 3).to_s << " GiB"
+=> "29.305004119873047 GiB"
+```
+
+## Note 2: ProcessInfo
+
+All the methods LinuxStat::ProcessInfo can take an argument containing the Process ID of a process.
+By default it's $$ or the PID of the current process, ruby, itself.
+
+Example:
+Say you want to see how much CPU Firefox is consuming, for that you have to do the following (firefox can create a lot of child process though):
+
+1. Get the PID of Firefox:
+```
+LinuxStat::Process.names.find { |x| x[1].include? 'firefox' }[0]
+=> 770 # but this differs all the time
+```
+
+2. Get the CPU usage:
+```
+$ irb
+irb(main):001:0> require 'linux_stat'
+=> true
+
+irb(main):002:0> pid = LinuxStat::Process.names.find { |x| x[1].include? 'firefox' }[0]
+=> 770
+
+irb(main):003:0> LinuxStat::ProcessInfo.cpu_usage(pid: pid)
+=> 0.0
+
+irb(main):004:0> LinuxStat::ProcessInfo.cpu_usage(pid: pid)
+=> 15.0
+```
+
+To get the memory usage of Firefox (for example):
+
+```
+$ irb
+irb(main):001:0> require 'linux_stat'
+=> true
+
+irb(main):002:0> LinuxStat::ProcessInfo.mem_stat(LinuxStat::Process.names.find { |x| x[1].include? 'firefox'.freeze }[0])
+=> {:memory=>468472, :virtual_memory=>4754080, :resident_memory=>814388}
+```
+
+To get ONLY the memory usage in MiB:
+
+```
+$ irb
+irb(main):001:0> require 'linux_stat'
+=> true
+
+irb(main):002:0> LinuxStat::ProcessInfo.memory(LinuxStat::Process.names.find { |x| x[1].include? 'firefox'.freeze }[0]).fdiv(1024).round(2).to_s << " MiB"
+=> "467.51 MiB"
+```
+
+## Note 3: FS
+
+LinuxStat::FS module gives you the raw info in Hash collected from statvfs.
+
+It's not documented above because it's not suggested to run this directly. But it shouldn't cause any issue. `LinuxStat::Filesystem.stat_raw(fs = '/')` does that automatically.
+
+It always requires an argument, and it's very fast. It directly calls the C API without any intermediate Ruby code.
+
+For example, to get the info about '/' or root:
+
+```
+$ irb
+irb(main):001:0> require 'linux_stat'
+=> true
+
+irb(main):002:0> LinuxStat::FS.stat('/')
+=> {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>9349843, :block_avail_unpriv=>9349843, :inodes=>58612160, :free_inodes=>56708247, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
+
+irb(main):003:0> t = Time.now ; puts LinuxStat::FS.stat('/') ; Time.now - t
+{:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>9349843, :block_avail_unpriv=>9349843, :inodes=>58612160, :free_inodes=>56708247, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
+=> 5.0468e-05
+```
+
+To learn more about them, just run ri and the method name. To see all available methods:
+
+---
 
 ## Return Types
 + In general, if a method returns either a Float or a Integer or a Time, it will return a Float or Integer or Time in all cases. But if the status isn't available, it will return nil.
@@ -409,6 +528,8 @@ LinuxStat::Uname.version
 
 If some error is *raised* it should be reported as a bug.
 
+---
+
 ## Ruby on Rails
 
 1. Just add `gem linux_stat`:
@@ -421,22 +542,28 @@ You can use LinuxStat directly in rails.
 
 ![RailsApp](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/images/rails.gif)
 
+---
 
 ## Android
 
 LinuxStat does support Android OS. But it's not rigorously tested on all device like android apps.
 
 But in Termux you can just run LinuxStat without facing issues.
+Note that the CPU count can differ due to hotplugging feature. So if you see the CPU count changes, there's not really nothing to do about that.
 
 ![termux](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/images/termux.webp)
 
 Issues regarding running LinuxStat on termux are also welcomed.
+
+---
 
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
+---
 
 ## Testing
 Like other gems, this doesn't have a test like RSpec. We suggest using the bin/linuxstat.rb file on various systems.
@@ -459,9 +586,13 @@ $ ruby bin/linuxstat.rb upc
 ```
 This is not a valid module and can't be run.
 
+---
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/Souravgoswami/linux_stat.
+
+---
 
 ## License
 

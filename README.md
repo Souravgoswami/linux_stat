@@ -1,7 +1,7 @@
 # LinuxStat
 ![logo](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/images/logo.jpg)
 
-For reading the HTML version, visit [linux_stat](https://souravgoswami.github.io/linux_stat/).
+For reading the eyecandy HTML version, visit [linux_stat](https://souravgoswami.github.io/linux_stat/).
 
 LinuxStat lets you read status of a Linux system. It can show you cpu stats and usages, memory stats and usages, swap stats and usages, battery usage, bios info,  kernel details, local ip, os details and parse os-release + lsb-release, etc.
 

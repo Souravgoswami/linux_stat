@@ -37,6 +37,22 @@ static VALUE getPosixVersion(VALUE obj) {
 	return INT2FIX(sysconf(_SC_VERSION)) ;
 }
 
+static VALUE getUser(VALUE obj) {
+	return rb_str_new_cstr(getlogin()) ;
+}
+
+static VALUE getUID(VALUE obj) {
+	return INT2FIX(getuid()) ;
+}
+
+static VALUE getGID(VALUE obj) {
+	return INT2FIX(getgid()) ;
+}
+
+static VALUE getEUID(VALUE obj) {
+	return INT2FIX(geteuid()) ;
+}
+
 void Init_sysconf() {
 	VALUE _linux_stat = rb_define_module("LinuxStat") ;
 	VALUE _sysconf = rb_define_module_under(_linux_stat, "Sysconf") ;
@@ -50,4 +66,11 @@ void Init_sysconf() {
 	rb_define_module_function(_sysconf, "stream_max", getStreamMax, 0) ;
 	rb_define_module_function(_sysconf, "tty_name_max", getTTYNameMax, 0) ;
 	rb_define_module_function(_sysconf, "posix_version", getPosixVersion, 0) ;
+
+	rb_define_module_function(_sysconf, "get_uid", getUID, 0) ;
+	rb_define_module_function(_sysconf, "get_gid", getGID, 0) ;
+	rb_define_module_function(_sysconf, "get_euid", getEUID, 0) ;
+
+	rb_define_module_function(_sysconf, "get_user", getUser, 0) ;
+	rb_define_module_function(_sysconf, "get_login", getUser, 0) ;
 }

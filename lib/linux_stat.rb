@@ -18,3 +18,4 @@ require "linux_stat/filesystem"
 require "linux_stat/sysconf"
 require "linux_stat/kernel"
 require "linux_stat/process_info"
+require 'linux_stat/user'

@@ -288,7 +288,7 @@ LinuxStat::Process.zombie
 ### LinuxStat::ProcessInfo
 ```
 LinuxStat::ProcessInfo.cmdline
-=> "ruby bin/linuxstat.rb -md"
+=> "ruby exe/linuxstat.rb -md"
 
 LinuxStat::ProcessInfo.command_name
 => "ruby"
@@ -397,6 +397,58 @@ LinuxStat::Uname.sysname
 
 LinuxStat::Uname.version
 => "#1 SMP PREEMPT Wed, 21 Oct 2020 01:11:20 +0000"
+
+```
+
+### LinuxStat::User
+```
+LinuxStat::User.get_euid
+=> 1000
+
+LinuxStat::User.get_gid
+=> 1000
+
+LinuxStat::User.get_uid
+=> 1000
+
+LinuxStat::User.get_user
+=> "sourav"
+
+LinuxStat::User.gid_by_username
+=> 1000
+
+LinuxStat::User.gids
+=> {:root=>0, :bin=>1, :daemon=>2, :mail=>12, :ftp=>11, :http=>33, :nobody=>65534, :dbus=>81, :"systemd-journal-remote"=>982, :"systemd-network"=>981, :"systemd-resolve"=>980, :"systemd-timesync"=>979, :"systemd-coredump"=>978, :uuidd=>68, :avahi=>977, :...
+
+LinuxStat::User.home_by_gid
+=> "/home/sourav"
+
+LinuxStat::User.home_by_username
+=> "/home/sourav"
+
+LinuxStat::User.home_directories
+=> {:root=>"/root", :bin=>"/", :daemon=>"/", :mail=>"/var/spool/mail", :ftp=>"/srv/ftp", :http=>"/srv/http", :nobody=>"/", :dbus=>"/", :"systemd-journal-remote"=>"/", :"systemd-network"=>"/", :"systemd-resolve"=>"/", :"systemd-timesync"=>"/", :"systemd-c...
+
+LinuxStat::User.homes_by_uid
+=> ["/home/sourav"]
+
+LinuxStat::User.ids
+=> {:root=>{:uid=>0, :gid=>0}, :bin=>{:uid=>1, :gid=>1}, :daemon=>{:uid=>2, :gid=>2}, :mail=>{:uid=>8, :gid=>12}, :ftp=>{:uid=>14, :gid=>11}, :http=>{:uid=>33, :gid=>33}, :nobody=>{:uid=>65534, :gid=>65534}, :dbus=>{:uid=>81, :gid=>81}, :"systemd-journal...
+
+LinuxStat::User.list
+=> ["root", "bin", "daemon", "mail", "ftp", "http", "nobody", "dbus", "systemd-journal-remote", "systemd-network", "systemd-resolve", "systemd-timesync", "systemd-coredump", "uuidd", "avahi", "colord", "git", "lxdm", "polkitd", "rtkit", "usbmux", "sourav...
+
+LinuxStat::User.uid_by_username
+=> 1000
+
+LinuxStat::User.uids
+=> {:root=>0, :bin=>1, :daemon=>2, :mail=>8, :ftp=>14, :http=>33, :nobody=>65534, :dbus=>81, :"systemd-journal-remote"=>982, :"systemd-network"=>981, :"systemd-resolve"=>980, :"systemd-timesync"=>979, :"systemd-coredump"=>978, :uuidd=>68, :avahi=>977, :c...
+
+LinuxStat::User.username_by_gid
+=> "sourav"
+
+LinuxStat::User.usernames_by_uid
+=> ["sourav"]
 
 ```
 
@@ -514,6 +566,46 @@ irb(main):003:0> t = Time.now ; puts LinuxStat::FS.stat('/') ; Time.now - t
 
 To learn more about them, just run ri and the method name. To see all available methods:
 
+## Note 4: User
+Most of the LinuxStat::User supports arguments.
+
+For example, to get a user's home by the username:
+
+```
+irb(main):001:0> require 'linux_stat'
+=> true
+
+irb(main):002:0> LinuxStat::User.home_by_username('root')
+=> "/root"
+
+irb(main):003:0> LinuxStat::User.home_by_username('ftp')
+=> "/srv/ftp"
+
+irb(main):004:0> LinuxStat::User.home_by_username('mail')
+=> "/var/spool/mail"
+```
+
+Or to get the UID/GID by username:
+
+```
+irb(main):001:0> require 'linux_stat'
+=> true
+
+irb(main):002:0> LinuxStat::User.uid_by_username('root')
+=> 0
+
+irb(main):003:0> LinuxStat::User.uid_by_username('ftp')
+=> 14
+
+irb(main):004:0> LinuxStat::User.gid_by_username('ftp')
+=> 11
+
+irb(main):005:0> LinuxStat::User.gid_by_username('InvalidUser')
+=> nil
+```
+
+Read the ri documentation for more info.
+
 ---
 
 ## Return Types
@@ -563,30 +655,33 @@ After checking out the repo, compile and install this gem onto your local machin
 
 You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To test all modules, run `rake install` and then `bin/linuxstat.rb`. Also check "Testing" below.
+To test all modules, run `rake install` and then `exe/linuxstat.rb`. Also check "Testing" below.
 
 ---
 
 ## Testing
 Like other gems, this doesn't have a test like RSpec.
-We suggest using the bin/linuxstat.rb file on various Linux systems to test.
+
+We suggest using the exe/linuxstat.rb file on various Linux systems to test.
+
 First you need to execute `bundle exec rake install` to compile and install this gem.
+
 If you need to test a specific module, say the CPU, just run it like this:
 
 ```
-$ ruby bin/linuxstat.rb CPU
+$ ruby exe/linuxstat.rb CPU
 ```
 
 Or:
 ```
-$ ruby bin/linuxstat.rb cpu
+$ ruby exe/linuxstat.rb cpu
 ```
 
 That is, the argument passed is not case-sensitive.
 But if the argument passed isn't available and outright wrong, it will run all the module methods. For example, you can't do:
 
 ```
-$ ruby bin/linuxstat.rb upc
+$ ruby exe/linuxstat.rb upc
 ```
 This is not a valid module and can't be run.
 

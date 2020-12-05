@@ -133,8 +133,6 @@ module LinuxStat
 				end
 			end
 
-			alias release version
-
 			# Reads maximum 1024 bytes from /proc/version and returns the string.
 			# The output is also cached ; as changing the value in runtime is unexpected.
 			def string
@@ -148,6 +146,7 @@ module LinuxStat
 				@@tick ||= LinuxStat::Sysconf.sc_clk_tck
 			end
 
+			alias release version
 			alias clk_tck ticks
 
 			private

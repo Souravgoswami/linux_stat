@@ -308,6 +308,10 @@ module LinuxStat
 				IO.read("/proc/#{pid}/stat".freeze).split[38].to_i
 			end
 
+			# def owned_by
+
+			# end
+
 			private
 			def get_ticks
 				@@ticks ||= Sysconf.sc_clk_tck

@@ -311,8 +311,17 @@ body {
 	line-height: 40px ;
 
 	.title {
-		font-size: 40px ;
+		font-size: 48px ;
 		color: #159957 ;
+		margin: 2rem 0 ;
+	}
+
+	h3 {
+		background: linear-gradient(45deg, #3da, #55f) ;
+		display: inline-block ;
+		color: transparent ;
+		-webkit-background-clip: text ;
+		background-clip: text ;
 	}
 
 	.head {

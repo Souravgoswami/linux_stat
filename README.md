@@ -103,7 +103,7 @@ LinuxStat::CPU.count
 => 4
 
 LinuxStat::CPU.cur_freq
-=> [1999998, 2000003, 2000015, 2000009]
+=> [2000050, 2000024, 1998134, 1975870]
 
 LinuxStat::CPU.max_freq
 => [2000000, 2000000, 2000000, 2000000]
@@ -112,38 +112,38 @@ LinuxStat::CPU.model
 => "Intel(R) Core(TM) i3-6006U CPU @ 2.00GHz"
 
 LinuxStat::CPU.stat
-=> {0=>14.29, 1=>25.0, 2=>0.0, 3=>25.0, 4=>14.29}
+=> {0=>3.57, 1=>0.0, 2=>0.0, 3=>0.0, 4=>0.0}
 
 LinuxStat::CPU.total_usage
-=> 18.75
+=> 3.45
 
 LinuxStat::CPU.usage
-=> 14.29
+=> 9.68
 
 LinuxStat::CPU.usages
-=> {0=>16.67, 1=>14.29, 2=>28.57, 3=>0.0, 4=>25.0}
+=> {0=>6.67, 1=>0.0, 2=>25.0, 3=>12.5, 4=>14.29}
 
 ```
 
 ### LinuxStat::Filesystem
 ```
 LinuxStat::Filesystem.available
-=> 42144575488
+=> 36234563584
 
 LinuxStat::Filesystem.free
-=> 42144575488
+=> 36234563584
 
 LinuxStat::Filesystem.stat
-=> {:total=>119981191168, :free=>42144575488, :used=>77836615680}
+=> {:total=>119981191168, :free=>36234563584, :used=>83746627584}
 
 LinuxStat::Filesystem.stat_raw
-=> {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>10289203, :block_avail_unpriv=>10289203, :inodes=>58612160, :free_inodes=>56716465, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
+=> {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>8846329, :block_avail_unpriv=>8846329, :inodes=>58612160, :free_inodes=>56635312, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
 
 LinuxStat::Filesystem.total
 => 119981191168
 
 LinuxStat::Filesystem.used
-=> 77836615680
+=> 83746627584
 
 ```
 
@@ -184,22 +184,22 @@ LinuxStat::Kernel.version
 ### LinuxStat::Memory
 ```
 LinuxStat::Memory.available
-=> 606548
+=> 602148
 
 LinuxStat::Memory.percent_available
-=> 15.81
+=> 15.7
 
 LinuxStat::Memory.percent_used
-=> 84.19
+=> 84.3
 
 LinuxStat::Memory.stat
-=> {:total=>3836256, :used=>3229708, :available=>606548, :percent_used=>84.19, :percent_available=>15.81}
+=> {:total=>3836256, :used=>3234108, :available=>602148, :percent_used=>84.3, :percent_available=>15.7}
 
 LinuxStat::Memory.total
 => 3836256
 
 LinuxStat::Memory.used
-=> 3229708
+=> 3234108
 
 ```
 
@@ -225,7 +225,7 @@ LinuxStat::Mounts.tmpfs
 ### LinuxStat::Net
 ```
 LinuxStat::Net.ipv4_private
-=> "192.168.0.101"
+=> "192.168.43.107"
 
 ```
 
@@ -253,29 +253,29 @@ LinuxStat::OS.os_release
 => {:NAME=>"Arch Linux", :PRETTY_NAME=>"Arch Linux", :ID=>"arch", :BUILD_ID=>"rolling", :ANSI_COLOR=>"38;2;23;147;209", :HOME_URL=>"https://www.archlinux.org/", :DOCUMENTATION_URL=>"https://wiki.archlinux.org/", :SUPPORT_URL=>"https://bbs.archlinux.org/"...
 
 LinuxStat::OS.uptime
-=> {:hour=>9, :minute=>10, :second=>19.41}
+=> {:hour=>15, :minute=>19, :second=>34.72}
 
 ```
 
 ### LinuxStat::Process
 ```
 LinuxStat::Process.count
-=> 221
+=> 228
 
 LinuxStat::Process.idle
-=> [3, 4, 6, 9, 12, 23, 30, 37, 39, 49, 102, 103, 104, 106, 107, 108, 109, 110, 117, 118, 120, 122, 131, 134, 140, 152, 153, 168, 170, 173, 174, 182, 183, 184, 185, 186, 187, 214, 224, 268, 308, 313, 314, 330, 2357, 2358, 2359, 2360, 2361, 2362, 25094, 2...
+=> [3, 4, 6, 9, 12, 23, 30, 37, 39, 49, 102, 103, 104, 106, 107, 108, 109, 110, 117, 118, 119, 121, 131, 134, 140, 152, 153, 174, 176, 178, 182, 183, 187, 188, 189, 190, 191, 192, 225, 231, 280, 327, 329, 335, 5823, 5824, 5825, 5826, 5827, 5828, 43047, 4...
 
 LinuxStat::Process.list
-=> [1, 2, 3, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 46, 47, 48, 49, 50, 51, 52, 102, 103, 104, 106, 107, 108, 109, 110, 112, 114, 115, 117, 118, 120, 122, 131, 134,...
+=> [1, 2, 3, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 46, 47, 48, 49, 50, 51, 52, 102, 103, 104, 106, 107, 108, 109, 110, 112, 114, 115, 117, 118, 119, 121, 131, 134,...
 
 LinuxStat::Process.names
 => {1=>"systemd", 2=>"kthreadd", 3=>"rcu_gp", 4=>"rcu_par_gp", 6=>"kworker/0:0H-kblockd", 9=>"mm_percpu_wq", 10=>"ksoftirqd/0", 11=>"rcuc/0", 12=>"rcu_preempt", 13=>"rcub/0", 14=>"migration/0", 15=>"idle_inject/0", 16=>"cpuhp/0", 17=>"cpuhp/1", 18=>"idle...
 
 LinuxStat::Process.running
-=> [30804]
+=> [49287]
 
 LinuxStat::Process.sleeping
-=> [1, 2, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 38, 40, 41, 42, 46, 47, 48, 50, 51, 52, 112, 114, 115, 167, 169, 188, 215, 228, 307, 309, 311, 316, 317, 319, 320, 354, 355, 356, 357, 364, 368, 370, 384, 397,...
+=> [1, 2, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 38, 40, 41, 42, 46, 47, 48, 50, 51, 52, 112, 114, 115, 173, 175, 193, 219, 235, 301, 312, 313, 315, 326, 328, 340, 363, 364, 365, 366, 373, 376, 378, 381, 395,...
 
 LinuxStat::Process.types
 => {1=>:sleeping, 2=>:sleeping, 3=>:idle, 4=>:idle, 6=>:idle, 9=>:idle, 10=>:sleeping, 11=>:sleeping, 12=>:idle, 13=>:sleeping, 14=>:sleeping, 15=>:sleeping, 16=>:sleeping, 17=>:sleeping, 18=>:sleeping, 19=>:sleeping, 20=>:sleeping, 21=>:sleeping, 23=>:i...
@@ -288,37 +288,37 @@ LinuxStat::Process.zombie
 ### LinuxStat::ProcessInfo
 ```
 LinuxStat::ProcessInfo.cmdline
-=> "ruby exe/linuxstat.rb -md"
+=> "/usr/bin/ruby /home/sourav/.gem/ruby/2.7.0/bin/linuxstat.rb --html -md"
 
 LinuxStat::ProcessInfo.command_name
 => "ruby"
 
 LinuxStat::ProcessInfo.cpu_stat
-=> {:cpu_usage=>0.0, :threads=>1, :last_executed_cpu=>2}
+=> {:cpu_usage=>0.0, :threads=>1, :last_executed_cpu=>3}
 
 LinuxStat::ProcessInfo.cpu_usage
 => 0.0
 
 LinuxStat::ProcessInfo.last_executed_cpu
-=> 2
+=> 3
 
 LinuxStat::ProcessInfo.mem_stat
-=> {:memory=>9644, :virtual_memory=>79568, :resident_memory=>15764}
+=> {:memory=>11748, :virtual_memory=>81680, :resident_memory=>17928}
 
 LinuxStat::ProcessInfo.memory
-=> 9644
+=> 11748
 
 LinuxStat::ProcessInfo.resident_memory
-=> 15764
+=> 17928
 
 LinuxStat::ProcessInfo.threads
 => 1
 
 LinuxStat::ProcessInfo.total_io
-=> {:read_bytes=>0, :write_bytes=>0}
+=> {:read_bytes=>3932160, :write_bytes=>0}
 
 LinuxStat::ProcessInfo.virtual_memory
-=> 79568
+=> 81680
 
 ```
 
@@ -328,25 +328,25 @@ LinuxStat::Swap.any?
 => true
 
 LinuxStat::Swap.available
-=> 2256212
+=> 3358184
 
 LinuxStat::Swap.list
-=> {"/dev/zram0"=>[:partition, 4194300, 1938088, -2]}
+=> {"/dev/zram0"=>[:partition, 4194300, 836116, -2]}
 
 LinuxStat::Swap.percent_available
-=> 53.79
+=> 80.07
 
 LinuxStat::Swap.percent_used
-=> 46.21
+=> 19.93
 
 LinuxStat::Swap.stat
-=> {:total=>4194300, :used=>1938088, :available=>2256212, :percent_used=>46.21, :percent_available=>53.79}
+=> {:total=>4194300, :used=>836116, :available=>3358184, :percent_used=>19.93, :percent_available=>80.07}
 
 LinuxStat::Swap.total
 => 4194300
 
 LinuxStat::Swap.used
-=> 1938088
+=> 836116
 
 ```
 
@@ -355,6 +355,21 @@ LinuxStat::Swap.used
 LinuxStat::Sysconf.child_max
 => 2000000
 
+LinuxStat::Sysconf.get_euid
+=> 1000
+
+LinuxStat::Sysconf.get_gid
+=> 1000
+
+LinuxStat::Sysconf.get_login
+=> "sourav"
+
+LinuxStat::Sysconf.get_uid
+=> 1000
+
+LinuxStat::Sysconf.get_user
+=> "sourav"
+
 LinuxStat::Sysconf.hostname_max
 => 64
 
@@ -362,7 +377,7 @@ LinuxStat::Sysconf.login_name_max
 => 256
 
 LinuxStat::Sysconf.open_max
-=> 8192
+=> 1024
 
 LinuxStat::Sysconf.page_size_max
 => 4096
@@ -564,7 +579,7 @@ irb(main):003:0> t = Time.now ; puts LinuxStat::FS.stat('/') ; Time.now - t
 => 5.0468e-05
 ```
 
-To learn more about them, just run ri and the method name. To see all available methods:
+To learn more about them, just run ri and the method name. To see all available methods.
 
 ## Note 4: User
 Most of the LinuxStat::User supports arguments.

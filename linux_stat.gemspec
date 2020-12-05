@@ -10,8 +10,6 @@ Gem::Specification.new do |s|
 	s.homepage = "https://github.com/Souravgoswami/linux_stat/"
 	s.license = "MIT"
 	s.required_ruby_version = Gem::Requirement.new(">= 2.5.0")
-	s.metadata["source_code_uri"] = "https://github.com/Souravgoswami/linux_stat"
-	s.metadata["changelog_uri"] = "https://github.com/Souravgoswami/linux_stat/commits/master"
 	s.files = Dir.glob(%w(lib/**/** ext/**/*.{c,rb} bin/** README.md LICENCE))
 	s.bindir = "exe"
 	s.executables = s.files.grep(%r{^exe/}) { |f| File.basename(f) }

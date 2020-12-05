@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 $-v = true
-%w(bundler/setup linux_stat irb).each(&method(:require))
+%w(linux_stat irb).each(&method(:require))
 IRB.start(__FILE__)

@@ -399,6 +399,7 @@ LinuxStat::Uname.version
 => "#1 SMP PREEMPT Wed, 21 Oct 2020 01:11:20 +0000"
 
 ```
+
 ---
 
 ## Note 1: Filesystem
@@ -558,15 +559,18 @@ Issues regarding running LinuxStat on termux are also welcomed.
 ---
 
 ## Development
+After checking out the repo, compile and install this gem onto your local machine with `bundle exec rake install`
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To test all modules, run `rake install` and then `bin/linuxstat.rb`. Also check "Testing" below.
 
 ---
 
 ## Testing
-Like other gems, this doesn't have a test like RSpec. We suggest using the bin/linuxstat.rb file on various systems.
+Like other gems, this doesn't have a test like RSpec.
+We suggest using the bin/linuxstat.rb file on various Linux systems to test.
+First you need to execute `bundle exec rake install` to compile and install this gem.
 If you need to test a specific module, say the CPU, just run it like this:
 
 ```

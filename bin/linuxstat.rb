@@ -1,15 +1,11 @@
 #!/usr/bin/env ruby
+$-v = true
+
 begin
 	require 'linux_stat'
 rescue LoadError
-	puts "The Gem needs to be installed before this test can be run!"
+	abort "The Gem needs to be installed before this test can be run!"
 end
-
-$-v = true
-
-# Print time each method takes unless --no-time or -nt option is passed
-markdown = ARGV.any? { |x| x[/^\-(\-markdown|md)$/] }
-html = ARGV.any? { |x| x[/^\-(\-html|html)$/] }
 
 # Check which conflicting argument (e.g., `-md -html` together) is passed last
 # Always use the last argument
@@ -38,6 +34,7 @@ end
 
 MARKDOWN, HTML = hash[:markdown], hash[:html]
 
+# Print time each method takes unless --no-time or -nt option is passed
 PRINT_TIME = (MARKDOWN || HTML) ? false : !ARGV.any? { |x| x[/^\-\-no-time$/] || x[/^\-nt$/] }
 
 %w(--markdown -md --no-time -nt --html -html).each(&ARGV.method(:delete))
@@ -99,10 +96,11 @@ execute.sort.each do |c|
 		puts
 	end
 
-	meths.length > 0
+	if meths.length > 0
 		if MARKDOWN
 			puts "```\n\n"
 		elsif HTML
 			puts "</pre>"
 		end
+	end
 end

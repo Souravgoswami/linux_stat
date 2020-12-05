@@ -38,7 +38,8 @@ static VALUE getPosixVersion(VALUE obj) {
 }
 
 static VALUE getUser(VALUE obj) {
-	return rb_str_new_cstr(getlogin()) ;
+	char *name = getlogin() ;
+	return name ? rb_str_new_cstr(name) : rb_str_new_cstr("") ;
 }
 
 static VALUE getUID(VALUE obj) {

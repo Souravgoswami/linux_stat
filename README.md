@@ -572,6 +572,7 @@ Most of the LinuxStat::User supports arguments.
 For example, to get a user's home by the username:
 
 ```
+$ irb
 irb(main):001:0> require 'linux_stat'
 => true
 
@@ -585,9 +586,33 @@ irb(main):004:0> LinuxStat::User.home_by_username('mail')
 => "/var/spool/mail"
 ```
 
+Or to get the user's home by the GID/UID:
+
+```
+$ irb
+irb(main):001:0> require 'linux_stat'
+=> true
+
+irb(main):002:0> LinuxStat::User.homes_by_uid(1001)
+=> ["/home/userx", "/home/userz"]
+
+irb(main):003:0> LinuxStat::User.homes_by_uid(1000)
+=> ["/home/sourav"]
+
+irb(main):004:0> LinuxStat::User.home_by_gid(1001)
+=> "/home/userx"
+
+irb(main):005:0> LinuxStat::User.home_by_gid(1000)
+=> "/home/sourav"
+
+irb(main):006:0> LinuxStat::User.home_by_gid(0)
+=> "/root"
+```
+
 Or to get the UID/GID by username:
 
 ```
+$ irb 
 irb(main):001:0> require 'linux_stat'
 => true
 

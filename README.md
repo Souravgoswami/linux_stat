@@ -13,12 +13,12 @@ It only works for Linux, and detecting the OS is upto the user of this gem.
 + You need to have the C compile to be able to compile the C extension.
 On Arch Linux:
 ```
-# pacman -S gcc
+# pacman -S gcc make
 ```
 
 On Debian based systems:
 ```
-# apt install gcc
+# apt install gcc build-essential
 ```
 
 + You might also require ruby-dev in Debian based systems which provides support for ruby.h header file:

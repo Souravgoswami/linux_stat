@@ -127,9 +127,10 @@ module LinuxStat
 			#
 			# If the info isn't available it will return nil.
 			def memory(pid = $$)
-				_rss_anon = IO.readlines("/proc/#{pid}/status")
-					.find { |x| x.start_with?('RssAnon') }
+				file = "/proc/#{pid}/status".freeze
+				return nil unless File.readable?(file)
 
+				_rss_anon = IO.readlines(file).find { |x| x.start_with?('RssAnon') }
 				_rss_anon ? _rss_anon.split[1].to_i : nil
 			end
 
@@ -144,7 +145,10 @@ module LinuxStat
 			#
 			# If the info isn't available it will return nil.
 			def virtual_memory(pid = $$)
-				_virtual_memory = IO.read("/proc/#{pid}/stat".freeze).split[22]
+				file = "/proc/#{pid}/stat".freeze
+				return nil unless File.readable?(file)
+
+				_virtual_memory = IO.read(file).split[22]
 				_virtual_memory ? _virtual_memory.to_i.fdiv(1024).to_i : nil
 			end
 
@@ -159,7 +163,10 @@ module LinuxStat
 			#
 			# If the info isn't available it will return nil.
 			def resident_memory(pid = $$)
-				_vm_rss = IO.readlines("/proc/#{pid}/status")
+				file = "/proc/#{pid}/status".freeze
+				return nil unless File.readable?(file)
+
+				_vm_rss = IO.readlines(file)
 					.find { |x| x.start_with?('VmRSS') }
 
 				_vm_rss ? _vm_rss.split[1].to_i : nil

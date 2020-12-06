@@ -17,11 +17,9 @@ module LinuxStat
 			# But if the status isn't available it will return an empty Hash.
 			def ids
 				return {} unless passwd_readable?
-				passwd.reduce({}) { |h, x|
-					splitted = x.split(?:)
-
-					h.merge!(splitted[0].to_sym => {
-						uid: splitted[2].to_i, gid: splitted[3].to_i
+				passwd_splitted.reduce({}) { |h, x|
+					h.merge!(x[0].to_sym => {
+						uid: x[2].to_i, gid: x[3].to_i
 					})
 				}
 			end
@@ -34,9 +32,8 @@ module LinuxStat
 			# But if the status isn't available it will return an empty Hash.
 			def uids
 				return {} unless passwd_readable?
-				passwd.reduce({}) { |h, x|
-					splitted = x.split(?:)
-					h.merge!(splitted[0].to_sym => splitted[2].to_i)
+				passwd_splitted.reduce({}) { |h, x|
+					h.merge!(x[0].to_sym => x[2].to_i)
 				}
 			end
 
@@ -48,9 +45,8 @@ module LinuxStat
 			# But if the status isn't available it will return an empty Hash.
 			def gids
 				return {} unless passwd_readable?
-				passwd.reduce({}) { |h, x|
-					splitted = x.split(?:)
-					h.merge!(splitted[0].to_sym => splitted[3].to_i)
+				passwd_splitted.reduce({}) { |h, x|
+					h.merge!(x[0].to_sym => x[3].to_i)
 				}
 			end
 
@@ -69,11 +65,35 @@ module LinuxStat
 			end
 
 			# Returns the user ID as integer
-			# It directly calls LinuxStat::Sysconf.get_user
+			# It directly calls LinuxStat::Sysconf.get_uid and LinuxStat::Sysconf.get_gid
+			# and then reads /etc/passwd and matches the values with UID and GID.
 			#
-			# It doesn't get affected with the assignment of USER environment variable.
+			# It doesn't get affected with the assignment of USER environment variable
+			# If either /etc/passwd is readable or LinuxStat::Sysconf.get_login() is not empty.
+			#
+			# But if /etc/passwd isn't readable (which is weird), it will fall back to sysconf.h's get_login()
+			# It that's not available, like in docker, falls back to ENV['USER].to_s
+			#
+			# Note that this is not cached or memoized so use this at your own processing expense.
+			# It should return the username under most robust circumstances.
+			# But if nothing is available for some reason, it will return an empty String.
 			def get_user
-				LinuxStat::Sysconf.get_user
+				unless passwd_readable?
+					_l = LinuxStat::Sysconf.get_login().freeze
+					return _l.empty? ? ENV['USER'.freeze].to_s : _l
+				end
+
+				uid, gid = LinuxStat::Sysconf.get_uid, LinuxStat::Sysconf.get_gid
+
+				username = ''
+				passwd.each { |x|
+					splitted = x.split(?:).freeze
+					if splitted[2].to_i == uid && splitted[3].to_i == gid
+						username = splitted[0]
+						break
+					end
+				}
+				username
 			end
 
 			# Returns the user ID as integer
@@ -94,6 +114,17 @@ module LinuxStat
 				LinuxStat::Sysconf.get_euid
 			end
 
+			# Calls LinuxStat::Sysconf.get_login()
+			# The username is returned as a String.
+			# It doesn't get affected by ENV['USER]
+			#
+			# But if the name isn't available (say inside a container), it will return an empty String.
+			# This is meant for speed but not for reliability.
+			# To get more reliable output, you might try LinuxStat::User.get_user()
+			def get_login
+				LinuxStat::Sysconf.get_login
+			end
+
 			# def usernames_by_uid(gid = get_uid)
 			# Where uid is the group id of the user. By default it's the uid of the current user.
 			#
@@ -108,10 +139,9 @@ module LinuxStat
 				return [] unless passwd_readable?
 
 				usernames = []
-				passwd.each do |x|
-					splitted = x.split(?:.freeze)
-					usernames << splitted[0] if splitted[2].to_i == uid
-				end
+				passwd_splitted.each { |x|
+					usernames << x[0] if x[2].to_i == uid
+				}
 				usernames
 			end
 
@@ -243,10 +273,20 @@ module LinuxStat
 				home
 			end
 
+			alias get_current_user get_user
+
 			private
 			def passwd
 				@@passwd_file ||= '/etc/passwd'.freeze
 				IO.readlines(@@passwd_file)
+			end
+
+			# Only use this method where we are sure that the whole array is going to be used.
+			# In cases like find() or a loop with `break` this is a lot of overhead.
+			# In cases like reduce({}) or select, this is not helpful.
+			def passwd_splitted
+				@@passwd_file ||= '/etc/passwd'.freeze
+				IO.readlines(@@passwd_file).map { |x| x.split(?:.freeze) }
 			end
 
 			def passwd_readable?

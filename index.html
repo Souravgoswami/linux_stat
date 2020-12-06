@@ -636,7 +636,7 @@ layout: linuxstat
 	=> "/root"
 	</pre>
 
-Or to get the UID/GID by username:
+	Or to get the UID/GID by username:
 
 	<pre>
 	<dollar>irb</dollar>
@@ -656,9 +656,28 @@ Or to get the UID/GID by username:
 	=> nil
 	</pre>
 
+	Or to get the current user (in docker for example):
+
+	<pre>
+	$ irb
+	irb(main):001:0> require 'linux_stat'
+	=> true
+
+	irb(main):002:0> LinuxStat::User.get_current_user
+	=> "x"
+
+	irb(main):003:0> LinuxStat::User.get_user
+	=> "x"
+
+	irb(main):004:0> LinuxStat::User.get_login
+	=> ""
+	</pre>
+
+	<break></break>
+	Right, the get_login() can return an empty string. But LinuxStat::User.get_user also aliased as LinuxStat::User.get_current_user shouldn't return an empty string under most circumstances.
+
 	<break></break>
 	Read the ri documentation for more info.
-
 
 	<a class="head" id="returntypes" href="#returntypes" content="Return Types"></a>
 	<ol>

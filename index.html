@@ -414,11 +414,17 @@ layout: linuxstat
 	</pre>
 	<h3>LinuxStat::User</h3>
 	<pre>
+	LinuxStat::User.get_current_user
+	=> "sourav"
+
 	LinuxStat::User.get_euid
 	=> 1000
 
 	LinuxStat::User.get_gid
 	=> 1000
+
+	LinuxStat::User.get_login
+	=> "sourav"
 
 	LinuxStat::User.get_uid
 	=> 1000

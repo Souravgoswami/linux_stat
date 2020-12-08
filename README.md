@@ -674,6 +674,25 @@ irb(main):005:0> LinuxStat::User.gid_by_username('InvalidUser')
 => nil
 ```
 
+Or to get the current user (in docker for example):
+
+```
+$ irb
+irb(main):001:0> require 'linux_stat'
+=> true
+
+irb(main):002:0> LinuxStat::User.get_current_user
+=> "x"
+
+irb(main):003:0> LinuxStat::User.get_user
+=> "x"
+
+irb(main):004:0> LinuxStat::User.get_login
+=> ""
+```
+
+Right, the get_login() can return an empty string. But LinuxStat::User.get_user also aliased as LinuxStat::User.get_current_user shouldn't return an empty string under most circumstances.
+
 ## Note 5: PrettifyBytes
 Often times we need to work with KB, MB GB, TB, or KiB, MiB, GiB, TiB, etc.
 And we need some work to convert bytes to those units.
@@ -683,6 +702,7 @@ To avoid such duplication, it comes with a PrettifyBytes module.
 For example, to convert bytes to decimal suffixes:
 
 ```
+$irb
 irb(main):001:0> require 'linux_stat'
 => true
 
@@ -702,52 +722,70 @@ irb(main):005:0> LinuxStat::PrettifyBytes.convert_decimal(10 ** 13)
 To convert bytes to binary suffixes:
 
 ```
-irb(main):007:0> LinuxStat::PrettifyBytes.convert_binary(1000)
+irb(main):006:0> LinuxStat::PrettifyBytes.convert_binary(1000)
 => "1000.00 bytes"
 
-irb(main):008:0> LinuxStat::PrettifyBytes.convert_binary(10000)
+irb(main):007:0> LinuxStat::PrettifyBytes.convert_binary(10000)
 => "9.77 kibibytes"
 
-irb(main):009:0> LinuxStat::PrettifyBytes.convert_binary(100000)
+irb(main):008:0> LinuxStat::PrettifyBytes.convert_binary(100000)
 => "97.66 kibibytes"
 
-irb(main):010:0> LinuxStat::PrettifyBytes.convert_binary(10 ** 13)
+irb(main):009:0> LinuxStat::PrettifyBytes.convert_binary(10 ** 13)
 => "9.09 tebibytes"
 ```
 
 To convert them to short Metric decimal suffixes:
 
 ```
-irb(main):017:0> LinuxStat::PrettifyBytes.convert_short_decimal(1000)
+irb(main):010:0> LinuxStat::PrettifyBytes.convert_short_decimal(1000)
 => "1.00 kB"
 
-irb(main):018:0> LinuxStat::PrettifyBytes.convert_short_decimal(10000)
+irb(main):011:0> LinuxStat::PrettifyBytes.convert_short_decimal(10000)
 => "10.00 kB"
 
-irb(main):019:0> LinuxStat::PrettifyBytes.convert_short_decimal(100000)
+irb(main):012:0> LinuxStat::PrettifyBytes.convert_short_decimal(100000)
 => "100.00 kB"
 
-irb(main):020:0> LinuxStat::PrettifyBytes.convert_short_decimal(10 ** 13)
+irb(main):013:0> LinuxStat::PrettifyBytes.convert_short_decimal(10 ** 13)
 => "10.00 TB"
 ```
 
 To convert them to short IEC binary suffixes:
 
 ```
-irb(main):013:0> LinuxStat::PrettifyBytes.convert_short_binary(1000)
+irb(main):014:0> LinuxStat::PrettifyBytes.convert_short_binary(1000)
 => "1000 B"
 
-irb(main):014:0> LinuxStat::PrettifyBytes.convert_short_binary(10000)
+irb(main):015:0> LinuxStat::PrettifyBytes.convert_short_binary(10000)
 => "9.77 KiB"
 
-irb(main):015:0> LinuxStat::PrettifyBytes.convert_short_binary(100000)
+irb(main):016:0> LinuxStat::PrettifyBytes.convert_short_binary(100000)
 => "97.66 KiB"
 
-irb(main):016:0> LinuxStat::PrettifyBytes.convert_short_binary(10 ** 13)
+irb(main):017:0> LinuxStat::PrettifyBytes.convert_short_binary(10 ** 13)
 => "9.09 TiB"
 ```
 
-It can support values upto hundreds of yottabytes and yobibytes, or yb and yib.
+It can support values upto hundreds of yottabytes and yobibytes, or yb and yib. You can also do stuff like:
+
+```
+$ irb
+irb(main):001:0> require 'linux_stat'
+=> true
+
+irb(main):002:0> LinuxStat::PrettifyBytes.convert_short_decimal(LinuxStat::Mounts.device_stat('/dev/sdb1')[:total])
+=> "31.47 GB"
+
+irb(main):003:0> LinuxStat::PrettifyBytes.convert_short_binary(LinuxStat::Mounts.device_stat('/dev/sdb1')[:total])
+=> "29.31 GiB"
+
+irb(main):004:0> LinuxStat::PrettifyBytes.convert_short_binary(LinuxStat::Mounts.device_stat('/dev/sdb1')[:used])
+=> "26.80 GiB"
+
+irb(main):005:0> LinuxStat::PrettifyBytes.convert_short_binary(LinuxStat::Mounts.device_stat('/dev/sdb1')[:available])
+=> "2.51 GiB"
+```
 
 Read the ri documentation for more info.
 

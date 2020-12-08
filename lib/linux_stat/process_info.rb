@@ -275,7 +275,7 @@ module LinuxStat
 				idle2 = uptime - starttime2 - total_time2
 
 				totald = idle2.+(total_time2).-(idle1 + total_time)
-				ret = totald.-(idle2 - idle1).fdiv(totald).*(100).round(2).abs./(LinuxStat::CPU.count)
+				totald.-(idle2 - idle1).fdiv(totald).*(100).round(2).abs./(LinuxStat::CPU.count)
 			end
 
 			# threads(pid = $$)

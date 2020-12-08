@@ -164,7 +164,7 @@ module LinuxStat
 
 						total, free, available, used = fs_info(_x[1])
 
-						m.merge!(_x[0] => {
+						m.merge!({
 							mountpoint: _x[1],
 
 							total: total,

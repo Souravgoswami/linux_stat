@@ -206,7 +206,7 @@ LinuxStat::Memory.used
 ### LinuxStat::Mounts
 ```
 LinuxStat::Mounts.device_stat
-=> {"/dev/sda2"=>{:mountpoint=>"/", :total=>119981191168, :free=>34612666368, :available=>34612666368, :used=>85368524800, :percent_used=>71.15, :percent_free=>28.85, :percent_available=>28.85}}
+=> {:mountpoint=>"/", :total=>119981191168, :free=>34098106368, :available=>34098106368, :used=>85883084800, :percent_used=>71.58, :percent_free=>28.42, :percent_available=>28.42}
 
 LinuxStat::Mounts.devices_stat
 => {"proc"=>{:mountpoint=>"/proc", :total=>0, :free=>0, :available=>0, :used=>0, :percent_used=>NaN, :percent_free=>NaN, :percent_available=>NaN}, "sys"=>{:mountpoint=>"/sys", :total=>0, :free=>0, :available=>0, :used=>0, :percent_used=>NaN, :percent_fre...
@@ -687,23 +687,23 @@ irb(main):001:0> require 'linux_stat'
 => true
 
 irb(main):002:0> LinuxStat::PrettifyBytes.convert_decimal(1000)
-=> "1.0 kilobyte"
+=> "1.00 kilobyte"
 
 irb(main):003:0> LinuxStat::PrettifyBytes.convert_decimal(10000)
-=> "10.0 kilobytes"
+=> "10.00 kilobytes"
 
 irb(main):004:0> LinuxStat::PrettifyBytes.convert_decimal(100000)
-=> "100.0 kilobytes"
+=> "100.00 kilobytes"
 
 irb(main):005:0> LinuxStat::PrettifyBytes.convert_decimal(10 ** 13)
-=> "10.0 terabytes"
+=> "10.00 terabytes"
 ```
 
 To convert bytes to binary suffixes:
 
 ```
 irb(main):007:0> LinuxStat::PrettifyBytes.convert_binary(1000)
-=> "1000.0 bytes"
+=> "1000.00 bytes"
 
 irb(main):008:0> LinuxStat::PrettifyBytes.convert_binary(10000)
 => "9.77 kibibytes"
@@ -719,16 +719,16 @@ To convert them to short Metric decimal suffixes:
 
 ```
 irb(main):017:0> LinuxStat::PrettifyBytes.convert_short_decimal(1000)
-=> "1.0 kB"
+=> "1.00 kB"
 
 irb(main):018:0> LinuxStat::PrettifyBytes.convert_short_decimal(10000)
-=> "10.0 kB"
+=> "10.00 kB"
 
 irb(main):019:0> LinuxStat::PrettifyBytes.convert_short_decimal(100000)
-=> "100.0 kB"
+=> "100.00 kB"
 
 irb(main):020:0> LinuxStat::PrettifyBytes.convert_short_decimal(10 ** 13)
-=> "10.0 TB"
+=> "10.00 TB"
 ```
 
 To convert them to short IEC binary suffixes:

@@ -1,7 +1,9 @@
 #include <sys/statvfs.h>
 #include "ruby.h"
+
 #pragma GCC optimize ("O3")
 #pragma clang optimize on
+#pragma once
 
 static VALUE statfs(VALUE obj, VALUE dir) {
 	struct statvfs buf ;

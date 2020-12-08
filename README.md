@@ -674,6 +674,81 @@ irb(main):005:0> LinuxStat::User.gid_by_username('InvalidUser')
 => nil
 ```
 
+## Note 5: PrettifyBytes
+Often times we need to work with KB, MB GB, TB, or KiB, MiB, GiB, TiB, etc.
+And we need some work to convert bytes to those units.
+Because LinuxStat provides a lot of data in bytes, and kilobytes, it's quite tedious to convert them all the time.
+To avoid such duplication, it comes with a PrettifyBytes module.
+
+For example, to convert bytes to decimal suffixes:
+
+```
+irb(main):001:0> require 'linux_stat'
+=> true
+
+irb(main):002:0> LinuxStat::PrettifyBytes.convert_decimal(1000)
+=> "1.0 kilobyte"
+
+irb(main):003:0> LinuxStat::PrettifyBytes.convert_decimal(10000)
+=> "10.0 kilobytes"
+
+irb(main):004:0> LinuxStat::PrettifyBytes.convert_decimal(100000)
+=> "100.0 kilobytes"
+
+irb(main):005:0> LinuxStat::PrettifyBytes.convert_decimal(10 ** 13)
+=> "10.0 terabytes"
+```
+
+To convert bytes to binary suffixes:
+
+```
+irb(main):007:0> LinuxStat::PrettifyBytes.convert_binary(1000)
+=> "1000.0 bytes"
+
+irb(main):008:0> LinuxStat::PrettifyBytes.convert_binary(10000)
+=> "9.77 kibibytes"
+
+irb(main):009:0> LinuxStat::PrettifyBytes.convert_binary(100000)
+=> "97.66 kibibytes"
+
+irb(main):010:0> LinuxStat::PrettifyBytes.convert_binary(10 ** 13)
+=> "9.09 tebibytes"
+```
+
+To convert them to short Metric decimal suffixes:
+
+```
+irb(main):017:0> LinuxStat::PrettifyBytes.convert_short_decimal(1000)
+=> "1.0 kB"
+
+irb(main):018:0> LinuxStat::PrettifyBytes.convert_short_decimal(10000)
+=> "10.0 kB"
+
+irb(main):019:0> LinuxStat::PrettifyBytes.convert_short_decimal(100000)
+=> "100.0 kB"
+
+irb(main):020:0> LinuxStat::PrettifyBytes.convert_short_decimal(10 ** 13)
+=> "10.0 TB"
+```
+
+To convert them to short IEC binary suffixes:
+
+```
+irb(main):013:0> LinuxStat::PrettifyBytes.convert_short_binary(1000)
+=> "1000 B"
+
+irb(main):014:0> LinuxStat::PrettifyBytes.convert_short_binary(10000)
+=> "9.77 KiB"
+
+irb(main):015:0> LinuxStat::PrettifyBytes.convert_short_binary(100000)
+=> "97.66 KiB"
+
+irb(main):016:0> LinuxStat::PrettifyBytes.convert_short_binary(10 ** 13)
+=> "9.09 TiB"
+```
+
+It can support values upto hundreds of yottabytes and yobibytes, or yb and yib.
+
 Read the ri documentation for more info.
 
 ---

@@ -1,8 +1,9 @@
 module LinuxStat
 	module CPU
 		class << self
-			# stat(sleep = 0.075)
+			# stat(sleep = 1.0 / LinuxStat::Sysconf.sc_clk_tck)
 			# Where sleep is the delay to gather the data.
+			# The minimum possible value at anytime is 1.0 / LinuxStat::Sysconf.sc_clk_tck
 			# This method returns the cpu usage of all threads.
 			#
 			# The first one is aggregated CPU usage reported by the Linux kernel.
@@ -12,7 +13,7 @@ module LinuxStat
 			# {0=>84.38, 1=>100.0, 2=>50.0, 3=>87.5, 4=>87.5}
 			#
 			# If the information is not available, it will return an empty Hash
-			def stat(sleep = 0.075)
+			def stat(sleep = ticks_to_ms)
 				return {} unless stat?
 
 				data = IO.readlines('/proc/stat').select! { |x| x[/^cpu\d*/] }.map! { |x| x.split.map!(&:to_f) }
@@ -33,20 +34,24 @@ module LinuxStat
 					idle_then, idle_now  = idle + iowait, idle2 + iowait2
 					totald = idle_now.+(user2 + nice2 + sys2 + irq2 + softirq2 + steal2) - idle_then.+(user + nice + sys + irq + softirq + steal)
 
+					res = totald.-(idle_now - idle_then).fdiv(totald).*(100).round(2).abs
+					res = 0.0 if res.nan?
+
 					h.merge!(
-						x => totald.-(idle_now - idle_then).fdiv(totald).*(100).round(2).abs
+						x => res
 					)
 				end
 			end
 
-			# total_usage(sleep = 0.075)
+			# total_usage(sleep = 1.0 / LinuxStat::Sysconf.sc_clk_tck)
 			# Where sleep is the delay to gather the data.
+			# The minimum possible value at anytime is 1.0 / LinuxStat::Sysconf.sc_clk_tck
 			# This method returns the cpu usage of all threads.
 			#
 			# It's like running LinuxStat::CPU.stat[0] but it's much more efficient and calculates just the aggregated usage which is available at the top of the /proc/stat file.
 			#
 			# If the information is not available, it will return nil.
-			def total_usage(sleep = 0.075)
+			def total_usage(sleep = ticks_to_ms)
 				return nil unless stat?
 
 				data = IO.foreach('/proc/stat').first.split.tap(&:shift).map!(&:to_f)
@@ -112,6 +117,10 @@ module LinuxStat
 
 			def stat?
 				@@stat_readable ||= File.readable?('/proc/stat')
+			end
+
+			def ticks_to_ms
+				@@ms ||= 1.0 / LinuxStat::Sysconf.sc_clk_tck
 			end
 		end
 	end

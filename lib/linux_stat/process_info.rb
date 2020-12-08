@@ -172,9 +172,11 @@ module LinuxStat
 				_vm_rss ? _vm_rss.split[1].to_i : nil
 			end
 
-			# cpu_stat(pid: $$, sleep: 0.05)
+			# cpu_stat(pid: $$, sleep: 1.0 / LinuxStat::Sysconf.sc_clk_tck)
 			# Where pid is the process ID and sleep time is the interval between measurements.
-			# By default it is the id of the current process ($$), and sleep is 0.05
+			#
+			# By default it is the id of the current process ($$), and sleep is LinuxStat::Sysconf.sc_clk_tck
+			# The smallest amount of available sleep time is 1.0 / LinuxStat::Sysconf.sc_clk_tck.
 			#
 			# Note 1:
 			# Do note that the sleep time can slow down your application.
@@ -204,7 +206,7 @@ module LinuxStat
 			#
 			# The :last_executed_cpu also returns an Integer indicating
 			# the last executed cpu of the process.
-			def cpu_stat(pid: $$, sleep: 0.05)
+			def cpu_stat(pid: $$, sleep: ticks_to_ms)
 				file = "/proc/#{pid}/stat"
 				return {} unless File.readable?(file)
 
@@ -236,9 +238,11 @@ module LinuxStat
 				}
 			end
 
-			# cpu_usage(pid: $$, sleep: 0.05)
+			# cpu_usage(pid: $$, sleep: 1.0 / LinuxStat::Sysconf.sc_clk_tck)
 			# Where pid is the process ID and sleep time is the interval between measurements.
-			# By default it is the id of the current process ($$), and sleep is 0.05
+			#
+			# By default it is the id of the current process ($$), and sleep is 1.0 / LinuxStat::Sysconf.sc_clk_tck
+			# The smallest amount of available sleep time is LinuxStat::Sysconf.sc_clk_tck.
 			#
 			# It retuns the CPU usage in Float.
 			# For example:
@@ -248,7 +252,7 @@ module LinuxStat
 			# But if the info isn't available, it will return nil.
 			#
 			# This method is more efficient than running LinuxStat::ProcessInfo.cpu_stat()
-			def cpu_usage(pid: $$, sleep: 0.05)
+			def cpu_usage(pid: $$, sleep: ticks_to_ms)
 				file = "/proc/#{pid}/stat"
 				return nil unless File.readable?(file)
 
@@ -271,7 +275,7 @@ module LinuxStat
 				idle2 = uptime - starttime2 - total_time2
 
 				totald = idle2.+(total_time2).-(idle1 + total_time)
-				totald.-(idle2 - idle1).fdiv(totald).*(100).round(2).abs./(LinuxStat::CPU.count)
+				ret = totald.-(idle2 - idle1).fdiv(totald).*(100).round(2).abs./(LinuxStat::CPU.count)
 			end
 
 			# threads(pid = $$)
@@ -305,16 +309,72 @@ module LinuxStat
 				file = "/proc/#{pid}/stat".freeze
 				return nil unless File.readable?(file)
 
-				IO.read("/proc/#{pid}/stat".freeze).split[38].to_i
+				IO.read(file).split[38].to_i
 			end
 
-			# def owned_by
+			# uid(pid = $$)
+			# returns the UIDs of the process as an Array of Integers.
+			#
+			# If the info isn't available it returns an empty Array.
+			def uid(pid = $$)
+				file = "/proc/#{pid}/status".freeze
+				return nil unless File.readable?(file)
 
-			# end
+				data = IO.readlines(file.freeze).find { |x|
+					x[/Uid.*\d*/]
+				}.to_s.split.drop(1)
+
+				{
+					real: data[0].to_i,
+					effective: data[1].to_i,
+					saved_set: data[2].to_i,
+					filesystem_uid: data[3].to_i
+				}
+			end
+
+			# gid(pid = $$)
+			# returns the GIDs of the process as an Hash containing the following data:
+			# :real, :effective, :saved_set, :filesystem_uid
+			#
+			# If the info isn't available it returns an empty Hash.
+			def gid(pid = $$)
+				file = "/proc/#{pid}/status".freeze
+				return nil unless File.readable?(file)
+
+				data = IO.readlines(file.freeze).find { |x|
+					x[/Gid.*\d*/]
+				}.split.drop(1)
+
+				{
+					real: data[0].to_i,
+					effective: data[1].to_i,
+					saved_set: data[2].to_i,
+					filesystem_uid: data[3].to_i
+				}
+			end
+
+			# owner(pid = $$)
+			# Returns the owner of the process
+			# But if the status is not available, it will return an empty frozen String.
+			def owner(pid = $$)
+				file = "/proc/#{pid}/status".freeze
+				return ''.freeze unless File.readable?(file)
+
+				gid = IO.readlines(file.freeze).find { |x|
+					x[/Gid.*\d*/]
+				}.split.drop(1)[2].to_i
+
+				LinuxStat::User.username_by_gid(gid)
+			end
 
 			private
 			def get_ticks
 				@@ticks ||= Sysconf.sc_clk_tck
+			end
+
+			# Just to avoid multiple calculations!...
+			def ticks_to_ms
+				@@ms ||= 1.0 / get_ticks
 			end
 		end
 	end

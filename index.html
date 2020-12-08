@@ -112,7 +112,7 @@ layout: linuxstat
 	=> 4
 
 	LinuxStat::CPU.cur_freq
-	=> [2000016, 2000017, 1998574, 1885056]
+	=> [2000049, 2000100, 2000063, 2000070]
 
 	LinuxStat::CPU.max_freq
 	=> [2000000, 2000000, 2000000, 2000000]
@@ -121,46 +121,46 @@ layout: linuxstat
 	=> "Intel(R) Core(TM) i3-6006U CPU @ 2.00GHz"
 
 	LinuxStat::CPU.stat
-	=> {0=>12.5, 1=>12.5, 2=>12.5, 3=>0.0, 4=>12.5}
+	=> {0=>20.0, 1=>0.0, 2=>50.0, 3=>0.0, 4=>0.0}
 
 	LinuxStat::CPU.total_usage
-	=> 10.0
+	=> 0.0
 
 	LinuxStat::CPU.usage
-	=> 10.0
+	=> 20.0
 
 	LinuxStat::CPU.usages
-	=> {0=>6.45, 1=>0.0, 2=>12.5, 3=>11.11, 4=>12.5}
+	=> {0=>0.0, 1=>0.0, 2=>0.0, 3=>0.0, 4=>0.0}
 
 	</pre>
 	<h3>LinuxStat::Filesystem</h3>
 	<pre>
 	LinuxStat::Filesystem.available
-	=> 36233908224
+	=> 34099154944
 
 	LinuxStat::Filesystem.free
-	=> 36233908224
+	=> 34099154944
 
 	LinuxStat::Filesystem.stat
-	=> {:total=>119981191168, :free=>36233908224, :used=>83747282944}
+	=> {:total=>119981191168, :free=>34099154944, :used=>85882036224}
 
 	LinuxStat::Filesystem.stat_raw
-	=> {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>8846169, :block_avail_unpriv=>8846169, :inodes=>58612160, :free_inodes=>56635342, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
+	=> {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>8324989, :block_avail_unpriv=>8324989, :inodes=>58612160, :free_inodes=>56578298, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
 
 	LinuxStat::Filesystem.total
 	=> 119981191168
 
 	LinuxStat::Filesystem.used
-	=> 83747282944
+	=> 85882036224
 
 	</pre>
 	<h3>LinuxStat::Kernel</h3>
 	<pre>
 	LinuxStat::Kernel.build_date
-	=> 2020-10-21 01:11:20 +0000
+	=> 2020-11-20 07:44:55 +0000
 
 	LinuxStat::Kernel.build_date_string
-	=> "21 Oct 2020 01:11:20 +0000"
+	=> "20 Nov 2020 07:44:55 +0000"
 
 	LinuxStat::Kernel.build_user
 	=> "souravgoswami@archlinux"
@@ -175,43 +175,58 @@ layout: linuxstat
 	=> "10.2.0"
 
 	LinuxStat::Kernel.release
-	=> "5.9.1-xanmod1-1"
+	=> "5.9.9-xanmod1-1"
 
 	LinuxStat::Kernel.string
-	=> "Linux version 5.9.1-xanmod1-1 (souravgoswami@archlinux) (gcc (GCC) 10.2.0, GNU ld (GNU Binutils) 2.35.1) #1 SMP PREEMPT Wed, 21 Oct 2020 01:11:20 +0000"
+	=> "Linux version 5.9.9-xanmod1-1 (souravgoswami@archlinux) (gcc (GCC) 10.2.0, GNU ld (GNU Binutils) 2.35.1) #1 SMP PREEMPT Fri, 20 Nov 2020 07:44:55 +0000"
 
 	LinuxStat::Kernel.ticks
 	=> 100
 
 	LinuxStat::Kernel.version
-	=> "5.9.1-xanmod1-1"
+	=> "5.9.9-xanmod1-1"
 
 	</pre>
 	<h3>LinuxStat::Memory</h3>
 	<pre>
 	LinuxStat::Memory.available
-	=> 986632
+	=> 187876
 
 	LinuxStat::Memory.percent_available
-	=> 25.72
+	=> 4.9
 
 	LinuxStat::Memory.percent_used
-	=> 74.28
+	=> 95.1
 
 	LinuxStat::Memory.stat
-	=> {:total=>3836256, :used=>2849624, :available=>986632, :percent_used=>74.28, :percent_available=>25.72}
+	=> {:total=>3836228, :used=>3648352, :available=>187876, :percent_used=>95.1, :percent_available=>4.9}
 
 	LinuxStat::Memory.total
-	=> 3836256
+	=> 3836228
 
 	LinuxStat::Memory.used
-	=> 2849624
+	=> 3648352
 
 	</pre>
 	<h3>LinuxStat::Mounts</h3>
 	<pre>
+	LinuxStat::Mounts.device_stat
+	=> {:mountpoint=>"/", :total=>119981191168, :free=>34099154944, :available=>34099154944, :used=>85882036224, :percent_used=>71.58, :percent_free=>28.42, :percent_available=>28.42}
+
+	LinuxStat::Mounts.devices_stat
+	=> {"proc"=>{:mountpoint=>"/proc", :total=>0, :free=>0, :available=>0, :used=>0, :percent_used=>NaN, :percent_free=>NaN, :percent_available=>NaN}, "sys"=>{:mountpoint=>"/sys", :total=>0, :free=>0, :available=>0, :used=>0, :percent_used=>NaN, :percent_fre...
+
 	LinuxStat::Mounts.list
-	=> ["proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0", "sys /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0", "dev /dev devtmpfs rw,nosuid,relatime,size=1891804k,nr_inodes=472951,mode=755 0 0", "run /run tmpfs rw,nosuid,nodev,relatime,mode=755 0 0", "...
+	=> ["proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0", "sys /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0", "dev /dev devtmpfs rw,nosuid,relatime,size=1892904k,nr_inodes=473226,mode=755 0 0", "run /run tmpfs rw,nosuid,nodev,relatime,mode=755 0 0", "...
+
+	LinuxStat::Mounts.list_devices
+	=> ["proc", "sys", "dev", "run", "/dev/sda2", "securityfs", "tmpfs", "devpts", "tmpfs", "cgroup2", "cgroup", "pstore", "none", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "systemd-1", "deb...
+
+	LinuxStat::Mounts.list_devices_mount_point
+	=> {"proc"=>"/proc", "sys"=>"/sys", "dev"=>"/dev", "run"=>"/run", "/dev/sda2"=>"/", "securityfs"=>"/sys/kernel/security", "tmpfs"=>"/run/user/1000", "devpts"=>"/dev/pts", "cgroup2"=>"/sys/fs/cgroup/unified", "cgroup"=>"/sys/fs/cgroup/perf_event", "pstore...
+
+	LinuxStat::Mounts.mount_point
+	=> "/"
 
 	LinuxStat::Mounts.root
 	=> "/dev/sda2"
@@ -256,16 +271,16 @@ layout: linuxstat
 	=> {:NAME=>"Arch Linux", :PRETTY_NAME=>"Arch Linux", :ID=>"arch", :BUILD_ID=>"rolling", :ANSI_COLOR=>"38;2;23;147;209", :HOME_URL=>"https://www.archlinux.org/", :DOCUMENTATION_URL=>"https://wiki.archlinux.org/", :SUPPORT_URL=>"https://bbs.archlinux.org/"...
 
 	LinuxStat::OS.uptime
-	=> {:hour=>15, :minute=>6, :second=>3.6}
+	=> {:hour=>15, :minute=>21, :second=>7.32}
 
 	</pre>
 	<h3>LinuxStat::Process</h3>
 	<pre>
 	LinuxStat::Process.count
-	=> 222
+	=> 219
 
 	LinuxStat::Process.idle
-	=> [3, 4, 6, 9, 12, 23, 30, 37, 39, 49, 102, 103, 104, 106, 107, 108, 109, 110, 117, 118, 119, 121, 131, 134, 140, 152, 153, 174, 176, 178, 182, 183, 187, 188, 189, 190, 191, 192, 225, 231, 280, 327, 329, 335, 5823, 5824, 5825, 5826, 5827, 5828, 44054, 4...
+	=> [3, 4, 6, 9, 12, 23, 30, 37, 39, 49, 102, 103, 104, 106, 107, 108, 109, 110, 117, 118, 119, 121, 131, 134, 140, 152, 153, 178, 180, 183, 184, 188, 192, 193, 194, 195, 196, 197, 199, 241, 287, 337, 341, 349, 3799, 3800, 3801, 3802, 3803, 3804, 36322, 3...
 
 	LinuxStat::Process.list
 	=> [1, 2, 3, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 46, 47, 48, 49, 50, 51, 52, 102, 103, 104, 106, 107, 108, 109, 110, 112, 114, 115, 117, 118, 119, 121, 131, 134,...
@@ -274,10 +289,10 @@ layout: linuxstat
 	=> {1=>"systemd", 2=>"kthreadd", 3=>"rcu_gp", 4=>"rcu_par_gp", 6=>"kworker/0:0H-kblockd", 9=>"mm_percpu_wq", 10=>"ksoftirqd/0", 11=>"rcuc/0", 12=>"rcu_preempt", 13=>"rcub/0", 14=>"migration/0", 15=>"idle_inject/0", 16=>"cpuhp/0", 17=>"cpuhp/1", 18=>"idle...
 
 	LinuxStat::Process.running
-	=> [48426]
+	=> [39452]
 
 	LinuxStat::Process.sleeping
-	=> [1, 2, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 38, 40, 41, 42, 46, 47, 48, 50, 51, 52, 112, 114, 115, 173, 175, 193, 219, 235, 301, 312, 313, 315, 326, 328, 340, 363, 364, 365, 366, 373, 376, 378, 381, 395,...
+	=> [1, 2, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 38, 40, 41, 42, 46, 47, 48, 50, 51, 52, 112, 114, 115, 177, 179, 198, 228, 246, 310, 316, 323, 324, 325, 336, 338, 370, 371, 372, 373, 380, 384, 388, 399, 410,...
 
 	LinuxStat::Process.types
 	=> {1=>:sleeping, 2=>:sleeping, 3=>:idle, 4=>:idle, 6=>:idle, 9=>:idle, 10=>:sleeping, 11=>:sleeping, 12=>:idle, 13=>:sleeping, 14=>:sleeping, 15=>:sleeping, 16=>:sleeping, 17=>:sleeping, 18=>:sleeping, 19=>:sleeping, 20=>:sleeping, 21=>:sleeping, 23=>:i...
@@ -289,37 +304,46 @@ layout: linuxstat
 	<h3>LinuxStat::ProcessInfo</h3>
 	<pre>
 	LinuxStat::ProcessInfo.cmdline
-	=> "/usr/bin/ruby /home/sourav/.gem/ruby/2.7.0/bin/linuxstat.rb --html"
+	=> "ruby /usr/bin/linuxstat.rb -html"
 
 	LinuxStat::ProcessInfo.command_name
 	=> "ruby"
 
 	LinuxStat::ProcessInfo.cpu_stat
-	=> {:cpu_usage=>0.0, :threads=>1, :last_executed_cpu=>0}
+	=> {:cpu_usage=>0.0, :threads=>1, :last_executed_cpu=>3}
 
 	LinuxStat::ProcessInfo.cpu_usage
 	=> 0.0
 
+	LinuxStat::ProcessInfo.gid
+	=> {:real=>1000, :effective=>1000, :saved_set=>1000, :filesystem_uid=>1000}
+
 	LinuxStat::ProcessInfo.last_executed_cpu
-	=> 0
+	=> 3
 
 	LinuxStat::ProcessInfo.mem_stat
-	=> {:memory=>11760, :virtual_memory=>81672, :resident_memory=>17716}
+	=> {:memory=>11736, :virtual_memory=>81912, :resident_memory=>17260}
 
 	LinuxStat::ProcessInfo.memory
-	=> 11760
+	=> 11736
+
+	LinuxStat::ProcessInfo.owner
+	=> "sourav"
 
 	LinuxStat::ProcessInfo.resident_memory
-	=> 17716
+	=> 17260
 
 	LinuxStat::ProcessInfo.threads
 	=> 1
 
 	LinuxStat::ProcessInfo.total_io
-	=> {:read_bytes=>610304, :write_bytes=>0}
+	=> {:read_bytes=>6365184, :write_bytes=>0}
+
+	LinuxStat::ProcessInfo.uid
+	=> {:real=>1000, :effective=>1000, :saved_set=>1000, :filesystem_uid=>1000}
 
 	LinuxStat::ProcessInfo.virtual_memory
-	=> 81672
+	=> 81912
 
 	</pre>
 	<h3>LinuxStat::Swap</h3>
@@ -328,25 +352,25 @@ layout: linuxstat
 	=> true
 
 	LinuxStat::Swap.available
-	=> 3360488
+	=> 1885156
 
 	LinuxStat::Swap.list
-	=> {"/dev/zram0"=>[:partition, 4194300, 833812, -2]}
+	=> {"/dev/zram0"=>[:partition, 4194300, 2309144, -2]}
 
 	LinuxStat::Swap.percent_available
-	=> 80.12
+	=> 44.95
 
 	LinuxStat::Swap.percent_used
-	=> 19.88
+	=> 55.05
 
 	LinuxStat::Swap.stat
-	=> {:total=>4194300, :used=>833812, :available=>3360488, :percent_used=>19.88, :percent_available=>80.12}
+	=> {:total=>4194300, :used=>2309144, :available=>1885156, :percent_used=>55.05, :percent_available=>44.95}
 
 	LinuxStat::Swap.total
 	=> 4194300
 
 	LinuxStat::Swap.used
-	=> 833812
+	=> 2309144
 
 	</pre>
 	<h3>LinuxStat::Sysconf</h3>
@@ -403,13 +427,13 @@ layout: linuxstat
 	=> "archlinux"
 
 	LinuxStat::Uname.release
-	=> "5.9.1-xanmod1-1"
+	=> "5.9.9-xanmod1-1"
 
 	LinuxStat::Uname.sysname
 	=> "Linux"
 
 	LinuxStat::Uname.version
-	=> "#1 SMP PREEMPT Wed, 21 Oct 2020 01:11:20 +0000"
+	=> "#1 SMP PREEMPT Fri, 20 Nov 2020 07:44:55 +0000"
 
 	</pre>
 	<h3>LinuxStat::User</h3>
@@ -675,6 +699,85 @@ layout: linuxstat
 
 	<break></break>
 	Right, the get_login() can return an empty string. But LinuxStat::User.get_user also aliased as LinuxStat::User.get_current_user shouldn't return an empty string under most circumstances.
+
+	<a class="head" id="note-5-prettifybytes" href="#note-5-prettifybytes" content="Note 5: PrettifyBytes"></a>
+	Often times we need to work with KB, MB GB, TB, or KiB, MiB, GiB, TiB, etc.
+	<break></break>
+	And we need some work to convert bytes to those units.
+	<break></break>
+	Because LinuxStat provides a lot of data in bytes, and kilobytes, it's quite tedious to convert them all the time.
+	<break></break>
+	To avoid such duplication, it comes with a PrettifyBytes module.
+
+	<break></break>
+	For example, to convert bytes to decimal suffixes:
+
+	<pre>
+		irb(main):001:0> require 'linux_stat'
+		=> true
+
+		irb(main):002:0> LinuxStat::PrettifyBytes.convert_decimal(1000)
+		=> "1.00 kilobyte"
+
+		irb(main):003:0> LinuxStat::PrettifyBytes.convert_decimal(10000)
+		=> "10.00 kilobytes"
+
+		irb(main):004:0> LinuxStat::PrettifyBytes.convert_decimal(100000)
+		=> "100.00 kilobytes"
+
+		irb(main):005:0> LinuxStat::PrettifyBytes.convert_decimal(10 ** 13)
+		=> "10.00 terabytes"
+	</pre>
+
+	To convert bytes to binary suffixes:
+
+	<pre>
+		irb(main):007:0> LinuxStat::PrettifyBytes.convert_binary(1000)
+		=> "1000.00 bytes"
+
+		irb(main):008:0> LinuxStat::PrettifyBytes.convert_binary(10000)
+		=> "9.77 kibibytes"
+
+		irb(main):009:0> LinuxStat::PrettifyBytes.convert_binary(100000)
+		=> "97.66 kibibytes"
+
+		irb(main):010:0> LinuxStat::PrettifyBytes.convert_binary(10 ** 13)
+		=> "9.09 tebibytes"
+	</pre>
+
+	To convert them to short Metric decimal suffixes:
+
+	<pre>
+		irb(main):017:0> LinuxStat::PrettifyBytes.convert_short_decimal(1000)
+		=> "1.00 kB"
+
+		irb(main):018:0> LinuxStat::PrettifyBytes.convert_short_decimal(10000)
+		=> "10.00 kB"
+
+		irb(main):019:0> LinuxStat::PrettifyBytes.convert_short_decimal(100000)
+		=> "100.00 kB"
+
+		irb(main):020:0> LinuxStat::PrettifyBytes.convert_short_decimal(10 ** 13)
+		=> "10.00 TB"
+	</pre>
+
+	To convert them to short IEC binary suffixes:
+
+	<pre>
+		irb(main):013:0> LinuxStat::PrettifyBytes.convert_short_binary(1000)
+		=> "1000 B"
+
+		irb(main):014:0> LinuxStat::PrettifyBytes.convert_short_binary(10000)
+		=> "9.77 KiB"
+
+		irb(main):015:0> LinuxStat::PrettifyBytes.convert_short_binary(100000)
+		=> "97.66 KiB"
+
+		irb(main):016:0> LinuxStat::PrettifyBytes.convert_short_binary(10 ** 13)
+		=> "9.09 TiB"
+	</pre>
+
+	It can support values upto hundreds of yottabytes and yobibytes, or yb and yib.
 
 	<break></break>
 	Read the ri documentation for more info.

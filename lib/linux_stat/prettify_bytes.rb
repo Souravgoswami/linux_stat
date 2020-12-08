@@ -13,7 +13,7 @@ module LinuxStat
 				unit = @@d_units.find { |x| n < x[1] } || ['yotta'.freeze, 10 ** 27]
 
 				converted = n.fdiv(unit[1] / 1000).round(2)
-				"#{converted} #{unit[0]}byte#{?s.freeze if converted != 1}"
+				"#{pad_left(converted)} #{unit[0]}byte#{?s.freeze if converted != 1}"
 			end
 
 			# Converts a number to binary byte units and outputs with the IEC prefix
@@ -28,7 +28,7 @@ module LinuxStat
 				unit = @@b_units.find { |x| n < x[1] } || ['yobi'.freeze, 10 ** 27]
 
 				converted = n.fdiv(unit[1] / 1024).round(2)
-				"#{converted} #{unit[0]}byte#{?s.freeze if converted != 1}"
+				"#{pad_left(converted)} #{unit[0]}byte#{?s.freeze if converted != 1}"
 			end
 
 			# Converts a number to decimal byte units
@@ -43,7 +43,7 @@ module LinuxStat
 				unit = @@sd_units.find { |x| n < x[1] } || [?Y.freeze, 10 ** 27]
 
 				converted = n.fdiv(unit[1] / 1000).round(2)
-				"#{converted} #{unit[0]}B"
+				"#{pad_left(converted)} #{unit[0]}B"
 			end
 
 			# Converts a number to binary byte units
@@ -60,7 +60,15 @@ module LinuxStat
 				unit = @@sb_units.find { |x| n < x[1] } || [?Y.freeze, 1024 ** 9]
 
 				converted = n.fdiv(unit[1] / 1024).round(2)
-				"#{converted} #{unit[0]}iB"
+				"#{pad_left(converted)} #{unit[0]}iB"
+			end
+
+			private
+			def pad_left(n, mantissa_length = 2)
+				n = n.round(mantissa_length)
+				exp, mant = n.to_s.split(?..freeze)
+				m = mant.length < mantissa_length ? mant + ?0.freeze * (mantissa_length - mant.length) : mant
+				exp + ?..freeze + m
 			end
 		end
 	end

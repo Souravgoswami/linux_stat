@@ -88,6 +88,8 @@ module LinuxStat
 				}
 			end
 
+			alias current_usage usage
+
 			private
 			# Returns the index containing the received and transmitted bytes
 			def find_index_of_bytes

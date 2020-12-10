@@ -25,7 +25,7 @@ static VALUE getOpenMax(VALUE obj) {
 	return INT2FIX(sysconf(_SC_OPEN_MAX)) ;
 }
 
-static VALUE getPageSizeMax(VALUE obj) {
+static VALUE getPageSize(VALUE obj) {
 	return INT2FIX(sysconf(_SC_PAGESIZE)) ;
 }
 
@@ -67,7 +67,7 @@ void Init_sysconf() {
 	rb_define_module_function(_sysconf, "hostname_max", getHostnameMax, 0) ;
 	rb_define_module_function(_sysconf, "login_name_max", getLoginNameMax, 0) ;
 	rb_define_module_function(_sysconf, "open_max", getOpenMax, 0) ;
-	rb_define_module_function(_sysconf, "page_size_max", getPageSizeMax, 0) ;
+	rb_define_module_function(_sysconf, "pagesize", getPageSize, 0) ;
 	rb_define_module_function(_sysconf, "stream_max", getStreamMax, 0) ;
 	rb_define_module_function(_sysconf, "tty_name_max", getTTYNameMax, 0) ;
 	rb_define_module_function(_sysconf, "posix_version", getPosixVersion, 0) ;

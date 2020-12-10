@@ -70,10 +70,10 @@ module LinuxStat
 			# By default it is the id of the current process ($$)
 			#
 			# It retuns the memory, virtual memory, and resident memory of the process.
-			# All values are in Kilobytes.
+			# All values are in kilobytes.
 			#
 			# The output is a Hash. For example, a sample output:
-			#    {:memory=>8656, :virtual_memory=>78272, :resident_memory=>14072}
+			#    {:memory=>8515.584, :virtual_memory=>79781.888, :resident_memory=>13955.072}
 			#
 			# Note:
 			# If you need only memory usage of a process, run LinuxStat::ProcessInfo.memory(pid)
@@ -85,34 +85,22 @@ module LinuxStat
 			#
 			# If the info isn't available it will return an empty Hash.
 			def mem_stat(pid = $$)
-				stat_file = "/proc/#{pid}/stat".freeze
-				status_file = "/proc/#{pid}/status".freeze
+				statm = "/proc/#{pid}/statm".freeze
 
-				stat = if File.readable?(stat_file)
-					IO.read(stat_file).split
+				data = if File.readable?(statm)
+					IO.read(statm).split
 				else
-					[]
+					return {}
 				end
 
-				status = if File.readable?(status_file)
-					IO.readlines(status_file)
-				else
-					[]
-				end
-
-				_rss_anon = status.find { |x| x.start_with?('RssAnon') }
-				rss_anon = _rss_anon ? _rss_anon.split[1].to_i : nil
-
-				_virtual_memory = stat[22]
-				vm = _virtual_memory ? _virtual_memory.to_i.fdiv(1024).to_i : nil
-
-				_vm_rss = status.find { |x| x.start_with?('VmRSS') }
-				vm_rss = _vm_rss ? _vm_rss.split[1].to_i : nil
+				_rss_anon = (data[1] && data[2]) ? data[1].to_i.-(data[2].to_i).*(pagesize).fdiv(1000) : nil
+				_virtual_memory = data[0] ? data[0].to_i*(pagesize).fdiv(1000) : nil
+				_resident_memory = data[1] ? data[1].to_i.*(pagesize).fdiv(1000) : nil
 
 				{
-					memory: rss_anon,
-					virtual_memory: vm,
-					resident_memory: vm_rss
+					memory: _rss_anon,
+					virtual_memory: _virtual_memory,
+					resident_memory: _resident_memory
 				}
 			end
 
@@ -121,17 +109,17 @@ module LinuxStat
 			# By default it is the id of the current process ($$)
 			#
 			# It retuns the memory of the process.
-			# The value is in Kilobytes.
+			# The value is in kilobytes.
 			# The output is an Integer. For example, a sample output:
-			#    8664
+			#    8523.776
 			#
 			# If the info isn't available it will return nil.
 			def memory(pid = $$)
-				file = "/proc/#{pid}/status".freeze
+				file = "/proc/#{pid}/statm".freeze
 				return nil unless File.readable?(file)
 
-				_rss_anon = IO.readlines(file).find { |x| x.start_with?('RssAnon') }
-				_rss_anon ? _rss_anon.split[1].to_i : nil
+				data = IO.read(file).split
+				(data[1] && data[2]) ? data[1].to_i.-(data[2].to_i).*(pagesize).fdiv(1000) : nil
 			end
 
 			# virtual_memory(pid = $$)
@@ -139,17 +127,17 @@ module LinuxStat
 			# By default it is the id of the current process ($$)
 			#
 			# It retuns the virtual memory for the process.
-			# The value is in Kilobytes.
+			# The value is in kilobytes.
 			# The output is an Integer. For example, a sample output:
-			#    78376
+			#    79781.888
 			#
 			# If the info isn't available it will return nil.
 			def virtual_memory(pid = $$)
-				file = "/proc/#{pid}/stat".freeze
+				file = "/proc/#{pid}/statm".freeze
 				return nil unless File.readable?(file)
 
-				_virtual_memory = IO.read(file).split[22]
-				_virtual_memory ? _virtual_memory.to_i.fdiv(1024).to_i : nil
+				_virtual_memory = IO.read(file).split[0]
+				_virtual_memory ? _virtual_memory.to_i.*(pagesize).fdiv(1000) : nil
 			end
 
 			# resident_memory(pid = $$)
@@ -157,19 +145,17 @@ module LinuxStat
 			# By default it is the id of the current process ($$)
 			#
 			# It retuns the resident memory for the process.
-			# The value is in Kilobytes.
+			# The value is in kilobytes.
 			# The output is an Integer. For example, a sample output:
-			#    14012
+			#    13996.032
 			#
 			# If the info isn't available it will return nil.
 			def resident_memory(pid = $$)
-				file = "/proc/#{pid}/status".freeze
+				file = "/proc/#{pid}/statm".freeze
 				return nil unless File.readable?(file)
 
-				_vm_rss = IO.readlines(file)
-					.find { |x| x.start_with?('VmRSS') }
-
-				_vm_rss ? _vm_rss.split[1].to_i : nil
+				_vm_rss = IO.read(file).split[1]
+				_vm_rss ? _vm_rss.to_i.*(pagesize).fdiv(1000) : nil
 			end
 
 			# cpu_stat(pid: $$, sleep: 1.0 / LinuxStat::Sysconf.sc_clk_tck)
@@ -292,7 +278,8 @@ module LinuxStat
 				file = "/proc/#{pid}/stat".freeze
 				return nil unless File.readable?(file)
 
-				IO.read(file).split[19].to_i
+				data = IO.read(file).split[19]
+				data ? data.to_i : nil
 			end
 
 			# last_executed_cpu(pid = $$)
@@ -375,6 +362,10 @@ module LinuxStat
 			# Just to avoid multiple calculations!...
 			def ticks_to_ms
 				@@ms ||= 1.0 / get_ticks
+			end
+
+			def pagesize
+				@@pagesize ||= LinuxStat::Sysconf.pagesize
 			end
 		end
 	end

@@ -1,8 +1,26 @@
-# Independed and LinuxStat specific unrelated modules
+# ----------------------------------------------------------------------------------------------------- #
+# Don't edit this file unless you know what you are doing.                                               #
+#                                                                                                                                  #
+#  A file can have reverse dependency.                                                                         #
+# For example, linux_stat/utsname is required before                                                    #
+# linux_stat/os, which means utsname can be used by LinuxStat::OS and the files below.  #
+#                                                                                                                                  #
+# Once wrongly edited, you need to go through each method to know what                     #
+# file is required by the module functions. Which can be very time consuming.                 #
+#                                                                                                                                   #
+# If you are writng an independent module, just add them under "Independent" section   #
+# If you are writing a dependent module, just append that to the end of the file.             #
+# If you are writing something that is miscellaneous, just add it to miscellaneous section #
+# ------------------------------------------------------------------------------------------------------ #
+
+# Miscellaneous Modules
+# Independed and LinuxStat's miscellaneous modules
 require "linux_stat/version"
 require 'linux_stat/prettify_bytes'
 
-# Independed and LinuxStat related modules
+# Independed Modules
+# Modules that doesn't have any dependency on its own
+# But might be required by other module functions in "Dependent Modules" section
 require "linux_stat/battery"
 require "linux_stat/bios"
 require "linux_stat/cpu"
@@ -10,6 +28,9 @@ require "linux_stat/memory"
 require "linux_stat/net"
 require "linux_stat/process"
 require "linux_stat/swap"
+
+# Dependent Modules
+# Modules that can have reverse dependency
 
 # LinuxStat::Uname dependent modules
 require 'linux_stat/utsname'

@@ -86,12 +86,9 @@ module LinuxStat
 			# If the info isn't available it will return an empty Hash.
 			def mem_stat(pid = $$)
 				statm = "/proc/#{pid}/statm".freeze
+				return {} unless File.readable?(statm)
 
-				data = if File.readable?(statm)
-					IO.read(statm).split
-				else
-					return {}
-				end
+				data = IO.read(statm).split
 
 				_rss_anon = (data[1] && data[2]) ? data[1].to_i.-(data[2].to_i).*(pagesize).fdiv(1000) : nil
 				_virtual_memory = data[0] ? data[0].to_i*(pagesize).fdiv(1000) : nil

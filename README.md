@@ -239,20 +239,23 @@ LinuxStat::Mounts.tmpfs
 
 ### LinuxStat::Net
 ```
+LinuxStat::Net.current_usage
+=> {:received=>2183400.0, :transmitted=>114860.0}
+
 LinuxStat::Net.ipv4_private
 => "192.168.0.102"
 
 LinuxStat::Net.total_bytes
-=> {:received=>260376085, :transmitted=>41350738}
+=> {:received=>294316415, :transmitted=>45313147}
 
 LinuxStat::Net.total_bytes_received
-=> 260376085
+=> 294317913
 
 LinuxStat::Net.total_bytes_transmitted
-=> 41350738
+=> 45313147
 
 LinuxStat::Net.usage
-=> {:received=>0.0, :transmitted=>0.0}
+=> {:received=>1643690.0, :transmitted=>146030.0}
 
 ```
 

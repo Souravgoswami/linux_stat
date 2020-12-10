@@ -91,7 +91,9 @@ module LinuxStat
 			private
 			# Returns the index containing the received and transmitted bytes
 			def find_index_of_bytes
-				unless @index_of_bytes
+				@@index_of_bytes ||= nil
+
+				unless @@index_of_bytes
 					data = IO.foreach(DEV)
 
 					r, h = data.next.split, {}
@@ -103,11 +105,11 @@ module LinuxStat
 					}
 
 					data_0 = data.next.gsub(?|.freeze, ' %'.freeze)
-					@index_of_bytes = []
-					data_0.split.each_with_index { |x, i| @index_of_bytes << i if x == '%bytes'.freeze }
-					h[:r] > h[:t] ? @index_of_bytes.reverse : @index_of_bytes
+					@@index_of_bytes = []
+					data_0.split.each_with_index { |x, i| @@index_of_bytes << i if x == '%bytes'.freeze }
+					h[:r] > h[:t] ? @@index_of_bytes.reverse : @@index_of_bytes
 				else
-					@index_of_bytes
+					@@index_of_bytes
 				end
 			end
 		end

@@ -2,7 +2,7 @@
 $-v = true
 
 begin
-	require 'linux_stat'
+	require 'linux_stat' unless defined?(LinuxStat)
 rescue LoadError
 	abort "The Gem needs to be installed before this test can be run!"
 end

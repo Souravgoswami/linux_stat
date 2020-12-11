@@ -10,4 +10,6 @@ let observer = new IntersectionObserver(e => {
 footerGlowAnim.forEach(_i => observer.observe(_i))
 
 for(let i of document.querySelectorAll('pre'))
-	i.innerHTML = i.innerHTML.split('\n').map(x => x.trim() + "\n").join('').trim()
+	i.innerHTML = i.innerHTML.split('\n').map(x => {
+		return (x.slice(0, 2) === "\t\t") ? x.slice(2) + "\n" : (x.trim() + "\n")
+	}).join('').trim()

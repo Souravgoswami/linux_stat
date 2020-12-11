@@ -509,8 +509,79 @@ layout: linuxstat
 
 	</pre>
 
+	<a class="head" id="note-1" href="#note-1" content="Note 1: CPU usage, and Net usage"></a>
+	These methods requires a polling interval:
 
-	<a class="head" id="note-1-fs" href="#note-1-fs" content="Note 1: Filesystem"></a>
+	<ol>
+		<li>LinuxStat::CPU.stat, usage, total_usage, usage.</li>
+		<li>LinuxStat::ProcessInfo.cpu_usage, cpu_stat.</li>
+		<li>LinuxStat::Net.usage, current_usage.</li>
+	</ol>
+
+	<break></break>
+	They sleep for a given interval and then differentiate between the data.
+
+	<break></break>
+	For more info look at the ri documentation for the above methods.
+
+	<break></break>
+	These methods can slow down your application a bit unless you implement them in a thread.
+
+	<break></break>
+	Other methods doesn't have the sleep implemented, and they just works under a millisecond.
+
+	<break></break>
+	For example:
+
+	<pre>
+		LinuxStat::CPU.stat(0.1)
+		=> {0=>7.69, 1=>0.0, 2=>0.0, 3=>18.18, 4=>10.0}
+	</pre>
+	This will sleep for 0.1 seconds. To be reliable, use a time like 0.05 seconds or so.
+
+	<break></break>
+	If you want to build a system monitor and don't want to wait, you have to do something like this:
+
+	<pre class="nowrap">
+		#!/usr/bin/ruby
+		require 'linux_stat'
+		threads, usages = [], []
+		counter = 0
+
+		thread = Thread.new { usages = LinuxStat::CPU.usages(0.5).values }
+
+		while true
+			unless thread.alive?
+				thread.join
+				thread = Thread.new { usages = LinuxStat::CPU.usages(0.5).values }
+			end
+
+			# clears the screen and prints the info
+			puts "\e[2J\e[H\e[3J"\
+			"#{counter += 1}\n"\
+			"\e[1;33mTotal CPU Usage:\e[0m #{usages[0]}%\n"\
+			"#{usages[1..-1].to_a.map.with_index { |x, i| "\e[1;33mCore #{i}\e[0m => #{x}%\n" }.join}"\
+			"Total Download: #{LinuxStat::PrettifyBytes.convert_decimal LinuxStat::Net.total_bytes_received}\n"\
+			"Total Upload: #{LinuxStat::PrettifyBytes.convert_decimal LinuxStat::Net.total_bytes_transmitted}"
+		end
+	</pre>
+
+	This will not wait in every loop for 0.5 seconds, but it will not update the cpu usage in every loop either.
+	<break></break>
+	So what you will be seeing in the CPU usage in every 0.5 seconds interval.
+
+	<break></break>
+	You will also see the counter increases like crazy. Which means it's not getting waited for 0.5 seconds.
+
+	<break></break>
+	But the other methods doesn't have this delay, thus in this example,
+	you will be able see the "Total Download" and "Total Upload" in real time,
+	well as soon as the Linux kernel updates the data and ruby executes the loop.
+
+	<break></break>
+	Just run the linuxstat.rb command to test what method takes what time measured in microseconds.
+
+	<a class="head" id="note-2" href="#note-2" content="Note 2: Filesystem"></a>
 
 	Filesystem can take arguments. By default it's '/' or the root of the system...
 
@@ -546,7 +617,7 @@ layout: linuxstat
 		=> "29.305004119873047 GiB"
 	</pre>
 
-	<a class="head" id="note-2-processinfo" href="#note-2-processinfo" content="Note 2: ProcessInfo"></a>
+	<a class="head" id="note-3" href="#note-3" content="Note 3: ProcessInfo"></a>
 
 	All the methods LinuxStat::ProcessInfo can take an argument containing the Process ID of a process.
 	<break></break>
@@ -602,7 +673,7 @@ layout: linuxstat
 		=> "467.51 MiB"
 	</pre>
 
-	<a class="head" id="note-3-fs" href="#note-3-fs" content="Note 3: FS"></a>
+	<a class="head" id="note-4" href="#note-4" content="Note 4: FS"></a>
 	LinuxStat::FS module gives you the raw info in Hash collected from statvfs.
 
 	<break></break>
@@ -632,7 +703,7 @@ layout: linuxstat
 
 	To learn more about them, just run ri and the method name. To see all available methods.
 
-	<a class="head" id="note-4-user" href="#note-4-user" content="Note 4: User"></a>
+	<a class="head" id="note-5" href="#note-5" content="Note 5: User"></a>
 	Most of the LinuxStat::User supports arguments.
 
 	For example, to get a user's home by the username:

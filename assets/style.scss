@@ -402,6 +402,12 @@ body {
 		border-radius: 6px ;
 		font-size: 14px ;
 
+		&.nowrap {
+			white-space: pre !important ;
+			// word-break: normal !important ;
+			overflow: auto ;
+		}
+
 		code {
 			counter-increment: listing ;
 			overflow: auto ;

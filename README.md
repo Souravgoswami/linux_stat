@@ -523,9 +523,11 @@ These methods requires a polling interval:
 
 They sleep for a given interval and then differentiate between the data.
 
-These methods can really slow down your application unless you implement them in a thread.
+For more info look at the ri documentation for the above methods.
 
-Look at the ri documentation, the LinuxStat::CPU.usage.
+These methods can slow down your application a bit unless you implement them in a thread.
+
+Other methods doesn't have the sleep implemented, and they just works under a millisecond.
 
 For example:
 
@@ -533,8 +535,7 @@ For example:
 LinuxStat::CPU.stat(0.1)
 => {0=>7.69, 1=>0.0, 2=>0.0, 3=>18.18, 4=>10.0}
 ```
-
-This will sleep for 0.1 seconds. To be reliable, use a time like 0.03 seconds or so.
+This will sleep for 0.1 seconds. To be reliable, use a time like 0.05 seconds or so.
 
 If you want to build a system monitor and don't want to wait, you have to do something like this:
 
@@ -542,33 +543,36 @@ If you want to build a system monitor and don't want to wait, you have to do som
 #!/usr/bin/ruby -w
 require 'linux_stat'
 threads, usages = [], []
+counter = 0
+
+thread = Thread.new { usages = LinuxStat::CPU.usages(0.5).values }
 
 while true
-	if threads.count < 50
-		threads << Thread.new { usages = LinuxStat::CPU.usages(0.1).values }
-	else
-		threads.each do |t|
-			unless t.alive?
-				t.join
-				threads.delete(t)
-			end
-		end
+	unless thread.alive?
+		thread.join
+		thread = Thread.new { usages = LinuxStat::CPU.usages(0.5).values }
 	end
 
 	# clears the screen and prints the info
 	puts "\e[2J\e[H\e[3J"\
-	"Thread Count: #{threads.count}\n"\
+	"#{counter += 1}\n"\
 	"\e[1;33mTotal CPU Usage:\e[0m #{usages[0]}%\n"\
-	"#{usages[1..-1].to_a.map.with_index { |x, i| "\e[1;33mCore #{i}\e[0m => #{x}%\n" }.join}"
+	"#{usages[1..-1].to_a.map.with_index { |x, i| "\e[1;33mCore #{i}\e[0m => #{x}%\n" }.join}"\
+	"Total Download: #{LinuxStat::PrettifyBytes.convert_decimal LinuxStat::Net.total_bytes_received}\n"\
+	"Total Upload: #{LinuxStat::PrettifyBytes.convert_decimal LinuxStat::Net.total_bytes_transmitted}"
 end
 ```
 
-This will not wait in every loop for 0.1 seconds, but it will not update the cpu usage in every loop either.
-So what you will be seeing in the CPU usage in every 0.1 seconds.
+This will not wait in every loop for 0.5 seconds, but it will not update the cpu usage in every loop either.
+So what you will be seeing in the CPU usage in every 0.5 seconds interval.
 
-Other methods doesn't have the sleep implemented, and they just works under a millisecond.
+You will also see the counter increases like crazy. Which means it's not getting waited for 0.5 seconds.
 
-Just run the linuxstat.rb command to test what method takes what time in microseconds.
+But the other methods doesn't have this delay, thus in this example,
+you will be able see the "Total Download" and "Total Upload" in real time,
+well as soon as the Linux kernel updates the data and ruby executes the loop.
+
+Just run the linuxstat.rb command to test what method takes what time measured in microseconds.
 
 ## Note 2: Filesystem
 
@@ -605,7 +609,7 @@ irb(main):005:0> LinuxStat::Filesystem.total(thumbdrive).fdiv(1024 ** 3).to_s <<
 => "29.305004119873047 GiB"
 ```
 
-## Note 2: ProcessInfo
+## Note 3: ProcessInfo
 
 All the methods LinuxStat::ProcessInfo can take an argument containing the Process ID of a process.
 By default it's $$ or the PID of the current process, ruby, itself.
@@ -657,7 +661,7 @@ irb(main):002:0> LinuxStat::ProcessInfo.memory(LinuxStat::Process.names.find { |
 => "467.51 MiB"
 ```
 
-## Note 3: FS
+## Note 4: FS
 
 LinuxStat::FS module gives you the raw info in Hash collected from statvfs.
 
@@ -682,7 +686,7 @@ irb(main):003:0> t = Time.now ; puts LinuxStat::FS.stat('/') ; Time.now - t
 
 To learn more about them, just run ri and the method name. To see all available methods.
 
-## Note 4: User
+## Note 5: User
 Most of the LinuxStat::User supports arguments.
 
 For example, to get a user's home by the username:
@@ -764,7 +768,7 @@ irb(main):004:0> LinuxStat::User.get_login
 
 Right, the get_login() can return an empty string. But LinuxStat::User.get_user also aliased as LinuxStat::User.get_current_user shouldn't return an empty string under most circumstances.
 
-## Note 5: PrettifyBytes
+## Note 6: PrettifyBytes
 Often times we need to work with KB, MB GB, TB, or KiB, MiB, GiB, TiB, etc.
 And we need some work to convert bytes to those units.
 Because LinuxStat provides a lot of data in bytes, and kilobytes, it's quite tedious to convert them all the time.

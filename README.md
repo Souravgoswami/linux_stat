@@ -514,7 +514,63 @@ LinuxStat::User.usernames_by_uid
 
 ---
 
-## Note 1: Filesystem
+## Note 1: CPU usage, and Net usage
+These methods requires a polling interval:
+
+1. LinuxStat::CPU.stat, usage, total_usage, usage.
+2. LinuxStat::ProcessInfo.cpu_usage, cpu_stat.
+3. LinuxStat::Net.usage, current_usage.
+
+They sleep for a given interval and then differentiate between the data.
+
+These methods can really slow down your application unless you implement them in a thread.
+
+Look at the ri documentation, the LinuxStat::CPU.usage.
+
+For example:
+
+```
+LinuxStat::CPU.stat(0.1)
+=> {0=>7.69, 1=>0.0, 2=>0.0, 3=>18.18, 4=>10.0}
+```
+
+This will sleep for 0.1 seconds. To be reliable, use a time like 0.03 seconds or so.
+
+If you want to build a system monitor and don't want to wait, you have to do something like this:
+
+```
+#!/usr/bin/ruby -w
+require 'linux_stat'
+threads, usages = [], []
+
+while true
+	if threads.count < 50
+		threads << Thread.new { usages = LinuxStat::CPU.usages(0.1).values }
+	else
+		threads.each do |t|
+			unless t.alive?
+				t.join
+				threads.delete(t)
+			end
+		end
+	end
+
+	# clears the screen and prints the info
+	puts "\e[2J\e[H\e[3J"\
+	"Thread Count: #{threads.count}\n"\
+	"\e[1;33mTotal CPU Usage:\e[0m #{usages[0]}%\n"\
+	"#{usages[1..-1].to_a.map.with_index { |x, i| "\e[1;33mCore #{i}\e[0m => #{x}%\n" }.join}"
+end
+```
+
+This will not wait in every loop for 0.1 seconds, but it will not update the cpu usage in every loop either.
+So what you will be seeing in the CPU usage in every 0.1 seconds.
+
+Other methods doesn't have the sleep implemented, and they just works under a millisecond.
+
+Just run the linuxstat.rb command to test what method takes what time in microseconds.
+
+## Note 2: Filesystem
 
 Filesystem can take arguments. By default it's '/' or the root of the system...
 

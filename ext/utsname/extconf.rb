@@ -1,6 +1,10 @@
 require 'mkmf'
 
-unless (have_header('sys/utsname.h') && have_header('ruby.h'))
+unless have_const('linux') || RbConfig::CONFIG['arch'].to_s[/linux/]
+	abort('Platform is not linux')
+end
+
+unless have_header('sys/utsname.h') && have_header('ruby.h')
 	abort('Missing header')
 end
 

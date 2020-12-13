@@ -510,8 +510,16 @@ layout: linuxstat
 	</pre>
 
 	<a class="head" id="note-1" href="#note-1" content="Note 1: CPU usage, and Net usage"></a>
-	These methods requires a polling interval:
+	To calculate the current usage, we need to get two usages at a given interval, and subtract the 2nd from the first.
+	For example, if the current download (<code>LinuxStat::Net.total_bytes_received</code>) is 1000 bytes, and if 0.1 seconds ago, it was 100 bytes, that means 900 bytes was received in 0.1 seconds.
+	That means the current speed is 9000 bytes or 9 kB/s.
 
+	<break></break>
+	Without the polling, it's not really possible to calculate the current usage. Although the total usage can be calculated.
+	A system monitor does that, too...
+
+	<break></break>
+	Thus these methods require a polling interval:
 	<ol>
 		<li>LinuxStat::CPU.stat, usage, total_usage, usage.</li>
 		<li>LinuxStat::ProcessInfo.cpu_usage, cpu_stat.</li>
@@ -545,16 +553,13 @@ layout: linuxstat
 	<pre class="nowrap">
 		#!/usr/bin/ruby
 		require 'linux_stat'
-		threads, usages = [], []
+
+		usages = []
+		thread = Thread.new { }
 		counter = 0
 
-		thread = Thread.new { usages = LinuxStat::CPU.usages(0.5).values }
-
 		while true
-			unless thread.alive?
-				thread.join
-				thread = Thread.new { usages = LinuxStat::CPU.usages(0.5).values }
-			end
+			thread = Thread.new { usages = LinuxStat::CPU.usages(0.5).values } unless thread.alive?
 
 			# clears the screen and prints the info
 			puts "\e[2J\e[H\e[3J"\

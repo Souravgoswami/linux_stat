@@ -1,16 +1,21 @@
 module LinuxStat
 	module CPU
 		class << self
-			# stat(sleep = 1.0 / LinuxStat::Sysconf.sc_clk_tck)
+			##
+			# = stat(sleep = 1.0 / LinuxStat::Sysconf.sc_clk_tck)
+			#
 			# Where sleep is the delay to gather the data.
+			#
 			# The minimum possible value at anytime is 1.0 / LinuxStat::Sysconf.sc_clk_tck
+			#
 			# This method returns the cpu usage of all threads.
 			#
 			# The first one is aggregated CPU usage reported by the Linux kernel.
+			#
 			# And the consecutive ones are the real core usages.
 			#
 			# On a system with 4 threads, the output will be like::
-			# {0=>84.38, 1=>100.0, 2=>50.0, 3=>87.5, 4=>87.5}
+			#    {0=>84.38, 1=>100.0, 2=>50.0, 3=>87.5, 4=>87.5}
 			#
 			# If the information is not available, it will return an empty Hash
 			def stat(sleep = ticks_to_ms)
@@ -43,9 +48,13 @@ module LinuxStat
 				end
 			end
 
-			# total_usage(sleep = 1.0 / LinuxStat::Sysconf.sc_clk_tck)
+			##
+			# = total_usage(sleep = 1.0 / LinuxStat::Sysconf.sc_clk_tck)
+			#
 			# Where sleep is the delay to gather the data.
+			#
 			# The minimum possible value at anytime is 1.0 / LinuxStat::Sysconf.sc_clk_tck
+			#
 			# This method returns the cpu usage of all threads.
 			#
 			# It's like running LinuxStat::CPU.stat[0] but it's much more efficient and calculates just the aggregated usage which is available at the top of the /proc/stat file.
@@ -66,14 +75,18 @@ module LinuxStat
 				totald.-(idle_now - idle_then).fdiv(totald).*(100).round(2).abs
 			end
 
+			##
 			# Returns the total number of CPU threads.
+			#
 			# If the information isn't available, it will return 0.
 			def count
 				# CPU count can change during the program runtime
 				cpuinfo.count { |x| x.start_with?('processor') }
 			end
 
+			##
 			# Returns the model of processor.
+			#
 			# If the information isn't available, it will return en empty string.
 			#
 			# The output is also cached (memoized) ; as changing the value in runtime is unexpected.
@@ -81,7 +94,9 @@ module LinuxStat
 				@@name ||= cpuinfo.find { |x| x.start_with?('model name') }.to_s.split(?:)[-1].to_s.strip
 			end
 
+			##
 			# Returns an array with current core frequencies corresponding to the usages.
+			#
 			# If the information isn't available, it will return an empty array.
 			def cur_freq
 				@@cpu_freqs ||= Dir["/sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_cur_freq"]
@@ -94,7 +109,9 @@ module LinuxStat
 				end
 			end
 
+			##
 			# Returns an array with max core frequencies corresponding to the usages.
+			#
 			# If the information isn't available, it will return an empty array.
 			def max_freq
 				@@max_freqs ||= Dir["/sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_max_freq"]

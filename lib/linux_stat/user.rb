@@ -1,16 +1,21 @@
 module LinuxStat
 	module User
 		class << self
+			##
 			# Returns an array of users as string
+			#
 			# For example:
-			#    ["root", "bin", "daemon", "mail", "ftp", "http", "nobody"]
+			#   ["root", "bin", "daemon", "mail", "ftp", "http", "nobody"]
+			#
 			# But if the status isn't available it will return an empty Array.
 			def list
 				return [] unless passwd_readable?
 				passwd.map { |x| x[/.+?:/][0..-2].freeze }
 			end
 
+			##
 			# Returns all the Group ids directories as Hash.
+			#
 			# For example:
 			#    {:root=>{:uid=>0, :gid=>0}, :bin=>{:uid=>1, :gid=>1}, :daemon=>{:uid=>2, :gid=>2}, :mail=>{:uid=>8, :gid=>12}, :ftp=>{:uid=>14, :gid=>11}}
 			#
@@ -24,7 +29,9 @@ module LinuxStat
 				}
 			end
 
+			##
 			# Returns all the user IDs as Hash.
+			#
 			# For example:
 			#    LinuxStat::User.uids
 			#    => {:root=>0, :bin=>1, :daemon=>2, :mail=>8, :ftp=>14}
@@ -37,9 +44,12 @@ module LinuxStat
 				}
 			end
 
+			##
 			# Returns all the Group identifiers as Hash.
+			#
 			# For example:
 			#    LinuxStat::User.gids
+			#
 			#    => {:root=>0, :bin=>1, :daemon=>2, :mail=>12, :ftp=>11}
 			#
 			# But if the status isn't available it will return an empty Hash.
@@ -50,9 +60,12 @@ module LinuxStat
 				}
 			end
 
+			##
 			# Returns all the home directories as Hash.
+			#
 			# For example:
 			#    LinuxStat::User.home_directories
+			#
 			#    => {:root=>"/root", :bin=>"/", :daemon=>"/", :mail=>"/var/spool/mail", :ftp=>"/srv/ftp", :http=>"/srv/http", :nobody=>"/"}
 			#
 			# But if the status isn't available it will return an empty Hash.
@@ -64,19 +77,24 @@ module LinuxStat
 				}
 			end
 
+			##
 			# Returns the user ID as integer
+			#
 			# It directly calls LinuxStat::Sysconf.get_uid and LinuxStat::Sysconf.get_gid
+			#
 			# and then reads /etc/passwd and matches the values with UID and GID.
 			#
 			# It doesn't get affected with the assignment of USER environment variable
+			#
 			# If either /etc/passwd is readable or LinuxStat::Sysconf.get_login() is not empty.
 			#
 			# But if /etc/passwd isn't readable (which is weird), it will fall back to sysconf.h's get_login()
-			# It that's not available, like in docker, falls back to ENV['USER].to_s
+			# If that's not available, like in docker, falls back to ENV['USER].to_s
 			#
-			# Note that this is not cached or memoized so use this at your own processing expense.
 			# It should return the username under most robust circumstances.
 			# But if nothing is available for some reason, it will return an empty String.
+			#
+			# Note that this is not cached or memoized so use this at your own processing expense.
 			def get_user
 				unless passwd_readable?
 					_l = LinuxStat::Sysconf.get_login().freeze
@@ -96,42 +114,55 @@ module LinuxStat
 				username
 			end
 
+			##
 			# Returns the user ID as integer
+			#
 			# It directly calls LinuxStat::Sysconf.get_uid
 			def get_uid
 				LinuxStat::Sysconf.get_uid
 			end
 
+			##
 			# Returns the group ID as integer
+			#
 			# It directly calls LinuxStat::Sysconf.get_uid
 			def get_gid
 				LinuxStat::Sysconf.get_gid
 			end
 
+			##
 			# Returns the effective user ID as integer
+			#
 			# It directly calls LinuxStat::Sysconf.get_euid
 			def get_euid
 				LinuxStat::Sysconf.get_euid
 			end
 
+			##
 			# Calls LinuxStat::Sysconf.get_login()
+			#
 			# The username is returned as a String.
+			#
 			# It doesn't get affected by ENV['USER]
 			#
 			# But if the name isn't available (say inside a container), it will return an empty String.
+			#
 			# This is meant for speed but not for reliability.
 			# To get more reliable output, you might try LinuxStat::User.get_user()
 			def get_login
 				LinuxStat::Sysconf.get_login
 			end
 
-			# def usernames_by_uid(gid = get_uid)
+			##
+			# = def usernames_by_uid(gid = get_uid)
+			#
 			# Where uid is the group id of the user. By default it's the uid of the current user.
 			#
 			# It returns an Array containing the username corresponding to the uid.
 			#
 			# For example:
 			#    LinuxStat::User.usernames_by_uid(1001)
+			#
 			#    => ["userx", "usery"]
 			#
 			# But if the info isn't available it will return an empty Array.
@@ -145,10 +176,13 @@ module LinuxStat
 				usernames
 			end
 
-			# def username_by_gid(gid = get_gid)
+			##
+			# = username_by_gid(gid = get_gid)
+			#
 			# Where gid is the group id of the user. By default it's the gid of the current user.
 			#
 			# It returns a String cotaining the username corresponding to the gid
+			#
 			# But if the info isn't available it will return an empty frozen String.
 			def username_by_gid(gid = get_gid)
 				return ''.freeze unless passwd_readable?
@@ -164,15 +198,19 @@ module LinuxStat
 				username
 			end
 
-			# gid_by_username(username = get_user)
+			##
+			# = gid_by_username(username = get_user)
+			#
 			# Where username is the username to look for, by default it is the current user.
 			#
 			# It returns the gid by the username.
 			# For example:
 			#    LinuxStat::User.gid_by_username('root')
+			#
 			#    => "0"
 			#
 			# The return type is Integer.
+			#
 			# But if user passed doesn't exist or if the info isn't available, it will return nil.
 			def gid_by_username(username = get_user)
 				return nil unless passwd_readable?
@@ -188,15 +226,20 @@ module LinuxStat
 				gid
 			end
 
-			# uid_by_username(username = get_user)
+			##
+			# = uid_by_username(username = get_user)
+			#
 			# Where username is the username to look for, by default it is the current user.
 			#
 			# It returns the uid by the username.
+			#
 			# For example:
 			#    LinuxStat::User.uid_by_username('root')
+			#
 			#    => 0
 			#
 			# The return type is Integer.
+			#
 			# But if user passed doesn't exist or if the info isn't available, it will return nil.
 			def uid_by_username(username = get_user)
 				return nil unless passwd_readable?
@@ -212,8 +255,11 @@ module LinuxStat
 				uid
 			end
 
-			# home_by_username(user = get_user)
+			##
+			# = home_by_username(user = get_user)
+			#
 			# Where user is the name of the user.
+			#
 			# Returns the user's home. By default it returns the home of the current user.
 			#
 			# If the info isn't available, it will return ENV['HOME].to_s.freeze
@@ -231,10 +277,14 @@ module LinuxStat
 				home
 			end
 
-			# home_by_uid(id = get_uid)
+			##
+			# = home_by_uid(id = get_uid)
+			#
 			# Gets all the users home directory with user id.
+			#
 			# It returns an Array in this format:
 			#    LinuxStat::User.homes_by_uid(1001)
+			#
 			#    => ["/home/userx", "/home/usery"]
 			#
 			# Assuming both the users share same UID.
@@ -251,8 +301,11 @@ module LinuxStat
 				home
 			end
 
-			# home_by_gid(id = get_uid)
+			##
+			# = home_by_gid(id = get_uid)
+			#
 			# Gets the home of the user corresponding to the GID.
+			#
 			# It returns a String in this format:
 			#
 			# Assuming both the users share same UID.

@@ -1,12 +1,20 @@
 module LinuxStat
 	module ProcessInfo
 		class << self
-			# total_io(pid = $$)
+			##
+			# = total_io(pid = $$)
+			#
 			# Where pid is the process ID.
+			#
 			# By default it is the id of the current process ($$)
 			#
 			# It retuns the total read/write caused by a process.
-			# The output is Hash. For example, a sample output:
+			#
+			# The output is Hash.
+			#
+			# For example:
+			#    LinuxStat::ProcessInfo.total_io
+			#
 			#    {:read_bytes=>0, :write_bytes=>0}
 			#
 			# The output is only based on the total disk IO the process has done.
@@ -28,12 +36,18 @@ module LinuxStat
 				out
 			end
 
-			# cmdline(pid = $$)
+			##
+			# = cmdline(pid = $$)
+			#
 			# Where pid is the process ID.
+			#
 			# By default it is the id of the current process ($$)
 			#
 			# It retuns the total command of the process.
-			# The output is String. For example, a sample output:
+			#
+			# The output is String. For example:
+			#    LinuxStat::ProcessInfo.cmdline
+			#
 			#    "ruby -r linux_stat -e p LinuxStat::ProcessInfo.cmdline"
 			#
 			# If the info isn't available it will return an empty frozen String.
@@ -46,12 +60,18 @@ module LinuxStat
 				_cmdline.tap(&:strip!)
 			end
 
-			# command_name(pid = $$)
+			##
+			# = command_name(pid = $$)
+			#
 			# Where pid is the process ID.
+			#
 			# By default it is the id of the current process ($$)
 			#
 			# It retuns the total command name of the process.
-			# The output is String. For example, a sample output:
+			#
+			# The output is String. For example:
+			#    LinuxStat::ProcessInfo.command_name
+			#
 			#    "ruby"
 			#
 			# If the info isn't available it will return an empty frozen String.
@@ -65,22 +85,29 @@ module LinuxStat
 				File.split(_cmdline.tap(&:strip!).split[0])[-1]
 			end
 
-			# mem_stat(pid = $$)
+			##
+			# = mem_stat(pid = $$)
+			#
 			# Where pid is the process ID.
+			#
 			# By default it is the id of the current process ($$)
 			#
 			# It retuns the memory, virtual memory, and resident memory of the process.
+			#
 			# All values are in kilobytes.
 			#
-			# The output is a Hash. For example, a sample output:
+			# The output is a Hash. For example:
+			#    LinuxStat::ProcessInfo.mem_stat
+			#
 			#    {:memory=>8515.584, :virtual_memory=>79781.888, :resident_memory=>13955.072}
 			#
-			# Note:
-			# If you need only memory usage of a process, run LinuxStat::ProcessInfo.memory(pid)
-			# If you need only virtual memory for a process, run LinuxStat::ProcessInfo.virtual_memory(pid)
-			# If you need only resident memory of a process, run LinuxStat::ProcessInfo.resident_memory(pid)
+			# * Note:
+			# 1. If you need only memory usage of a process, run LinuxStat::ProcessInfo.memory(pid)
+			# 2. If you need only virtual memory for a process, run LinuxStat::ProcessInfo.virtual_memory(pid)
+			# 3. If you need only resident memory of a process, run LinuxStat::ProcessInfo.resident_memory(pid)
 			#
 			# This method opens opens multiple files.
+			#
 			# But if you need all of the info, then running this method once is efficient.
 			#
 			# If the info isn't available it will return an empty Hash.
@@ -101,13 +128,19 @@ module LinuxStat
 				}
 			end
 
-			# memory(pid = $$)
+			##
+			# = memory(pid = $$)
+			#
 			# Where pid is the process ID.
+			#
 			# By default it is the id of the current process ($$)
 			#
 			# It retuns the memory of the process.
 			# The value is in kilobytes.
-			# The output is an Integer. For example, a sample output:
+			#
+			# The output is an Integer. For example:
+			#    LinuxStat::ProcessInfo.memory
+			#
 			#    8523.776
 			#
 			# If the info isn't available it will return nil.
@@ -119,13 +152,20 @@ module LinuxStat
 				(data[1] && data[2]) ? data[1].to_i.-(data[2].to_i).*(pagesize).fdiv(1000) : nil
 			end
 
-			# virtual_memory(pid = $$)
+			##
+			# = virtual_memory(pid = $$)
+			#
 			# Where pid is the process ID.
+			#
 			# By default it is the id of the current process ($$)
 			#
 			# It retuns the virtual memory for the process.
+			#
 			# The value is in kilobytes.
-			# The output is an Integer. For example, a sample output:
+			#
+			# The output is an Integer. For example:
+			#    LinuxStat::ProcessInfo.virtual_memory
+			#
 			#    79781.888
 			#
 			# If the info isn't available it will return nil.
@@ -137,14 +177,21 @@ module LinuxStat
 				_virtual_memory ? _virtual_memory.to_i.*(pagesize).fdiv(1000) : nil
 			end
 
-			# resident_memory(pid = $$)
+			##
+			# = resident_memory(pid = $$)
+			#
 			# Where pid is the process ID.
+			#
 			# By default it is the id of the current process ($$)
 			#
 			# It retuns the resident memory for the process.
+			#
 			# The value is in kilobytes.
-			# The output is an Integer. For example, a sample output:
-			#    13996.032
+			#
+			# The output is an Integer. For example:
+			#    LinuxStat::ProcessInfo.cpu_stat
+			#
+			#    => 13996.032
 			#
 			# If the info isn't available it will return nil.
 			def resident_memory(pid = $$)
@@ -155,40 +202,48 @@ module LinuxStat
 				_vm_rss ? _vm_rss.to_i.*(pagesize).fdiv(1000) : nil
 			end
 
-			# cpu_stat(pid: $$, sleep: 1.0 / LinuxStat::Sysconf.sc_clk_tck)
+			##
+			# = cpu_stat(pid: $$, sleep: 1.0 / LinuxStat::Sysconf.sc_clk_tck)
+			#
 			# Where pid is the process ID and sleep time is the interval between measurements.
 			#
 			# By default it is the id of the current process ($$), and sleep is LinuxStat::Sysconf.sc_clk_tck
+			#
 			# The smallest amount of available sleep time is 1.0 / LinuxStat::Sysconf.sc_clk_tck.
 			#
-			# Note 1:
-			# Do note that the sleep time can slow down your application.
-			# And it's only needed for the cpu usage calculation.
+			# * Note 1:
+			# 1. Do note that the sleep time can slow down your application.
+			# 2. And it's only needed for the cpu usage calculation.
 			#
 			# It retuns the CPU usage, threads, and the last executed CPU in Hash.
+			#
 			# For example:
-			#    {:cpu_usage=>0.0, :threads=>1, :last_executed_cpu=>1}
+			#    LinuxStat::ProcessInfo.cpu_stat
+			#
+			#    => {:cpu_usage=>0.0, :threads=>1, :last_executed_cpu=>1}
 			#
 			# But if the info isn't available, it will return an empty Hash.
 			#
-			# The :cpu_usage is in percentage. It's also divided with the number
-			# of CPU. :cpu_usage for example, will return 25.0 if the CPU count
+			# The :cpu_usage is in percentage.
+			# It's also divided with the number of CPU.
+			#
+			# :cpu_usage for example, will return 25.0 if the CPU count
 			# is 4, and the process is using 100% of a thread / core.
-			# A value of 100.0 indicates it is using 100% processing power.
+			#
+			# A value of 100.0 indicates it is using 100% processing power available to the system.
 			#
 			# The :threads returns the number of threads for the process.
 			# The value is a Integer.
 			#
-			# Note 2:
-			# If you just need the CPU usage run LinuxStat::ProcessInfo.cpu_usage(pid = $$)
-			# If you just need the threads run LinuxStat::ProcessInfo.threads(pid = $$)
-			# If you just need the last executed CPU run LinuxStat::ProcessInfo.last_executed_cpu(pid = $$)
-			# Running this method is slower and it opens multiple files at once
+			# * Note 2:
+			# 1. If you just need the CPU usage run LinuxStat::ProcessInfo.cpu_usage(pid = $$)
+			# 2. If you just need the threads run LinuxStat::ProcessInfo.threads(pid = $$)
+			# 3. If you just need the last executed CPU run LinuxStat::ProcessInfo.last_executed_cpu(pid = $$)
+			# 4. Running this method is slower and it opens multiple files at once
 			#
 			# Only use this method if you need all of the data at once, in such case, it's more efficient to use this method.
 			#
-			# The :last_executed_cpu also returns an Integer indicating
-			# the last executed cpu of the process.
+			# The :last_executed_cpu also returns an Integer indicating the last executed cpu of the process.
 			def cpu_stat(pid: $$, sleep: ticks_to_ms)
 				file = "/proc/#{pid}/stat"
 				return {} unless File.readable?(file)
@@ -221,16 +276,24 @@ module LinuxStat
 				}
 			end
 
-			# cpu_usage(pid: $$, sleep: 1.0 / LinuxStat::Sysconf.sc_clk_tck)
+			##
+			# = cpu_usage(pid: $$, sleep: 1.0 / LinuxStat::Sysconf.sc_clk_tck)
+			#
 			# Where pid is the process ID and sleep time is the interval between measurements.
 			#
 			# By default it is the id of the current process ($$), and sleep is 1.0 / LinuxStat::Sysconf.sc_clk_tck
+			#
 			# The smallest amount of available sleep time is LinuxStat::Sysconf.sc_clk_tck.
 			#
 			# It retuns the CPU usage in Float.
+			#
 			# For example:
-			#    10.0
-			# A value of 100.0 indicates it is using 100% processing power.
+			#
+			#    LinuxStat::ProcessInfo.cpu_usage
+			#
+			#    => 10.0
+			#
+			# A value of 100.0 indicates it is using 100% processing power available to the system.
 			#
 			# But if the info isn't available, it will return nil.
 			#
@@ -261,13 +324,20 @@ module LinuxStat
 				totald.-(idle2 - idle1).fdiv(totald).*(100).round(2).abs./(LinuxStat::CPU.count)
 			end
 
-			# threads(pid = $$)
+			##
+			# = threads(pid = $$)
+			#
 			# Where pid is the process ID.
+			#
 			# By default it is the id of the current process ($$)
 			#
 			# It retuns the threads for the current process in Integer.
+			#
 			# For example:
-			#    1
+			#    LinuxStat::ProcessInfo.threads
+			#
+			#    => 2
+			#
 			# But if the info isn't available, it will return nil.
 			#
 			# This method is way more efficient than running LinuxStat::ProcessInfo.cpu_stat()
@@ -279,13 +349,20 @@ module LinuxStat
 				data ? data.to_i : nil
 			end
 
-			# last_executed_cpu(pid = $$)
+			##
+			# = last_executed_cpu(pid = $$)
+			#
 			# Where pid is the process ID.
+			#
 			# By default it is the id of the current process ($$)
 			#
 			# It retuns the last executed CPU in Integer.
+			#
 			# For example:
-			#    2
+			#    LinuxStat::ProcessInfo.last_executed_cpu
+			#
+			#    => 2
+			#
 			# But if the info isn't available, it will return nil.
 			#
 			# This method is way more efficient than running LinuxStat::ProcessInfo.cpu_stat()
@@ -296,7 +373,9 @@ module LinuxStat
 				IO.read(file).split[38].to_i
 			end
 
-			# uid(pid = $$)
+			##
+			# = uid(pid = $$)
+			#
 			# returns the UIDs of the process as an Array of Integers.
 			#
 			# If the info isn't available it returns an empty Array.
@@ -316,9 +395,12 @@ module LinuxStat
 				}
 			end
 
-			# gid(pid = $$)
+			##
+			# = gid(pid = $$)
+			#
 			# returns the GIDs of the process as an Hash containing the following data:
-			# :real, :effective, :saved_set, :filesystem_uid
+			#
+			#    :real, :effective, :saved_set, :filesystem_uid
 			#
 			# If the info isn't available it returns an empty Hash.
 			def gid(pid = $$)
@@ -337,7 +419,9 @@ module LinuxStat
 				}
 			end
 
-			# owner(pid = $$)
+			##
+			# = owner(pid = $$)
+			#
 			# Returns the owner of the process
 			# But if the status is not available, it will return an empty frozen String.
 			def owner(pid = $$)

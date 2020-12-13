@@ -1,4 +1,4 @@
-require_relative 'lib/linux_stat.rb'
+require_relative 'lib/linux_stat/version'
 
 Gem::Specification.new do |s|
 	s.name = "linux_stat"

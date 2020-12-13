@@ -1,7 +1,9 @@
 module LinuxStat
 	module Mounts
 		class << self
+			##
 			# Reads /proc/mounts and returns the output splitted with \n.
+			#
 			# In other words, it's same as running IO.readlines('/proc/mounts').each(&:strip!)
 			#
 			# It returns an Array.
@@ -10,6 +12,7 @@ module LinuxStat
 				mounts
 			end
 
+			##
 			# Reads /proc/mounts and returns list of devices.
 			#
 			# It returns an Array.
@@ -18,6 +21,7 @@ module LinuxStat
 				mounts.map { |x| x.split(?\s.freeze).first }
 			end
 
+			##
 			# Reads /proc/mounts and returns partition name of the device mounted at /.
 			#
 			# It returns a String.
@@ -26,6 +30,7 @@ module LinuxStat
 				find_root[0].to_s
 			end
 
+			##
 			# Reads /proc/mounts and returns the file system of the device mounted at /.
 			#
 			# It returns a String.
@@ -34,6 +39,7 @@ module LinuxStat
 				find_root[2].to_s
 			end
 
+			##
 			# Reads /proc/mounts and returns the options used for mounting /.
 			#
 			# It returns a String.
@@ -42,6 +48,7 @@ module LinuxStat
 				find_root[3].to_s
 			end
 
+			##
 			# Reads /proc/mounts and finds all tmpfs.
 			#
 			# It returns a Hash
@@ -54,13 +61,18 @@ module LinuxStat
 				ret
 			end
 
+			##
 			# mount_point(dev = root)
+			#
 			# Where device = block device.
+			#
 			# The default argument is the root block device.
 			#
 			# It helps you find the mountpoint of a block device.
 			# For example:
+			#
 			#    LinuxStat::Mounts.mount_point('/dev/sdb1')
+			#
 			#    => "/run/media/sourav/5c2b7af7-d4c3-4ab4-a035-06d18ffc8e6f"
 			#
 			# The return type is String.
@@ -81,12 +93,15 @@ module LinuxStat
 				m
 			end
 
+			##
 			# list_devices_mount_point()
 			#
 			# It shows all the block devices corresponding to mount points.
 			#
 			# For example:
+			#
 			#    LinuxStat::Mounts.list_devices_mount_point
+			#
 			#    => {"proc"=>"/proc", "sys"=>"/sys", "dev"=>"/dev", "run"=>"/run", "/dev/sda2"=>"/", "securityfs"=>"/sys/kernel/security", "tmpfs"=>"/run/user/1000", "devpts"=>"/dev/pts", "cgroup2"=>"/sys/fs/cgroup/unified", "cgroup"=>"/sys/fs/cgroup/perf_event", "pstore"=>"/sys/fs/pstore", "none"=>"/sys/fs/bpf", "systemd-1"=>"/proc/sys/fs/binfmt_misc", "debugfs"=>"/sys/kernel/debug", "mqueue"=>"/dev/mqueue", "hugetlbfs"=>"/dev/hugepages", "tracefs"=>"/sys/kernel/tracing", "configfs"=>"/sys/kernel/config", "fusectl"=>"/sys/fs/fuse/connections", "gvfsd-fuse"=>"/run/user/1000/gvfs", "/dev/sdb1"=>"/run/media/sourav/5c2b7af7-d4c3-4ab4-a035-06d18ffc8e6f", "binfmt_misc"=>"/proc/sys/fs/binfmt_misc"}
 			#
 			# The return type is Hash.
@@ -104,13 +119,17 @@ module LinuxStat
 				m
 			end
 
+			##
 			# devices_stat
+			#
 			# [ Not to confuse this method with device_stat(dev) which shows only one device's info ]
 			#
 			# It shows all the block devices corresponding to mount points and data from LinuxStat::FS.stat(arg)
 			#
 			# For example:
+			#
 			#    LinuxStat::Mounts.devices_stat
+			#
 			#    => {"proc"=>{:mountpoint=>"/proc", :total=>0, :free=>0, :available=>0, :used=>0, :percent_used=>NaN, :percent_free=>NaN, :percent_available=>NaN}, "/dev/sdb1"=>{:mountpoint=>"/run/media/sourav/5c2b7af7-d4c3-4ab4-a035-06d18ffc8e6f", :total=>31466008576, :free=>2693931008, :available=>2693931008, :used=>28772077568, :percent_used=>91.44, :percent_free=>8.56, :percent_available=>8.56}}
 			#
 			# The return type is Hash.
@@ -142,12 +161,17 @@ module LinuxStat
 				m
 			end
 
+			##
 			# device_stat(dev = root)
+			#
 			# [ Not to confuse this method with devices_stat() which shows all devices ]
+			#
 			# It shows all the block devices corresponding to mount points and data from LinuxStat::FS.stat(arg)
 			#
 			# For example:
+			#
 			#    LinuxStat::Mounts.device_stat('/dev/sda2')
+			#
 			#    => {"/dev/sda2"=>{:mountpoint=>"/", :total=>119981191168, :free=>35298562048, :available=>35298562048, :used=>84682629120, :percent_used=>70.58, :percent_free=>29.42, :percent_available=>29.42}}
 			#
 			# The return type is Hash.

@@ -1,7 +1,9 @@
 module LinuxStat
 	module Process
 		class << self
+			##
 			# Returns the list of processes from /proc/.
+			#
 			# The return type is an Array of Integers.
 			def list
 				Dir['/proc/*'].select! { |x|
@@ -10,12 +12,15 @@ module LinuxStat
 				}.map! { |x| File.split(x)[-1].to_i }
 			end
 
+			##
 			# Counts and returns the total number of process running on the system.
+			#
 			# The return type is Integer.
 			def count
 				list.count
 			end
 
+			##
 			# Returns all the id of processes mapped with their names as a Hash.
 			def names
 				list.reduce({}) { |h, x|
@@ -27,6 +32,7 @@ module LinuxStat
 				}
 			end
 
+			##
 			# Returns all the id of processes mapped with their status as a Hash.
 			def types
 				list.reduce({}) { |h, x|
@@ -46,6 +52,7 @@ module LinuxStat
 				}
 			end
 
+			##
 			# Returns all the id of processes that are sleeping.
 			# The return type is an Array of Integers.
 			def sleeping
@@ -58,6 +65,7 @@ module LinuxStat
 				}
 			end
 
+			##
 			# Returns all the id of processes that are idle.
 			# The return type is an Array of Integers.
 			def idle
@@ -70,6 +78,7 @@ module LinuxStat
 				}
 			end
 
+			##
 			# Returns all the id of processes that are zombies.
 			# The return type is an Array of Integers.
 			def zombie
@@ -82,6 +91,7 @@ module LinuxStat
 				}
 			end
 
+			##
 			# Returns all the id of processes that are running.
 			# The return type is an Array of Integers.
 			def running

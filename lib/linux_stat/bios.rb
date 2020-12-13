@@ -1,7 +1,9 @@
 module LinuxStat
 	module BIOS
 		class << self
+			##
 			# Returns the model of the BIOS.
+			#
 			# If the information is not available it will return a frozen empty string.
 			#
 			# The output is also cached (memoized) ; as changing the value in runtime is unexpected.
@@ -16,7 +18,9 @@ module LinuxStat
 				end
 			end
 
+			##
 			# Returns the vendor of the BIOS.
+			#
 			# If the information is not available it will return a frozen empty string.
 			#
 			# The output is also cached (memoized) ; as changing the value in runtime is unexpected.
@@ -29,7 +33,9 @@ module LinuxStat
 				end
 			end
 
+			##
 			# Returns the version of the BIOS.
+			#
 			# If the information is not available it will return a frozen empty string.
 			#
 			# The output is also cached (memoized) ; as changing the value in runtime is unexpected.
@@ -41,7 +47,9 @@ module LinuxStat
 				end
 			end
 
+			##
 			# Returns the date of the BIOS.
+			#
 			# If the information is not available it will return a frozen empty string.
 			#
 			# The output is also cached (memoized) ; as changing the value in runtime is unexpected.

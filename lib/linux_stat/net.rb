@@ -2,7 +2,10 @@ module LinuxStat
 	module Net
 		class << self
 			DEV = '/proc/net/dev'.freeze
+
+			##
 			# Returns the local IP address of the system as a String.
+			#
 			# If the information isn't available, it will a frozen empty string.
 			def ipv4_private
 				require 'socket' unless defined?(Socket)
@@ -10,7 +13,9 @@ module LinuxStat
 				ip ? ip.ip? ? ip.ip_unpack[0].freeze : ''.freeze : ''.freeze
 			end
 
+			##
 			# Returns the total bytes received and transmitted as Hash.
+			#
 			# For example:
 			#    {:received=>56602867, :transmitted=>6940922}
 			#
@@ -29,6 +34,7 @@ module LinuxStat
 				}
 			end
 
+			##
 			# Returns the total bytes received as Integer.
 			#
 			# But if the status isn't available it will return nil.
@@ -41,6 +47,7 @@ module LinuxStat
 				data.map { |x| x.split[index].to_i }.sum
 			end
 
+			##
 			# Returns the total bytes transmitted as Integer.
 			#
 			# But if the status isn't available it will return nil.
@@ -53,7 +60,9 @@ module LinuxStat
 				data.map { |x| x.split[index].to_i }.sum
 			end
 
+			##
 			# usage(interval = 0.1)
+			#
 			# Where interval is the time between polling in seconds. The default is 0.1 seconds.
 			#
 			# The return type is a Hash, containg the current internet usage (received, transmit) in B/s.
@@ -62,8 +71,11 @@ module LinuxStat
 			#    {:received=>436060.0, :transmitted=>50350.0}
 			#
 			# If the system transmits 100 kb in the interval,
+			#
 			# this method will return 1000 kb/s. That is, it estimates
+			#
 			# the data it will transmit in one second. Thus, a good and reliable interval is 1 second
+			#
 			# It will return an empty Hash if the info (/proc/net/dev) isn't available.
 			def usage(interval = 0.1)
 				return {} unless File.readable?(DEV)

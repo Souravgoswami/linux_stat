@@ -515,7 +515,14 @@ LinuxStat::User.usernames_by_uid
 ---
 
 ## Note 1: CPU usage, and Net usage
-These methods requires a polling interval:
+To calculate the current usage, we need to get two usages at a given interval, and subtract the 2nd from the 1st.
+For example, if the current download (`LinuxStat::Net.total_bytes_received`) is 1000 bytes, and if 0.1 seconds ago, it was 100 bytes, that means 900 bytes was received in 0.1 seconds.
+That means the current speed is 9000 bytes/s or 9 kB/s.
+
+Without the polling, it's not really possible to calculate the current usage. Although the total usage can be calculated.
+A system monitor does that, too...
+
+Thus these methods requires a polling interval:
 
 1. LinuxStat::CPU.stat, usage, total_usage, usage.
 2. LinuxStat::ProcessInfo.cpu_usage, cpu_stat.
@@ -540,18 +547,15 @@ This will sleep for 0.1 seconds. To be reliable, use a time like 0.05 seconds or
 If you want to build a system monitor and don't want to wait, you have to do something like this:
 
 ```
-#!/usr/bin/ruby -w
+#!/usr/bin/ruby
 require 'linux_stat'
-threads, usages = [], []
+
+usages = []
+thread = Thread.new { }
 counter = 0
 
-thread = Thread.new { usages = LinuxStat::CPU.usages(0.5).values }
-
 while true
-	unless thread.alive?
-		thread.join
-		thread = Thread.new { usages = LinuxStat::CPU.usages(0.5).values }
-	end
+	thread = Thread.new { usages = LinuxStat::CPU.usages(0.5).values } unless thread.alive?
 
 	# clears the screen and prints the info
 	puts "\e[2J\e[H\e[3J"\

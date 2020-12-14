@@ -10,7 +10,7 @@ It only works for Linux, and detecting the OS is upto the user of this gem.
 ---
 
 ## Dependencies:
-+ You need to have the C compile to be able to compile the C extension.
++ You need to have the C compiler installed to be able to compile the C extensions.
 On Arch Linux:
 ```
 # pacman -S gcc make

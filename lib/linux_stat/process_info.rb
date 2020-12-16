@@ -436,6 +436,32 @@ module LinuxStat
 			end
 
 			##
+			# = start_time_epoch(pid = $$)
+			#
+			# Returns the epoch time (as Integer) the process was started.
+			#
+			# For example:
+			#    LinuxStat::ProcessInfo.start_time_epoch 526
+			#
+			#    => 1608097744
+			#
+			# If the info isn't available or the argument passed doesn't exist as a process ID, it will return nil.
+			def start_time_epoch(pid = $$)
+				stat_file = "/proc/#{pid}/stat".freeze
+				uptime = "/proc/uptime".freeze
+
+				@@u_readable ||= File.readable?(uptime)
+				return nil unless @@u_readable && File.readable?(stat_file)
+
+				u = IO.foreach(uptime, ' '.freeze).next.to_f
+				st = (IO.foreach(stat_file, ' '.freeze).first(22)[-1].to_f / get_ticks)
+
+				# Getting two Time objects and dealing with floating point numbers
+				# Just to make sure the time goes monotonically
+				Time.now.-(u - st).to_i
+			end
+
+			##
 			# = start_time(pid = $$)
 			#
 			# Returns the time (as Time object) the process was started.
@@ -443,7 +469,7 @@ module LinuxStat
 			# For example:
 			#    LinuxStat::ProcessInfo.start_time 14183
 			#
-			#    => 2020-12-16 13:31:43.559061275 +0000
+			#    => 2020-12-16 13:31:43 +0000
 			#
 			# If the info isn't available or the argument passed doesn't exist as a process ID, it will return nil.
 			#
@@ -452,13 +478,9 @@ module LinuxStat
 			#
 			# Don't trust the timezone returned by the time.
 			def start_time(pid = $$)
-				stat_file = "/proc/#{pid}/stat".freeze
-				uptime = "/proc/uptime".freeze
-
-				@@u_readable ||= File.readable?(uptime)
-				return nil unless @@u_readable && File.readable?(stat_file)
-
-				Time.now.-(IO.foreach(uptime, ' '.freeze).next.to_i - (IO.read(stat_file).split[21].to_i / get_ticks))
+				# Getting two Time objects and dealing with floating point numbers
+				# Just to make sure the time goes monotonically
+				Time.at(start_time_epoch(pid))
 			end
 
 			##

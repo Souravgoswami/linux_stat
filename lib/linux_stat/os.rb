@@ -135,8 +135,8 @@ module LinuxStat
 					key = splitted[0].to_s.strip
 					value = splitted[1..-1].join(?=).to_s.strip
 
-					value[0] = '' if value[0] == ?"
-					value[-1] = '' if value[-1] == ?"
+					value[0] = ''.freeze if value[0] == ?".freeze
+					value[-1] = ''.freeze if value[-1] == ?".freeze
 
 					h.merge!( key.to_sym => value )
 				}

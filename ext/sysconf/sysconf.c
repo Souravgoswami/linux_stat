@@ -3,7 +3,6 @@
 
 #pragma GCC optimize ("O3")
 #pragma clang optimize on
-#pragma once
 
 static VALUE getTick(VALUE obj) {
 	return INT2FIX(sysconf(_SC_CLK_TCK)) ;

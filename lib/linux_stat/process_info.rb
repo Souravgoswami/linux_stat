@@ -345,7 +345,7 @@ module LinuxStat
 				file = "/proc/#{pid}/stat".freeze
 				return nil unless File.readable?(file)
 
-				data = IO.read(file).split[19]
+				data = IO.foreach(file, ' '.freeze).first(20)[-1]
 				data ? data.to_i : nil
 			end
 
@@ -402,7 +402,7 @@ module LinuxStat
 			#
 			#    :real, :effective, :saved_set, :filesystem_uid
 			#
-			# If the info isn't available it returns an empty Hash.
+			# If the info isn't available or the argument passed doesn't exist as a process ID, it will return an empty Hash.
 			def gid(pid = $$)
 				file = "/proc/#{pid}/status".freeze
 				return nil unless File.readable?(file)
@@ -433,6 +433,93 @@ module LinuxStat
 				}.split.drop(1)[2].to_i
 
 				LinuxStat::User.username_by_gid(gid)
+			end
+
+			##
+			# = start_time(pid = $$)
+			#
+			# Returns the time (as Time object) the process was started.
+			#
+			# For example:
+			#    LinuxStat::ProcessInfo.start_time 14183
+			#
+			#    => 2020-12-16 13:31:43.559061275 +0000
+			#
+			# If the info isn't available or the argument passed doesn't exist as a process ID, it will return nil.
+			#
+			# The timezone returned based on current TZ.
+			# Thus the timezone could be affected by changing the ENV['TZ'] variable.
+			#
+			# Don't trust the timezone returned by the time.
+			def start_time(pid = $$)
+				stat_file = "/proc/#{pid}/stat".freeze
+				uptime = "/proc/uptime".freeze
+
+				@@u_readable ||= File.readable?(uptime)
+				return nil unless @@u_readable && File.readable?(stat_file)
+
+				Time.now.-(IO.foreach(uptime, ' '.freeze).next.to_i - (IO.read(stat_file).split[21].to_i / get_ticks))
+			end
+
+			##
+			# = running_time(pid = $$)
+			#
+			# Returns the time (in seconds, as Float) the process is running for.
+			#
+			# For example:
+			#    LinuxStat::ProcessInfo.running_time 14183
+			#
+			#    => 1947.619999999999
+			#
+			# If the info isn't available or the argument passed doesn't exist as a process ID, it will return nil.
+			def running_time(pid = $$)
+				stat_file = "/proc/#{pid}/stat".freeze
+				uptime = "/proc/uptime".freeze
+
+				@@u_readable ||= File.readable?(uptime)
+				return nil unless @@u_readable && File.readable?(stat_file)
+
+				IO.foreach(uptime, ' '.freeze).next.to_f - (IO.read(stat_file).split[21].to_i / get_ticks)
+			end
+
+			##
+			# = state(pid = $$)
+			# Returns the state of the process as a frozen String
+			#
+			# * A process could have multiple states:
+			#
+			# 1. S => Sleeping
+			#
+			# 2. R => Running
+			#
+			# 3. I => Idle
+			#
+			# 4. Z => Zombie
+			#
+			# It returns any one of them.
+			#
+			# If the info isn't available or the argument passed doesn't exist as a process ID,
+			# it will return an empty String.
+			def state(pid = $$)
+				file = "/proc/#{pid}/stat".freeze
+				return ''.freeze unless File.readable?(file)
+				IO.foreach(file, ' '.freeze).first(3)[-1].tap(&:rstrip!).freeze
+			end
+
+			##
+			# = nice(pid = $$)
+			# Returns the nice of the process
+			#
+			# The output value is an Integer ranging from -20 to 19
+			#
+			# -20 means the process has high priority, and 19 means the process has low priority
+			#
+			# If the info isn't available or the argument passed doesn't exist as a process ID, it will return nil.
+			def nice(pid = $$)
+				file = "/proc/#{pid}/stat"
+				return nil unless File.readable?(file)
+
+				IO.foreach(file, ' ').first(19)[-1].to_i
 			end
 
 			private

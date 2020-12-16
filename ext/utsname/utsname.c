@@ -3,7 +3,6 @@
 
 #pragma GCC optimize ("O3")
 #pragma clang optimize on
-#pragma once
 
 static struct utsname buf ;
 static short status ;

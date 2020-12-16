@@ -318,13 +318,13 @@ LinuxStat::Process.zombie
 ### LinuxStat::ProcessInfo
 ```
 LinuxStat::ProcessInfo.cmdline
-=> "ruby exe/linuxstat.rb -md"
+=> "ruby /usr/bin/linuxstat.rb -md ProcessInfo"
 
 LinuxStat::ProcessInfo.command_name
 => "ruby"
 
 LinuxStat::ProcessInfo.cpu_stat
-=> {:cpu_usage=>0.0, :threads=>1, :last_executed_cpu=>1}
+=> {:cpu_usage=>0.0, :threads=>1, :last_executed_cpu=>3}
 
 LinuxStat::ProcessInfo.cpu_usage
 => 0.0
@@ -333,31 +333,43 @@ LinuxStat::ProcessInfo.gid
 => {:real=>1000, :effective=>1000, :saved_set=>1000, :filesystem_uid=>1000}
 
 LinuxStat::ProcessInfo.last_executed_cpu
-=> 1
+=> 3
 
 LinuxStat::ProcessInfo.mem_stat
-=> {:memory=>10051.584, :virtual_memory=>81801.216, :resident_memory=>15986.688}
+=> {:memory=>10964.992, :virtual_memory=>82382.848, :resident_memory=>16248.832}
 
 LinuxStat::ProcessInfo.memory
-=> 10051.584
+=> 10964.992
+
+LinuxStat::ProcessInfo.nice
+=> 0
 
 LinuxStat::ProcessInfo.owner
 => "sourav"
 
 LinuxStat::ProcessInfo.resident_memory
-=> 15986.688
+=> 16248.832
+
+LinuxStat::ProcessInfo.running_time
+=> 0.6900000000023283
+
+LinuxStat::ProcessInfo.start_time
+=> 2020-12-16 21:17:37.183094026 +0530
+
+LinuxStat::ProcessInfo.state
+=> "R"
 
 LinuxStat::ProcessInfo.threads
 => 1
 
 LinuxStat::ProcessInfo.total_io
-=> {:read_bytes=>0, :write_bytes=>0}
+=> {:read_bytes=>5361664, :write_bytes=>0}
 
 LinuxStat::ProcessInfo.uid
 => {:real=>1000, :effective=>1000, :saved_set=>1000, :filesystem_uid=>1000}
 
 LinuxStat::ProcessInfo.virtual_memory
-=> 81801.216
+=> 82382.848
 
 ```
 

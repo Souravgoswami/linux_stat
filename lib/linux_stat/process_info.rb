@@ -383,7 +383,7 @@ module LinuxStat
 				file = "/proc/#{pid}/status".freeze
 				return nil unless File.readable?(file)
 
-				data = IO.readlines(file.freeze).find { |x|
+				data = IO.foreach(file.freeze).find { |x|
 					x[/Uid.*\d*/]
 				}.to_s.split.drop(1)
 
@@ -407,7 +407,7 @@ module LinuxStat
 				file = "/proc/#{pid}/status".freeze
 				return nil unless File.readable?(file)
 
-				data = IO.readlines(file.freeze).find { |x|
+				data = IO.foreach(file.freeze).find { |x|
 					x[/Gid.*\d*/]
 				}.split.drop(1)
 
@@ -428,7 +428,7 @@ module LinuxStat
 				file = "/proc/#{pid}/status".freeze
 				return ''.freeze unless File.readable?(file)
 
-				gid = IO.readlines(file.freeze).find { |x|
+				gid = IO.foreach(file.freeze).find { |x|
 					x[/Gid.*\d*/]
 				}.split.drop(1)[2].to_i
 

@@ -1,4 +1,5 @@
-# LinuxStat
+# LinuxStat [![Gem Version](https://badge.fury.io/rb/linux_stat.svg)](https://badge.fury.io/rb/linux_stat)
+
 ![logo](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/images/logo.jpg)
 
 For reading the eyecandy HTML version, visit [linux_stat](https://souravgoswami.github.io/linux_stat/).

@@ -207,7 +207,7 @@ module LinuxStat
 			# For example:
 			#    LinuxStat::User.gid_by_username('root')
 			#
-			#    => "0"
+			#    => 0
 			#
 			# The return type is Integer.
 			#

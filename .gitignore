@@ -12,5 +12,3 @@ _site
 .jekyll-cache
 .jekyll-metadata
 vendor
-# RSpec failure tracking
-.rspec_status

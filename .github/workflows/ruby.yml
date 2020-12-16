@@ -15,7 +15,6 @@ on:
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -27,6 +26,20 @@ jobs:
       uses: ruby/setup-ruby@21351ecc0a7c196081abca5dc55b08f085efe09a
       with:
         ruby-version: 2.5
+    - name: Install dependencies
+      run: bundle install
+    - name: Run rake install
+      run: rake install
+    - name: Run tests
+      run: linuxstat.rb
+
+    - name: Set up Ruby 2.6
+    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
+    # change this to (see https://github.com/ruby/setup-ruby#versioning):
+    # uses: ruby/setup-ruby@v1
+      uses: ruby/setup-ruby@v1.59.1
+      with:
+        ruby-version: 2.6
     - name: Install dependencies
       run: bundle install
     - name: Run rake install

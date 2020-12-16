@@ -42,7 +42,7 @@
 		<script>
 			let lh = document.getElementById('loader-head')
 			document.getElementById('loaderHider').onclick = function() { lh.remove() }
-			window.onload = function() { if (lh) lh.remove() }
+			document.addEventListener('DOMContentLoaded', function() { if (lh) lh.remove() })
 		</script>
 
 		<div id="container">{{ page.content }}</div>

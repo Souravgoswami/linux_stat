@@ -1,4 +1,4 @@
-# LinuxStat [![Ruby Gem](https://badge.fury.io/rb/linux_stat.svga)](https://rubygems.org/gems/linux_stat)
+# LinuxStat [![Ruby Gem](https://badge.fury.io/rb/linux_stat.svg)](https://rubygems.org/gems/linux_stat) ![Workflow Status](https://github.com/souravgoswami/linux_stat/workflows/LinuxStat%20Test/badge.svg)
 
 ![logo](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/images/logo.jpg)
 

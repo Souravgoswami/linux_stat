@@ -319,7 +319,7 @@ layout: linuxstat
 	<h3>LinuxStat::ProcessInfo</h3>
 	<pre>
 	LinuxStat::ProcessInfo.cmdline
-	=> "ruby /usr/bin/linuxstat.rb -html"
+	=> "ruby /usr/bin/linuxstat.rb -html ProcessInfo"
 
 	LinuxStat::ProcessInfo.command_name
 	=> "ruby"
@@ -337,28 +337,40 @@ layout: linuxstat
 	=> 2
 
 	LinuxStat::ProcessInfo.mem_stat
-	=> {:memory=>12136.448, :virtual_memory=>83750.912, :resident_memory=>18288.64}
+	=> {:memory=>10977.28, :virtual_memory=>82391.04000000001, :resident_memory=>16224.256}
 
 	LinuxStat::ProcessInfo.memory
-	=> 12136.448
+	=> 10977.28
+
+	LinuxStat::ProcessInfo.nice
+	=> 0
 
 	LinuxStat::ProcessInfo.owner
 	=> "sourav"
 
 	LinuxStat::ProcessInfo.resident_memory
-	=> 18288.64
+	=> 16224.256
+
+	LinuxStat::ProcessInfo.running_time
+	=> 0.5500000000029104
+
+	LinuxStat::ProcessInfo.start_time
+	=> 2020-12-16 21:18:28.037792869 +0530
+
+	LinuxStat::ProcessInfo.state
+	=> "R"
 
 	LinuxStat::ProcessInfo.threads
 	=> 1
 
 	LinuxStat::ProcessInfo.total_io
-	=> {:read_bytes=>0, :write_bytes=>0}
+	=> {:read_bytes=>1523712, :write_bytes=>0}
 
 	LinuxStat::ProcessInfo.uid
 	=> {:real=>1000, :effective=>1000, :saved_set=>1000, :filesystem_uid=>1000}
 
 	LinuxStat::ProcessInfo.virtual_memory
-	=> 83750.912
+	=> 82391.04
 
 	</pre>
 	<h3>LinuxStat::Swap</h3>

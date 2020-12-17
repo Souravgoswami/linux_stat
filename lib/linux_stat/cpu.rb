@@ -2,7 +2,7 @@ module LinuxStat
 	module CPU
 		class << self
 			##
-			# = stat(sleep = 1.0 / LinuxStat::Sysconf.sc_clk_tck)
+			# = stat(sleep = 1.0 / LinuxStat::Sysconf.sc_clk_tck * 5)
 			#
 			# Where sleep is the delay to gather the data.
 			#
@@ -18,7 +18,7 @@ module LinuxStat
 			#    {0=>84.38, 1=>100.0, 2=>50.0, 3=>87.5, 4=>87.5}
 			#
 			# If the information is not available, it will return an empty Hash
-			def stat(sleep = ticks_to_ms)
+			def stat(sleep = ticks_to_ms_t5)
 				return {} unless stat?
 
 				data = IO.readlines('/proc/stat').select! { |x| x[/^cpu\d*/] }.map! { |x| x.split.map!(&:to_f) }
@@ -60,7 +60,7 @@ module LinuxStat
 			# It's like running LinuxStat::CPU.stat[0] but it's much more efficient and calculates just the aggregated usage which is available at the top of the /proc/stat file.
 			#
 			# If the information is not available, it will return nil.
-			def total_usage(sleep = ticks_to_ms)
+			def total_usage(sleep = ticks_to_ms_t5)
 				return nil unless stat?
 
 				data = IO.foreach('/proc/stat').first.split.tap(&:shift).map!(&:to_f)
@@ -136,8 +136,11 @@ module LinuxStat
 				@@stat_readable ||= File.readable?('/proc/stat')
 			end
 
-			def ticks_to_ms
-				@@ms ||= 1.0 / LinuxStat::Sysconf.sc_clk_tck
+			# Just to avoid duplicate calculations
+			# ticks to ms times 5
+			# If the ticks is 100, it will return 0.05
+			def ticks_to_ms_t5
+				@@ms_t5 ||= 1.0 / LinuxStat::Sysconf.sc_clk_tck * 5
 			end
 		end
 	end

@@ -203,13 +203,13 @@ module LinuxStat
 			end
 
 			##
-			# = cpu_stat(pid: $$, sleep: 1.0 / LinuxStat::Sysconf.sc_clk_tck)
+			# = cpu_stat(pid: $$, sleep: 1.0 / LinuxStat::Sysconf.sc_clk_tck * 5)
 			#
 			# Where pid is the process ID and sleep time is the interval between measurements.
 			#
 			# By default it is the id of the current process ($$), and sleep is LinuxStat::Sysconf.sc_clk_tck
 			#
-			# The smallest amount of available sleep time is 1.0 / LinuxStat::Sysconf.sc_clk_tck.
+			# The smallest amount of available sleep time is 1.0 / LinuxStat::Sysconf.sc_clk_tck * 5.
 			#
 			# * Note 1:
 			# 1. Do note that the sleep time can slow down your application.
@@ -244,7 +244,7 @@ module LinuxStat
 			# Only use this method if you need all of the data at once, in such case, it's more efficient to use this method.
 			#
 			# The :last_executed_cpu also returns an Integer indicating the last executed cpu of the process.
-			def cpu_stat(pid: $$, sleep: ticks_to_ms)
+			def cpu_stat(pid: $$, sleep: ticks_to_ms_t5)
 				file = "/proc/#{pid}/stat"
 				return {} unless File.readable?(file)
 
@@ -277,15 +277,15 @@ module LinuxStat
 			end
 
 			##
-			# = cpu_usage(pid: $$, sleep: 1.0 / LinuxStat::Sysconf.sc_clk_tck)
+			# = cpu_usage(pid: $$, sleep: 1.0 / LinuxStat::Sysconf.sc_clk_tck * 5)
 			#
 			# Where pid is the process ID and sleep time is the interval between measurements.
 			#
-			# By default it is the id of the current process ($$), and sleep is 1.0 / LinuxStat::Sysconf.sc_clk_tck
+			# By default it is the id of the current process ($$), and sleep is 1.0 / LinuxStat::Sysconf.sc_clk_tck * 5
 			#
 			# The smallest amount of available sleep time is LinuxStat::Sysconf.sc_clk_tck.
 			#
-			# It retuns the CPU usage in Float.
+			# It retuns the CPU usage as Float.
 			#
 			# For example:
 			#
@@ -298,7 +298,7 @@ module LinuxStat
 			# But if the info isn't available, it will return nil.
 			#
 			# This method is more efficient than running LinuxStat::ProcessInfo.cpu_stat()
-			def cpu_usage(pid: $$, sleep: ticks_to_ms)
+			def cpu_usage(pid: $$, sleep: ticks_to_ms_t5)
 				file = "/proc/#{pid}/stat"
 				return nil unless File.readable?(file)
 
@@ -322,6 +322,54 @@ module LinuxStat
 
 				totald = idle2.+(total_time2).-(idle1 + total_time)
 				totald.-(idle2 - idle1).fdiv(totald).*(100).round(2).abs./(LinuxStat::CPU.count)
+			end
+
+			##
+			# = thread_usage(pid: $$, sleep: 1.0 / LinuxStat::Sysconf.sc_clk_tck * 5)
+			#
+			# Where pid is the process ID and sleep time is the interval between measurements.
+			#
+			# By default it is the id of the current process ($$), and sleep is 1.0 / LinuxStat::Sysconf.sc_clk_tck * 5
+			#
+			# The smallest amount of available sleep time is LinuxStat::Sysconf.sc_clk_tck.
+			#
+			# It retuns the per core CPU usage as Float.
+			#
+			# For example:
+			#
+			#    LinuxStat::ProcessInfo.core_usage
+			#
+			#    => 200.0
+			#
+			# A value of 100.0 indicates it is using 100% processing power of a core.
+			#
+			# The value could be 0 to (100 * the number of CPU threads (including hyperthreading) in the system)
+			#
+			# But if the info isn't available, it will return nil.
+			def thread_usage(pid: $$, sleep: ticks_to_ms_t5)
+				file = "/proc/#{pid}/stat"
+				return nil unless File.readable?(file)
+
+				ticks = get_ticks
+
+				utime, stime, starttime = IO.read(file)
+					.split.values_at(13, 14, 21).map(&:to_f)
+				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
+
+				total_time = utime + stime
+				idle1 = uptime - starttime - total_time
+
+				sleep(sleep)
+
+				utime2, stime2, starttime2 = IO.read(file)
+					.split.values_at(13, 14, 21).map(&:to_f)
+				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
+
+				total_time2 = utime2 + stime2
+				idle2 = uptime - starttime2 - total_time2
+
+				totald = idle2.+(total_time2).-(idle1 + total_time)
+				totald.-(idle2 - idle1).fdiv(totald).*(100).round(2).abs
 			end
 
 			##
@@ -550,8 +598,10 @@ module LinuxStat
 			end
 
 			# Just to avoid multiple calculations!...
-			def ticks_to_ms
-				@@ms ||= 1.0 / get_ticks
+			# ticks to ms * 5
+			# If ticks is 100, it will return 0.05
+			def ticks_to_ms_t5
+				@@ms_t5 ||= 1.0 / get_ticks * 5
 			end
 
 			def pagesize

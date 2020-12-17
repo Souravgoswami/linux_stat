@@ -50,477 +50,750 @@ Or install it yourself as:
 ## Usage
 ### LinuxStat::BIOS
 ```
-LinuxStat::BIOS.date
+# File: bios.rb | Line: 56
+# Definition: def date
+LinuxStat::BIOS.date()
 => "04/10/2017"
 
-LinuxStat::BIOS.model
+# File: bios.rb | Line: 10
+# Definition: def model
+LinuxStat::BIOS.model()
 => "Inspiron 5567"
 
-LinuxStat::BIOS.vendor
+# File: bios.rb | Line: 27
+# Definition: def vendor
+LinuxStat::BIOS.vendor()
 => "Dell Inc."
 
-LinuxStat::BIOS.version
+# File: bios.rb | Line: 42
+# Definition: def version
+LinuxStat::BIOS.version()
 => "1.1.2"
 
 ```
 
 ### LinuxStat::Battery
 ```
-LinuxStat::Battery.charge
+# File: battery.rb | Line: 100
+# Definition: def charge
+LinuxStat::Battery.charge()
 => 100.0
 
-LinuxStat::Battery.charging?
+# File: battery.rb | Line: 73
+# Definition: def charging?
+LinuxStat::Battery.charging?()
 => true
 
-LinuxStat::Battery.discharging?
+# File: battery.rb | Line: 82
+# Definition: def discharging?
+LinuxStat::Battery.discharging?()
 => false
 
-LinuxStat::Battery.full?
+# File: battery.rb | Line: 91
+# Definition: def full?
+LinuxStat::Battery.full?()
 => true
 
-LinuxStat::Battery.manufacturer
+# File: battery.rb | Line: 45
+# Definition: def manufacturer
+LinuxStat::Battery.manufacturer()
 => "Samsung SDI"
 
-LinuxStat::Battery.model
+# File: battery.rb | Line: 36
+# Definition: def model
+LinuxStat::Battery.model()
 => "DELL CYMGM77"
 
-LinuxStat::Battery.present?
+# File: battery.rb | Line: 8
+# Definition: def present?
+LinuxStat::Battery.present?()
 => true
 
-LinuxStat::Battery.stat
+# File: battery.rb | Line: 16
+# Definition: def stat
+LinuxStat::Battery.stat()
 => {:model=>"DELL CYMGM77", :manufacturer=>"Samsung SDI", :technology=>"Li-ion", :status=>"Full", :charge=>100.0, :charging=>true, :discharging=>false, :full=>true}
 
-LinuxStat::Battery.status
+# File: battery.rb | Line: 64
+# Definition: def status
+LinuxStat::Battery.status()
 => "Full"
 
-LinuxStat::Battery.technology
+# File: battery.rb | Line: 54
+# Definition: def technology
+LinuxStat::Battery.technology()
 => "Li-ion"
 
 ```
 
 ### LinuxStat::CPU
 ```
-LinuxStat::CPU.count
+# File: cpu.rb | Line: 82
+# Definition: def count
+LinuxStat::CPU.count()
 => 4
 
-LinuxStat::CPU.cur_freq
-=> [2000063, 2000108, 2000332, 2000028]
+# File: cpu.rb | Line: 101
+# Definition: def cur_freq
+LinuxStat::CPU.cur_freq()
+=> [2000018, 2000008, 2000003, 1992870]
 
-LinuxStat::CPU.max_freq
+# File: cpu.rb | Line: 116
+# Definition: def max_freq
+LinuxStat::CPU.max_freq()
 => [2000000, 2000000, 2000000, 2000000]
 
-LinuxStat::CPU.model
+# File: cpu.rb | Line: 93
+# Definition: def model
+LinuxStat::CPU.model()
 => "Intel(R) Core(TM) i3-6006U CPU @ 2.00GHz"
 
-LinuxStat::CPU.stat
-=> {0=>0.0, 1=>0.0, 2=>0.0, 3=>0.0, 4=>0.0}
+# File: cpu.rb | Line: 21
+# Definition: def stat(sleep = ticks_to_ms)
+LinuxStat::CPU.stat(sleep)
+=> {0=>25.0, 1=>50.0, 2=>0.0, 3=>0.0, 4=>50.0}
 
-LinuxStat::CPU.total_usage
-=> 0.0
+# File: linuxstat.rb | Line: 11
+# Definition: define_singleton_method(:total_usage) do
+LinuxStat::CPU.total_usage()
+=> nil
 
-LinuxStat::CPU.usage
-=> 20.0
+# File: cpu.rb | Line: 63
+# Definition: def total_usage(sleep = ticks_to_ms)
+LinuxStat::CPU.usage(sleep)
+=> 60.0
 
-LinuxStat::CPU.usages
-=> {0=>20.0, 1=>0.0, 2=>0.0, 3=>50.0, 4=>100.0}
+# File: cpu.rb | Line: 21
+# Definition: def stat(sleep = ticks_to_ms)
+LinuxStat::CPU.usages(sleep)
+=> {0=>33.33, 1=>0.0, 2=>0.0, 3=>0.0, 4=>100.0}
 
+```
+
+### LinuxStat::FS
+```
 ```
 
 ### LinuxStat::Filesystem
 ```
-LinuxStat::Filesystem.available
-=> 33120964608
+# File: filesystem.rb | Line: 92
+# Definition: def available(fs = ?/.freeze)
+LinuxStat::Filesystem.available(fs)
+=> 52544614400
 
-LinuxStat::Filesystem.free
-=> 33120964608
+# File: filesystem.rb | Line: 58
+# Definition: def free(fs = ?/.freeze)
+LinuxStat::Filesystem.free(fs)
+=> 52544614400
 
-LinuxStat::Filesystem.stat
-=> {:total=>119981191168, :free=>33120964608, :used=>86860226560}
+# File: filesystem.rb | Line: 19
+# Definition: def stat(fs = ?/.freeze)
+LinuxStat::Filesystem.stat(fs)
+=> {:total=>119981191168, :free=>52544614400, :used=>67436576768}
 
-LinuxStat::Filesystem.stat_raw
-=> {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>8086173, :block_avail_unpriv=>8086173, :inodes=>58612160, :free_inodes=>56567338, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
+# File: filesystem.rb | Line: 108
+# Definition: def stat_raw(fs = ?/.freeze)
+LinuxStat::Filesystem.stat_raw(fs)
+=> {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>12828275, :block_avail_unpriv=>12828275, :inodes=>58612160, :free_inodes=>56968579, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
 
-LinuxStat::Filesystem.total
+# File: filesystem.rb | Line: 39
+# Definition: def total(fs = ?/.freeze)
+LinuxStat::Filesystem.total(fs)
 => 119981191168
 
-LinuxStat::Filesystem.used
-=> 86860226560
+# File: filesystem.rb | Line: 73
+# Definition: def used(fs = ?/.freeze)
+LinuxStat::Filesystem.used(fs)
+=> 67436576768
 
 ```
 
 ### LinuxStat::Kernel
 ```
-LinuxStat::Kernel.build_date
+# File: kernel.rb | Line: 86
+# Definition: def build_date
+LinuxStat::Kernel.build_date()
 => 2020-11-20 07:44:55 +0000
 
-LinuxStat::Kernel.build_date_string
+# File: kernel.rb | Line: 140
+# Definition: def build_date_string
+LinuxStat::Kernel.build_date_string()
 => "20 Nov 2020 07:44:55 +0000"
 
-LinuxStat::Kernel.build_user
+# File: kernel.rb | Line: 21
+# Definition: def build_user
+LinuxStat::Kernel.build_user()
 => "souravgoswami@archlinux"
 
-LinuxStat::Kernel.clk_tck
+# File: kernel.rb | Line: 179
+# Definition: def ticks
+LinuxStat::Kernel.clk_tck()
 => 100
 
-LinuxStat::Kernel.compiler
+# File: kernel.rb | Line: 33
+# Definition: def compiler
+LinuxStat::Kernel.compiler()
 => [:gcc, "10.2.0"]
 
-LinuxStat::Kernel.compiler_version
+# File: kernel.rb | Line: 55
+# Definition: def compiler_version
+LinuxStat::Kernel.compiler_version()
 => "10.2.0"
 
-LinuxStat::Kernel.release
+# File: kernel.rb | Line: 10
+# Definition: def version
+LinuxStat::Kernel.release()
 => "5.9.9-xanmod1-1"
 
-LinuxStat::Kernel.string
+# File: kernel.rb | Line: 169
+# Definition: def string
+LinuxStat::Kernel.string()
 => "Linux version 5.9.9-xanmod1-1 (souravgoswami@archlinux) (gcc (GCC) 10.2.0, GNU ld (GNU Binutils) 2.35.1) #1 SMP PREEMPT Fri, 20 Nov 2020 07:44:55 +0000"
 
-LinuxStat::Kernel.ticks
+# File: kernel.rb | Line: 179
+# Definition: def ticks
+LinuxStat::Kernel.ticks()
 => 100
 
-LinuxStat::Kernel.version
+# File: kernel.rb | Line: 10
+# Definition: def version
+LinuxStat::Kernel.version()
 => "5.9.9-xanmod1-1"
 
 ```
 
 ### LinuxStat::Memory
 ```
-LinuxStat::Memory.available
-=> 579264
+# File: memory.rb | Line: 50
+# Definition: def available
+LinuxStat::Memory.available()
+=> 773460
 
-LinuxStat::Memory.percent_available
-=> 15.1
+# File: memory.rb | Line: 81
+# Definition: def percent_available
+LinuxStat::Memory.percent_available()
+=> 20.16
 
-LinuxStat::Memory.percent_used
-=> 84.9
+# File: memory.rb | Line: 70
+# Definition: def percent_used
+LinuxStat::Memory.percent_used()
+=> 79.84
 
-LinuxStat::Memory.stat
-=> {:total=>3836236, :used=>3256972, :available=>579264, :percent_used=>84.9, :percent_available=>15.1}
+# File: memory.rb | Line: 11
+# Definition: def stat
+LinuxStat::Memory.stat()
+=> {:total=>3836236, :used=>3062776, :available=>773460, :percent_used=>79.84, :percent_available=>20.16}
 
-LinuxStat::Memory.total
+# File: memory.rb | Line: 40
+# Definition: def total
+LinuxStat::Memory.total()
 => 3836236
 
-LinuxStat::Memory.used
-=> 3256972
+# File: memory.rb | Line: 60
+# Definition: def used
+LinuxStat::Memory.used()
+=> 3062776
 
 ```
 
 ### LinuxStat::Mounts
 ```
-LinuxStat::Mounts.device_stat
-=> {:mountpoint=>"/", :total=>119981191168, :free=>33120964608, :available=>33120964608, :used=>86860226560, :percent_used=>72.39, :percent_free=>27.61, :percent_available=>27.61}
+# File: mounts.rb | Line: 179
+# Definition: def device_stat(dev = root)
+LinuxStat::Mounts.device_stat(dev)
+=> {:mountpoint=>"/", :total=>119981191168, :free=>52544614400, :available=>52544614400, :used=>67436576768, :percent_used=>56.21, :percent_free=>43.79, :percent_available=>43.79}
 
-LinuxStat::Mounts.devices_stat
+# File: mounts.rb | Line: 137
+# Definition: def devices_stat
+LinuxStat::Mounts.devices_stat()
 => {"proc"=>{:mountpoint=>"/proc", :total=>0, :free=>0, :available=>0, :used=>0, :percent_used=>NaN, :percent_free=>NaN, :percent_available=>NaN}, "sys"=>{:mountpoint=>"/sys", :total=>0, :free=>0, :available=>0, :used=>0, :percent_used=>NaN, :percent_fre...
 
-LinuxStat::Mounts.list
-=> ["proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0", "sys /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0", "dev /dev devtmpfs rw,nosuid,relatime,size=1892908k,nr_inodes=473227,mode=755 0 0", "run /run tmpfs rw,nosuid,nodev,relatime,mode=755 0 0", "...
+# File: mounts.rb | Line: 11
+# Definition: def list
+LinuxStat::Mounts.list()
+=> ["proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0", "sys /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0", "dev /dev devtmpfs rw,nosuid,relatime,size=1892904k,nr_inodes=473226,mode=755 0 0", "run /run tmpfs rw,nosuid,nodev,relatime,mode=755 0 0", "...
 
-LinuxStat::Mounts.list_devices
-=> ["proc", "sys", "dev", "run", "/dev/sda2", "securityfs", "tmpfs", "devpts", "tmpfs", "cgroup2", "cgroup", "pstore", "none", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "systemd-1", "deb...
+# File: mounts.rb | Line: 20
+# Definition: def list_devices
+LinuxStat::Mounts.list_devices()
+=> ["proc", "sys", "dev", "run", "/dev/sda2", "securityfs", "tmpfs", "devpts", "tmpfs", "cgroup2", "cgroup", "pstore", "none", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "systemd-1", "tra...
 
-LinuxStat::Mounts.list_devices_mount_point
-=> {"proc"=>"/proc", "sys"=>"/sys", "dev"=>"/dev", "run"=>"/run", "/dev/sda2"=>"/", "securityfs"=>"/sys/kernel/security", "tmpfs"=>"/run/user/1000", "devpts"=>"/dev/pts", "cgroup2"=>"/sys/fs/cgroup/unified", "cgroup"=>"/sys/fs/cgroup/perf_event", "pstore...
+# File: mounts.rb | Line: 109
+# Definition: def list_devices_mount_point
+LinuxStat::Mounts.list_devices_mount_point()
+=> {"proc"=>"/proc", "sys"=>"/sys", "dev"=>"/dev", "run"=>"/run", "/dev/sda2"=>"/", "securityfs"=>"/sys/kernel/security", "tmpfs"=>"/run/user/1000", "devpts"=>"/dev/pts", "cgroup2"=>"/sys/fs/cgroup/unified", "cgroup"=>"/sys/fs/cgroup/blkio", "pstore"=>"/...
 
-LinuxStat::Mounts.mount_point
+# File: mounts.rb | Line: 80
+# Definition: def mount_point(dev = root)
+LinuxStat::Mounts.mount_point(dev)
 => "/"
 
-LinuxStat::Mounts.root
+# File: mounts.rb | Line: 29
+# Definition: def root
+LinuxStat::Mounts.root()
 => "/dev/sda2"
 
-LinuxStat::Mounts.root_fs
+# File: mounts.rb | Line: 38
+# Definition: def root_fs
+LinuxStat::Mounts.root_fs()
 => "xfs"
 
-LinuxStat::Mounts.root_mount_options
+# File: mounts.rb | Line: 47
+# Definition: def root_mount_options
+LinuxStat::Mounts.root_mount_options()
 => "rw,noatime,attr2,inode64,logbufs=8,logbsize=32k,noquota"
 
-LinuxStat::Mounts.tmpfs
-=> {"/dev/shm"=>"tmpfs /dev/shm tmpfs rw,nosuid,nodev 0 0", "/sys/fs/cgroup"=>"tmpfs /sys/fs/cgroup tmpfs ro,nosuid,nodev,noexec,size=4096k,nr_inodes=1024,mode=755 0 0", "/cache"=>"tmpfs /cache tmpfs rw,nosuid,nodev,relatime,size=2097152k 0 0", "/ramdisk...
+# File: mounts.rb | Line: 56
+# Definition: def tmpfs
+LinuxStat::Mounts.tmpfs()
+=> {"/dev/shm"=>"tmpfs /dev/shm tmpfs rw,nosuid,nodev 0 0", "/sys/fs/cgroup"=>"tmpfs /sys/fs/cgroup tmpfs ro,nosuid,nodev,noexec,size=4096k,nr_inodes=1024,mode=755 0 0", "/cache"=>"tmpfs /cache tmpfs rw,nosuid,nodev,relatime,size=2097152k 0 0", "/tmp"=>"...
 
 ```
 
 ### LinuxStat::Net
 ```
-LinuxStat::Net.current_usage
-=> {:received=>2183400.0, :transmitted=>114860.0}
+# File: net.rb | Line: 80
+# Definition: def usage(interval = 0.1)
+LinuxStat::Net.current_usage(interval)
+=> {:received=>0.0, :transmitted=>0.0}
 
-LinuxStat::Net.ipv4_private
+# File: net.rb | Line: 10
+# Definition: def ipv4_private
+LinuxStat::Net.ipv4_private()
 => "192.168.0.102"
 
-LinuxStat::Net.total_bytes
-=> {:received=>294316415, :transmitted=>45313147}
+# File: net.rb | Line: 23
+# Definition: def total_bytes
+LinuxStat::Net.total_bytes()
+=> {:received=>463746011, :transmitted=>35058283}
 
-LinuxStat::Net.total_bytes_received
-=> 294317913
+# File: net.rb | Line: 41
+# Definition: def total_bytes_received
+LinuxStat::Net.total_bytes_received()
+=> 463746011
 
-LinuxStat::Net.total_bytes_transmitted
-=> 45313147
+# File: net.rb | Line: 54
+# Definition: def total_bytes_transmitted
+LinuxStat::Net.total_bytes_transmitted()
+=> 35058283
 
-LinuxStat::Net.usage
-=> {:received=>1643690.0, :transmitted=>146030.0}
+# File: net.rb | Line: 80
+# Definition: def usage(interval = 0.1)
+LinuxStat::Net.usage(interval)
+=> {:received=>0.0, :transmitted=>0.0}
 
 ```
 
 ### LinuxStat::OS
 ```
-LinuxStat::OS.bits
+# File: os.rb | Line: 97
+# Definition: def bits
+LinuxStat::OS.bits()
 => 64
 
-LinuxStat::OS.distribution
+# File: os.rb | Line: 42
+# Definition: def distribution
+LinuxStat::OS.distribution()
 => "Arch Linux"
 
-LinuxStat::OS.hostname
+# File: os.rb | Line: 81
+# Definition: def hostname
+LinuxStat::OS.hostname()
 => "archlinux"
 
-LinuxStat::OS.lsb_release
+# File: os.rb | Line: 30
+# Definition: def lsb_release
+LinuxStat::OS.lsb_release()
 => {:LSB_VERSION=>"1.4", :DISTRIB_ID=>"Arch", :DISTRIB_RELEASE=>"rolling", :DISTRIB_DESCRIPTION=>"Arch Linux"}
 
-LinuxStat::OS.machine
+# File: os.rb | Line: 64
+# Definition: def machine
+LinuxStat::OS.machine()
 => "x86_64"
 
-LinuxStat::OS.nodename
+# File: os.rb | Line: 72
+# Definition: def nodename
+LinuxStat::OS.nodename()
 => "archlinux"
 
-LinuxStat::OS.os_release
+# File: os.rb | Line: 15
+# Definition: def os_release
+LinuxStat::OS.os_release()
 => {:NAME=>"Arch Linux", :PRETTY_NAME=>"Arch Linux", :ID=>"arch", :BUILD_ID=>"rolling", :ANSI_COLOR=>"38;2;23;147;209", :HOME_URL=>"https://www.archlinux.org/", :DOCUMENTATION_URL=>"https://wiki.archlinux.org/", :SUPPORT_URL=>"https://bbs.archlinux.org/"...
 
-LinuxStat::OS.uptime
-=> {:hour=>7, :minute=>44, :second=>29.92}
+# File: os.rb | Line: 110
+# Definition: def uptime
+LinuxStat::OS.uptime()
+=> {:hour=>5, :minute=>8, :second=>45.6}
+
+```
+
+### LinuxStat::PrettifyBytes
+```
+# File: prettify_bytes.rb | Line: 42
+# Definition: def convert_binary(n)
+LinuxStat::PrettifyBytes.convert_binary( = 466897525899849)
+=> "424.64 tebibytes"
+
+# File: prettify_bytes.rb | Line: 19
+# Definition: def convert_decimal(n)
+LinuxStat::PrettifyBytes.convert_decimal( = 126301977853880)
+=> "126.30 terabytes"
+
+# File: prettify_bytes.rb | Line: 90
+# Definition: def convert_short_binary(n)
+LinuxStat::PrettifyBytes.convert_short_binary( = 751373892255236)
+=> "683.37 TiB"
+
+# File: prettify_bytes.rb | Line: 65
+# Definition: def convert_short_decimal(n)
+LinuxStat::PrettifyBytes.convert_short_decimal( = 691728311539436)
+=> "691.73 TB"
 
 ```
 
 ### LinuxStat::Process
 ```
-LinuxStat::Process.count
-=> 205
+# File: process.rb | Line: 19
+# Definition: def count
+LinuxStat::Process.count()
+=> 201
 
-LinuxStat::Process.idle
-=> [3, 4, 6, 9, 12, 23, 30, 37, 39, 49, 102, 103, 104, 106, 107, 108, 109, 110, 117, 118, 120, 122, 131, 134, 140, 152, 153, 166, 168, 172, 174, 176, 178, 182, 183, 184, 185, 186, 188, 230, 271, 324, 328, 337, 14228, 14757, 14998, 14999, 15000, 15001, 15...
+# File: process.rb | Line: 71
+# Definition: def idle
+LinuxStat::Process.idle()
+=> [3, 4, 6, 9, 12, 23, 30, 37, 39, 49, 102, 103, 104, 106, 107, 108, 109, 110, 117, 118, 119, 121, 131, 134, 140, 152, 153, 169, 171, 173, 174, 177, 178, 183, 184, 185, 186, 187, 188, 231, 271, 373, 383, 1001, 2553, 2554, 2555, 2556, 2557, 2558, 7770, 1...
 
-LinuxStat::Process.list
-=> [1, 2, 3, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 46, 47, 48, 49, 50, 51, 52, 102, 103, 104, 106, 107, 108, 109, 110, 111, 114, 115, 117, 118, 120, 122, 131, 134,...
+# File: process.rb | Line: 8
+# Definition: def list
+LinuxStat::Process.list()
+=> [1, 2, 3, 4, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 46, 47, 48, 49, 50, 51, 52, 102, 103, 104, 106, 107, 108, 109, 110, 111, 114, 115, 117, 118, 119, 121, 131, 134,...
 
-LinuxStat::Process.names
-=> {1=>"systemd", 2=>"kthreadd", 3=>"rcu_gp", 4=>"rcu_par_gp", 6=>"kworker/0:0H", 9=>"mm_percpu_wq", 10=>"ksoftirqd/0", 11=>"rcuc/0", 12=>"rcu_preempt", 13=>"rcub/0", 14=>"migration/0", 15=>"idle_inject/0", 16=>"cpuhp/0", 17=>"cpuhp/1", 18=>"idle_inject/...
+# File: process.rb | Line: 25
+# Definition: def names
+LinuxStat::Process.names()
+=> {1=>"systemd", 2=>"kthreadd", 3=>"rcu_gp", 4=>"rcu_par_gp", 6=>"kworker/0:0H-kblockd", 9=>"mm_percpu_wq", 10=>"ksoftirqd/0", 11=>"rcuc/0", 12=>"rcu_preempt", 13=>"rcub/0", 14=>"migration/0", 15=>"idle_inject/0", 16=>"cpuhp/0", 17=>"cpuhp/1", 18=>"idle...
 
-LinuxStat::Process.running
-=> [21158]
+# File: process.rb | Line: 97
+# Definition: def running
+LinuxStat::Process.running()
+=> [12385]
 
-LinuxStat::Process.sleeping
-=> [1, 2, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 38, 40, 41, 42, 46, 47, 48, 50, 51, 52, 111, 114, 115, 165, 167, 189, 217, 231, 302, 307, 308, 309, 310, 320, 321, 322, 323, 325, 326, 350, 353, 356, 374, 394,...
+# File: process.rb | Line: 58
+# Definition: def sleeping
+LinuxStat::Process.sleeping()
+=> [1, 2, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 38, 40, 41, 42, 46, 47, 48, 50, 51, 52, 111, 114, 115, 168, 170, 189, 218, 235, 301, 305, 309, 310, 311, 314, 315, 316, 317, 331, 334, 337, 403, 407, 409, 410,...
 
-LinuxStat::Process.types
+# File: process.rb | Line: 37
+# Definition: def types
+LinuxStat::Process.types()
 => {1=>:sleeping, 2=>:sleeping, 3=>:idle, 4=>:idle, 6=>:idle, 9=>:idle, 10=>:sleeping, 11=>:sleeping, 12=>:idle, 13=>:sleeping, 14=>:sleeping, 15=>:sleeping, 16=>:sleeping, 17=>:sleeping, 18=>:sleeping, 19=>:sleeping, 20=>:sleeping, 21=>:sleeping, 23=>:i...
 
-LinuxStat::Process.zombie
+# File: process.rb | Line: 84
+# Definition: def zombie
+LinuxStat::Process.zombie()
 => []
 
 ```
 
 ### LinuxStat::ProcessInfo
 ```
-LinuxStat::ProcessInfo.cmdline
-=> "ruby /usr/bin/linuxstat.rb -md ProcessInfo"
+# File: process_info.rb | Line: 54
+# Definition: def cmdline(pid = $$)
+LinuxStat::ProcessInfo.cmdline(pid)
+=> "ruby /usr/bin/linuxstat.rb -md"
 
-LinuxStat::ProcessInfo.command_name
+# File: process_info.rb | Line: 78
+# Definition: def command_name(pid = $$)
+LinuxStat::ProcessInfo.command_name(pid)
 => "ruby"
 
-LinuxStat::ProcessInfo.cpu_stat
-=> {:cpu_usage=>0.0, :threads=>1, :last_executed_cpu=>3}
+# File: process_info.rb | Line: 247
+# Definition: def cpu_stat(pid: $$, sleep: ticks_to_ms)
+LinuxStat::ProcessInfo.cpu_stat(pid:, sleep:)
+=> {:cpu_usage=>0.0, :threads=>1, :last_executed_cpu=>0}
 
-LinuxStat::ProcessInfo.cpu_usage
+# File: process_info.rb | Line: 301
+# Definition: def cpu_usage(pid: $$, sleep: ticks_to_ms)
+LinuxStat::ProcessInfo.cpu_usage(pid:, sleep:)
 => 0.0
 
-LinuxStat::ProcessInfo.gid
+# File: process_info.rb | Line: 406
+# Definition: def gid(pid = $$)
+LinuxStat::ProcessInfo.gid(pid)
 => {:real=>1000, :effective=>1000, :saved_set=>1000, :filesystem_uid=>1000}
 
-LinuxStat::ProcessInfo.last_executed_cpu
-=> 3
-
-LinuxStat::ProcessInfo.mem_stat
-=> {:memory=>10964.992, :virtual_memory=>82382.848, :resident_memory=>16248.832}
-
-LinuxStat::ProcessInfo.memory
-=> 10964.992
-
-LinuxStat::ProcessInfo.nice
+# File: process_info.rb | Line: 369
+# Definition: def last_executed_cpu(pid = $$)
+LinuxStat::ProcessInfo.last_executed_cpu(pid)
 => 0
 
-LinuxStat::ProcessInfo.owner
+# File: process_info.rb | Line: 114
+# Definition: def mem_stat(pid = $$)
+LinuxStat::ProcessInfo.mem_stat(pid)
+=> {:memory=>12251.136, :virtual_memory=>83943.424, :resident_memory=>18247.68}
+
+# File: process_info.rb | Line: 147
+# Definition: def memory(pid = $$)
+LinuxStat::ProcessInfo.memory(pid)
+=> 12251.136
+
+# File: process_info.rb | Line: 540
+# Definition: def nice(pid = $$)
+LinuxStat::ProcessInfo.nice(pid)
+=> 0
+
+# File: process_info.rb | Line: 427
+# Definition: def owner(pid = $$)
+LinuxStat::ProcessInfo.owner(pid)
 => "sourav"
 
-LinuxStat::ProcessInfo.resident_memory
-=> 16248.832
+# File: process_info.rb | Line: 197
+# Definition: def resident_memory(pid = $$)
+LinuxStat::ProcessInfo.resident_memory(pid)
+=> 18247.68
 
-LinuxStat::ProcessInfo.running_time
-=> 0.6900000000023283
+# File: process_info.rb | Line: 497
+# Definition: def running_time(pid = $$)
+LinuxStat::ProcessInfo.running_time(pid)
+=> 0.680000000000291
 
-LinuxStat::ProcessInfo.start_time
-=> 2020-12-16 21:17:37.183094026 +0530
+# File: process_info.rb | Line: 480
+# Definition: def start_time(pid = $$)
+LinuxStat::ProcessInfo.start_time(pid)
+=> 2020-12-17 16:16:17 +0530
 
-LinuxStat::ProcessInfo.state
+# File: process_info.rb | Line: 449
+# Definition: def start_time_epoch(pid = $$)
+LinuxStat::ProcessInfo.start_time_epoch(pid)
+=> 1608201977
+
+# File: process_info.rb | Line: 525
+# Definition: def state(pid = $$)
+LinuxStat::ProcessInfo.state(pid)
 => "R"
 
-LinuxStat::ProcessInfo.threads
+# File: process_info.rb | Line: 344
+# Definition: def threads(pid = $$)
+LinuxStat::ProcessInfo.threads(pid)
 => 1
 
-LinuxStat::ProcessInfo.total_io
-=> {:read_bytes=>5361664, :write_bytes=>0}
+# File: process_info.rb | Line: 23
+# Definition: def total_io(pid = $$)
+LinuxStat::ProcessInfo.total_io(pid)
+=> {:read_bytes=>0, :write_bytes=>0}
 
-LinuxStat::ProcessInfo.uid
+# File: process_info.rb | Line: 382
+# Definition: def uid(pid = $$)
+LinuxStat::ProcessInfo.uid(pid)
 => {:real=>1000, :effective=>1000, :saved_set=>1000, :filesystem_uid=>1000}
 
-LinuxStat::ProcessInfo.virtual_memory
-=> 82382.848
+# File: process_info.rb | Line: 172
+# Definition: def virtual_memory(pid = $$)
+LinuxStat::ProcessInfo.virtual_memory(pid)
+=> 83943.424
 
 ```
 
 ### LinuxStat::Swap
 ```
-LinuxStat::Swap.any?
+# File: swap.rb | Line: 22
+# Definition: def any?
+LinuxStat::Swap.any?()
 => true
 
-LinuxStat::Swap.available
-=> 3383720
+# File: swap.rb | Line: 68
+# Definition: def available
+LinuxStat::Swap.available()
+=> 2868220
 
-LinuxStat::Swap.list
-=> {"/dev/zram0"=>[:partition, 4194300, 810580, -2]}
+# File: swap.rb | Line: 8
+# Definition: def list
+LinuxStat::Swap.list()
+=> {"/dev/zram0"=>[:partition, 4194300, 1326080, -2]}
 
-LinuxStat::Swap.percent_available
-=> 80.67
+# File: swap.rb | Line: 103
+# Definition: def percent_available
+LinuxStat::Swap.percent_available()
+=> 68.38
 
-LinuxStat::Swap.percent_used
-=> 19.33
+# File: swap.rb | Line: 89
+# Definition: def percent_used
+LinuxStat::Swap.percent_used()
+=> 31.62
 
-LinuxStat::Swap.stat
-=> {:total=>4194300, :used=>810580, :available=>3383720, :percent_used=>19.33, :percent_available=>80.67}
+# File: swap.rb | Line: 32
+# Definition: def stat
+LinuxStat::Swap.stat()
+=> {:total=>4194300, :used=>1326080, :available=>2868220, :percent_used=>31.62, :percent_available=>68.38}
 
-LinuxStat::Swap.total
+# File: swap.rb | Line: 57
+# Definition: def total
+LinuxStat::Swap.total()
 => 4194300
 
-LinuxStat::Swap.used
-=> 810580
+# File: swap.rb | Line: 80
+# Definition: def used
+LinuxStat::Swap.used()
+=> 1326080
 
 ```
 
 ### LinuxStat::Sysconf
 ```
-LinuxStat::Sysconf.child_max
+# # LinuxStat::Sysconf.child_max()
 => 2000000
 
-LinuxStat::Sysconf.get_euid
+# # LinuxStat::Sysconf.get_euid()
 => 1000
 
-LinuxStat::Sysconf.get_gid
+# # LinuxStat::Sysconf.get_gid()
 => 1000
 
-LinuxStat::Sysconf.get_login
+# # LinuxStat::Sysconf.get_login()
 => "sourav"
 
-LinuxStat::Sysconf.get_uid
+# # LinuxStat::Sysconf.get_uid()
 => 1000
 
-LinuxStat::Sysconf.get_user
+# # LinuxStat::Sysconf.get_user()
 => "sourav"
 
-LinuxStat::Sysconf.hostname_max
+# # LinuxStat::Sysconf.hostname_max()
 => 64
 
-LinuxStat::Sysconf.login_name_max
+# # LinuxStat::Sysconf.login_name_max()
 => 256
 
-LinuxStat::Sysconf.open_max
-=> 1024
+# # LinuxStat::Sysconf.open_max()
+=> 8192
 
-LinuxStat::Sysconf.pagesize
+# # LinuxStat::Sysconf.pagesize()
 => 4096
 
-LinuxStat::Sysconf.posix_version
+# # LinuxStat::Sysconf.posix_version()
 => 200809
 
-LinuxStat::Sysconf.sc_clk_tck
+# # LinuxStat::Sysconf.sc_clk_tck()
 => 100
 
-LinuxStat::Sysconf.stream_max
+# # LinuxStat::Sysconf.stream_max()
 => 16
 
-LinuxStat::Sysconf.tty_name_max
+# # LinuxStat::Sysconf.tty_name_max()
 => 32
 
 ```
 
 ### LinuxStat::Uname
 ```
-LinuxStat::Uname.machine
+# # LinuxStat::Uname.machine()
 => "x86_64"
 
-LinuxStat::Uname.nodename
+# # LinuxStat::Uname.nodename()
 => "archlinux"
 
-LinuxStat::Uname.release
+# # LinuxStat::Uname.release()
 => "5.9.9-xanmod1-1"
 
-LinuxStat::Uname.sysname
+# # LinuxStat::Uname.sysname()
 => "Linux"
 
-LinuxStat::Uname.version
+# # LinuxStat::Uname.version()
 => "#1 SMP PREEMPT Fri, 20 Nov 2020 07:44:55 +0000"
 
 ```
 
 ### LinuxStat::User
 ```
-LinuxStat::User.get_current_user
+# File: user.rb | Line: 98
+# Definition: def get_user
+LinuxStat::User.get_current_user()
 => "sourav"
 
-LinuxStat::User.get_euid
+# File: user.rb | Line: 137
+# Definition: def get_euid
+LinuxStat::User.get_euid()
 => 1000
 
-LinuxStat::User.get_gid
+# File: user.rb | Line: 129
+# Definition: def get_gid
+LinuxStat::User.get_gid()
 => 1000
 
-LinuxStat::User.get_login
+# File: user.rb | Line: 152
+# Definition: def get_login
+LinuxStat::User.get_login()
 => "sourav"
 
-LinuxStat::User.get_uid
+# File: user.rb | Line: 121
+# Definition: def get_uid
+LinuxStat::User.get_uid()
 => 1000
 
-LinuxStat::User.get_user
+# File: user.rb | Line: 98
+# Definition: def get_user
+LinuxStat::User.get_user()
 => "sourav"
 
-LinuxStat::User.gid_by_username
+# File: user.rb | Line: 215
+# Definition: def gid_by_username(username = get_user)
+LinuxStat::User.gid_by_username(username)
 => 1000
 
-LinuxStat::User.gids
+# File: user.rb | Line: 56
+# Definition: def gids
+LinuxStat::User.gids()
 => {:root=>0, :bin=>1, :daemon=>2, :mail=>12, :ftp=>11, :http=>33, :nobody=>65534, :dbus=>81, :"systemd-journal-remote"=>982, :"systemd-network"=>981, :"systemd-resolve"=>980, :"systemd-timesync"=>979, :"systemd-coredump"=>978, :uuidd=>68, :avahi=>977, :...
 
-LinuxStat::User.home_by_gid
+# File: user.rb | Line: 314
+# Definition: def home_by_gid(id = get_gid)
+LinuxStat::User.home_by_gid(id)
 => "/home/sourav"
 
-LinuxStat::User.home_by_username
+# File: user.rb | Line: 266
+# Definition: def home_by_username(user = get_user)
+LinuxStat::User.home_by_username(user)
 => "/home/sourav"
 
-LinuxStat::User.home_directories
+# File: user.rb | Line: 72
+# Definition: def home_directories
+LinuxStat::User.home_directories()
 => {:root=>"/root", :bin=>"/", :daemon=>"/", :mail=>"/var/spool/mail", :ftp=>"/srv/ftp", :http=>"/srv/http", :nobody=>"/", :dbus=>"/", :"systemd-journal-remote"=>"/", :"systemd-network"=>"/", :"systemd-resolve"=>"/", :"systemd-timesync"=>"/", :"systemd-c...
 
-LinuxStat::User.homes_by_uid
+# File: user.rb | Line: 293
+# Definition: def homes_by_uid(id = get_uid)
+LinuxStat::User.homes_by_uid(id)
 => ["/home/sourav"]
 
-LinuxStat::User.ids
+# File: user.rb | Line: 23
+# Definition: def ids
+LinuxStat::User.ids()
 => {:root=>{:uid=>0, :gid=>0}, :bin=>{:uid=>1, :gid=>1}, :daemon=>{:uid=>2, :gid=>2}, :mail=>{:uid=>8, :gid=>12}, :ftp=>{:uid=>14, :gid=>11}, :http=>{:uid=>33, :gid=>33}, :nobody=>{:uid=>65534, :gid=>65534}, :dbus=>{:uid=>81, :gid=>81}, :"systemd-journal...
 
-LinuxStat::User.list
+# File: user.rb | Line: 11
+# Definition: def list
+LinuxStat::User.list()
 => ["root", "bin", "daemon", "mail", "ftp", "http", "nobody", "dbus", "systemd-journal-remote", "systemd-network", "systemd-resolve", "systemd-timesync", "systemd-coredump", "uuidd", "avahi", "colord", "git", "lxdm", "polkitd", "rtkit", "usbmux", "sourav...
 
-LinuxStat::User.uid_by_username
+# File: user.rb | Line: 244
+# Definition: def uid_by_username(username = get_user)
+LinuxStat::User.uid_by_username(username)
 => 1000
 
-LinuxStat::User.uids
+# File: user.rb | Line: 40
+# Definition: def uids
+LinuxStat::User.uids()
 => {:root=>0, :bin=>1, :daemon=>2, :mail=>8, :ftp=>14, :http=>33, :nobody=>65534, :dbus=>81, :"systemd-journal-remote"=>982, :"systemd-network"=>981, :"systemd-resolve"=>980, :"systemd-timesync"=>979, :"systemd-coredump"=>978, :uuidd=>68, :avahi=>977, :c...
 
-LinuxStat::User.username_by_gid
+# File: user.rb | Line: 187
+# Definition: def username_by_gid(gid = get_gid)
+LinuxStat::User.username_by_gid(gid)
 => "sourav"
 
-LinuxStat::User.usernames_by_uid
+# File: user.rb | Line: 169
+# Definition: def usernames_by_uid(uid = get_uid)
+LinuxStat::User.usernames_by_uid(uid)
 => ["sourav"]
 
 ```

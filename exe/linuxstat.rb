@@ -7,6 +7,11 @@ rescue LoadError
 	abort "The Gem needs to be installed before this test can be run!"
 end
 
+module LinuxStat::CPU
+	define_singleton_method(:total_usage) do
+	end
+end
+
 # Gradient colour to strings
 class String
 	def colourize(colour = 1, flip: false)
@@ -107,21 +112,17 @@ execute.sort.each do |c|
 
 
 	meths.each do |meth|
-
 		arg = nil
 		params = e.method(meth).parameters
 
 		param = ''
 
 		params.each do |p|
-
 			case p[0]
 				when :opt
 					param << "#{p[1]}, "
 				when :key
-					param << ":#{p[1]}, "
-				when :req
-					param << p[1].to_s
+					param << "#{p[1]}:, "
 			end
 		end
 
@@ -147,14 +148,19 @@ execute.sort.each do |c|
 		dis = v.length > 253 ? v[0..250].strip + '...'.freeze : v
 
 		source = e.singleton_method(meth).source_location.to_a
-		src = source.empty? ? ''.freeze : "\u2B23 file: #{File.split(source[0])[-1]}, line: #{source[1]}\n"
+		src, src_meth = '', ''
+
+		unless source.empty?
+			src << "File: #{File.split(source[0])[-1]} | Line: #{source[1]}\n"
+			src_meth << "Definition: #{IO.foreach(source[0]).first(source[1])[-1].strip}\n"
+		end
 
 		if MARKDOWN
-			puts "#{src}#{e}.#{disp_meth}\n=> #{dis}"
+			puts "# #{src}# #{src_meth}#{e}.#{disp_meth}\n=> #{dis}"
 		elsif HTML
-			puts "#{src}#{e}.#{disp_meth}\n=> #{dis}"
+			puts "# #{src}# #{src_meth}#{e}.#{disp_meth}\n=> #{dis}"
 		else
-			puts "#{src.colourize}\e[1;38;2;80;80;255m#{e}.#{disp_meth}\e[0m\n=> #{dis}"
+			puts "\e[1m\u2B23 #{src.colourize}\e[1m\u2B23 #{src_meth.colourize(4)}\e[0m\e[1;38;2;80;80;255m#{e}.#{disp_meth}\e[0m\n=> #{dis}"
 		end
 
 		puts( "(" +

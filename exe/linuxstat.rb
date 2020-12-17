@@ -151,16 +151,25 @@ execute.sort.each do |c|
 		src, src_meth = '', ''
 
 		unless source.empty?
-			src << "File: #{File.split(source[0])[-1]} | Line: #{source[1]}\n"
-			src_meth << "Definition: #{IO.foreach(source[0]).first(source[1])[-1].strip}\n"
+			src << " File: #{File.split(source[0])[-1]} | Line: #{source[1]}\n"
+			src_meth << " Definition: #{IO.foreach(source[0]).first(source[1])[-1].strip}\n"
+
+			if MARKDOWN || HTML
+				src.prepend('#'.freeze)
+				src_meth.prepend('#'.freeze)
+			else
+				src.prepend(?\u2B23.freeze)
+				src_meth.prepend(?\u2B23.freeze)
+			end
 		end
 
+
 		if MARKDOWN
-			puts "# #{src}# #{src_meth}#{e}.#{disp_meth}\n=> #{dis}"
+			puts "#{src}#{src_meth}#{e}.#{disp_meth}\n=> #{dis}"
 		elsif HTML
-			puts "# #{src}# #{src_meth}#{e}.#{disp_meth}\n=> #{dis}"
+			puts "#{src}#{src_meth}#{e}.#{disp_meth}\n=> #{dis}"
 		else
-			puts "\e[1m\u2B23 #{src.colourize}\e[1m\u2B23 #{src_meth.colourize(4)}\e[0m\e[1;38;2;80;80;255m#{e}.#{disp_meth}\e[0m\n=> #{dis}"
+			puts "\e[1m#{src.colourize}\e[1m#{src_meth.colourize(4)}\e[0m\e[1;38;2;80;80;255m#{e}.#{disp_meth}\e[0m\n=> #{dis}"
 		end
 
 		puts( "(" +

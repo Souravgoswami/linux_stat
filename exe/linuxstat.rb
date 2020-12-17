@@ -105,7 +105,6 @@ execute.sort.each do |c|
 		end
 	end
 
-
 	meths.each do |meth|
 		arg = nil
 		params = e.method(meth).parameters
@@ -118,6 +117,8 @@ execute.sort.each do |c|
 					param << "#{p[1]}, "
 				when :key
 					param << "#{p[1]}:, "
+				when :req
+					param << "#{p[1] || 'arg'}, "
 			end
 		end
 
@@ -126,13 +127,15 @@ execute.sort.each do |c|
 		if e.method(meth).arity > 0
 			if c == :PrettifyBytes
 				arg = rand(10 ** 15)
+			elsif c == :FS
+				arg = '/'
 			else
 				next
 			end
 		end
 
 		disp_meth = "#{meth}"
-		disp_meth.concat(arg ? "(#{param} = #{arg})" : "(#{param})")
+		disp_meth.concat(arg ? "(#{param} = #{arg.inspect})" : "(#{param})")
 
 		time = Time.now
 		v = arg ? e.send(meth, arg) : e.send(meth)

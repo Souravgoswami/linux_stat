@@ -172,6 +172,9 @@ LinuxStat::CPU.usages(sleep)
 
 ### LinuxStat::FS
 ```
+LinuxStat::FS.stat(arg = "/")
+=> {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>12825937, :block_avail_unpriv=>12825937, :inodes=>58612160, :free_inodes=>56967681, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
+
 ```
 
 ### LinuxStat::Filesystem

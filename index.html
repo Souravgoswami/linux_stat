@@ -179,7 +179,7 @@ layout: linuxstat
 	# File: cpu.rb | Line: 101
 	# Definition: def cur_freq
 	LinuxStat::CPU.cur_freq()
-	=> [2000004, 2000006, 2000125, 1924797]
+	=> [1946437, 1978943, 1995769, 1988158]
 
 	# File: cpu.rb | Line: 116
 	# Definition: def max_freq
@@ -204,12 +204,12 @@ layout: linuxstat
 	# File: cpu.rb | Line: 63
 	# Definition: def total_usage(sleep = ticks_to_ms)
 	LinuxStat::CPU.usage(sleep)
-	=> 20.0
+	=> 25.0
 
 	# File: cpu.rb | Line: 21
 	# Definition: def stat(sleep = ticks_to_ms)
 	LinuxStat::CPU.usages(sleep)
-	=> {0=>0.0, 1=>0.0, 2=>0.0, 3=>0.0, 4=>0.0}
+	=> {0=>20.0, 1=>50.0, 2=>0.0, 3=>0.0, 4=>0.0}
 
 	</pre>
 	<h3>LinuxStat::FS</h3>
@@ -220,22 +220,22 @@ layout: linuxstat
 	# File: filesystem.rb | Line: 92
 	# Definition: def available(fs = ?/.freeze)
 	LinuxStat::Filesystem.available(fs)
-	=> 52545863680
+	=> 52544720896
 
 	# File: filesystem.rb | Line: 58
 	# Definition: def free(fs = ?/.freeze)
 	LinuxStat::Filesystem.free(fs)
-	=> 52545863680
+	=> 52544720896
 
 	# File: filesystem.rb | Line: 19
 	# Definition: def stat(fs = ?/.freeze)
 	LinuxStat::Filesystem.stat(fs)
-	=> {:total=>119981191168, :free=>52545863680, :used=>67435327488}
+	=> {:total=>119981191168, :free=>52544720896, :used=>67436470272}
 
 	# File: filesystem.rb | Line: 108
 	# Definition: def stat_raw(fs = ?/.freeze)
 	LinuxStat::Filesystem.stat_raw(fs)
-	=> {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>12828580, :block_avail_unpriv=>12828580, :inodes=>58612160, :free_inodes=>56968579, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
+	=> {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>12828301, :block_avail_unpriv=>12828301, :inodes=>58612160, :free_inodes=>56968294, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
 
 	# File: filesystem.rb | Line: 39
 	# Definition: def total(fs = ?/.freeze)
@@ -245,7 +245,7 @@ layout: linuxstat
 	# File: filesystem.rb | Line: 73
 	# Definition: def used(fs = ?/.freeze)
 	LinuxStat::Filesystem.used(fs)
-	=> 67435327488
+	=> 67436470272
 
 	</pre>
 	<h3>LinuxStat::Kernel</h3>
@@ -306,22 +306,22 @@ layout: linuxstat
 	# File: memory.rb | Line: 50
 	# Definition: def available
 	LinuxStat::Memory.available()
-	=> 509548
+	=> 490344
 
 	# File: memory.rb | Line: 81
 	# Definition: def percent_available
 	LinuxStat::Memory.percent_available()
-	=> 13.28
+	=> 12.78
 
 	# File: memory.rb | Line: 70
 	# Definition: def percent_used
 	LinuxStat::Memory.percent_used()
-	=> 86.72
+	=> 87.22
 
 	# File: memory.rb | Line: 11
 	# Definition: def stat
 	LinuxStat::Memory.stat()
-	=> {:total=>3836236, :used=>3326688, :available=>509548, :percent_used=>86.72, :percent_available=>13.28}
+	=> {:total=>3836236, :used=>3345892, :available=>490344, :percent_used=>87.22, :percent_available=>12.78}
 
 	# File: memory.rb | Line: 40
 	# Definition: def total
@@ -331,7 +331,7 @@ layout: linuxstat
 	# File: memory.rb | Line: 60
 	# Definition: def used
 	LinuxStat::Memory.used()
-	=> 3326688
+	=> 3345892
 
 	</pre>
 	<h3>LinuxStat::Mounts</h3>
@@ -339,7 +339,7 @@ layout: linuxstat
 	# File: mounts.rb | Line: 179
 	# Definition: def device_stat(dev = root)
 	LinuxStat::Mounts.device_stat(dev)
-	=> {:mountpoint=>"/", :total=>119981191168, :free=>52545863680, :available=>52545863680, :used=>67435327488, :percent_used=>56.2, :percent_free=>43.8, :percent_available=>43.8}
+	=> {:mountpoint=>"/", :total=>119981191168, :free=>52544720896, :available=>52544720896, :used=>67436470272, :percent_used=>56.21, :percent_free=>43.79, :percent_available=>43.79}
 
 	# File: mounts.rb | Line: 137
 	# Definition: def devices_stat
@@ -402,17 +402,17 @@ layout: linuxstat
 	# File: net.rb | Line: 23
 	# Definition: def total_bytes
 	LinuxStat::Net.total_bytes()
-	=> {:received=>508167002, :transmitted=>38032347}
+	=> {:received=>512291249, :transmitted=>38848287}
 
 	# File: net.rb | Line: 41
 	# Definition: def total_bytes_received
 	LinuxStat::Net.total_bytes_received()
-	=> 508167002
+	=> 512291249
 
 	# File: net.rb | Line: 54
 	# Definition: def total_bytes_transmitted
 	LinuxStat::Net.total_bytes_transmitted()
-	=> 38032347
+	=> 38848287
 
 	# File: net.rb | Line: 80
 	# Definition: def usage(interval = 0.1)
@@ -460,30 +460,30 @@ layout: linuxstat
 	# File: os.rb | Line: 110
 	# Definition: def uptime
 	LinuxStat::OS.uptime()
-	=> {:hour=>5, :minute=>15, :second=>44.2}
+	=> {:hour=>5, :minute=>33, :second=>6.83}
 
 	</pre>
 	<h3>LinuxStat::PrettifyBytes</h3>
 	<pre>
 	# File: prettify_bytes.rb | Line: 42
 	# Definition: def convert_binary(n)
-	LinuxStat::PrettifyBytes.convert_binary( = 376951294344666)
-	=> "342.84 tebibytes"
+	LinuxStat::PrettifyBytes.convert_binary( = 138432670317681)
+	=> "125.90 tebibytes"
 
 	# File: prettify_bytes.rb | Line: 19
 	# Definition: def convert_decimal(n)
-	LinuxStat::PrettifyBytes.convert_decimal( = 47482957241491)
-	=> "47.48 terabytes"
+	LinuxStat::PrettifyBytes.convert_decimal( = 392178575611154)
+	=> "392.18 terabytes"
 
 	# File: prettify_bytes.rb | Line: 90
 	# Definition: def convert_short_binary(n)
-	LinuxStat::PrettifyBytes.convert_short_binary( = 49235380256349)
-	=> "44.78 TiB"
+	LinuxStat::PrettifyBytes.convert_short_binary( = 971932927628671)
+	=> "883.97 TiB"
 
 	# File: prettify_bytes.rb | Line: 65
 	# Definition: def convert_short_decimal(n)
-	LinuxStat::PrettifyBytes.convert_short_decimal( = 499465941429470)
-	=> "499.47 TB"
+	LinuxStat::PrettifyBytes.convert_short_decimal( = 606612494593613)
+	=> "606.61 TB"
 
 	</pre>
 	<h3>LinuxStat::Process</h3>
@@ -511,12 +511,12 @@ layout: linuxstat
 	# File: process.rb | Line: 97
 	# Definition: def running
 	LinuxStat::Process.running()
-	=> [12863, 12876]
+	=> [13868]
 
 	# File: process.rb | Line: 58
 	# Definition: def sleeping
 	LinuxStat::Process.sleeping()
-	=> [1, 2, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 38, 40, 41, 42, 46, 47, 48, 50, 51, 52, 111, 114, 115, 168, 170, 189, 218, 235, 301, 305, 309, 310, 311, 314, 315, 316, 317, 331, 334, 337, 403, 407, 409, 410,...
+	=> [1, 2, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 38, 40, 41, 42, 46, 47, 48, 50, 51, 52, 111, 114, 115, 168, 170, 189, 218, 235, 301, 305, 309, 310, 311, 314, 315, 316, 317, 331, 334, 403, 407, 409, 410, 417,...
 
 	# File: process.rb | Line: 37
 	# Definition: def types
@@ -544,7 +544,7 @@ layout: linuxstat
 	# File: process_info.rb | Line: 247
 	# Definition: def cpu_stat(pid: $$, sleep: ticks_to_ms)
 	LinuxStat::ProcessInfo.cpu_stat(pid:, sleep:)
-	=> {:cpu_usage=>0.0, :threads=>1, :last_executed_cpu=>2}
+	=> {:cpu_usage=>0.0, :threads=>1, :last_executed_cpu=>3}
 
 	# File: process_info.rb | Line: 301
 	# Definition: def cpu_usage(pid: $$, sleep: ticks_to_ms)
@@ -559,17 +559,17 @@ layout: linuxstat
 	# File: process_info.rb | Line: 369
 	# Definition: def last_executed_cpu(pid = $$)
 	LinuxStat::ProcessInfo.last_executed_cpu(pid)
-	=> 2
+	=> 3
 
 	# File: process_info.rb | Line: 114
 	# Definition: def mem_stat(pid = $$)
 	LinuxStat::ProcessInfo.mem_stat(pid)
-	=> {:memory=>12238.848, :virtual_memory=>83959.808, :resident_memory=>18173.952}
+	=> {:memory=>12234.752, :virtual_memory=>83976.192, :resident_memory=>18083.84}
 
 	# File: process_info.rb | Line: 147
 	# Definition: def memory(pid = $$)
 	LinuxStat::ProcessInfo.memory(pid)
-	=> 12238.848
+	=> 12234.752
 
 	# File: process_info.rb | Line: 540
 	# Definition: def nice(pid = $$)
@@ -584,22 +584,22 @@ layout: linuxstat
 	# File: process_info.rb | Line: 197
 	# Definition: def resident_memory(pid = $$)
 	LinuxStat::ProcessInfo.resident_memory(pid)
-	=> 18173.952
+	=> 18083.84
 
 	# File: process_info.rb | Line: 497
 	# Definition: def running_time(pid = $$)
 	LinuxStat::ProcessInfo.running_time(pid)
-	=> 1.2700000000004366
+	=> 0.9000000000014552
 
 	# File: process_info.rb | Line: 480
 	# Definition: def start_time(pid = $$)
 	LinuxStat::ProcessInfo.start_time(pid)
-	=> 2020-12-17 16:23:16 +0530
+	=> 2020-12-17 16:40:39 +0530
 
 	# File: process_info.rb | Line: 449
 	# Definition: def start_time_epoch(pid = $$)
 	LinuxStat::ProcessInfo.start_time_epoch(pid)
-	=> 1608202396
+	=> 1608203439
 
 	# File: process_info.rb | Line: 525
 	# Definition: def state(pid = $$)
@@ -624,7 +624,7 @@ layout: linuxstat
 	# File: process_info.rb | Line: 172
 	# Definition: def virtual_memory(pid = $$)
 	LinuxStat::ProcessInfo.virtual_memory(pid)
-	=> 83959.808
+	=> 83976.192
 
 	</pre>
 	<h3>LinuxStat::Swap</h3>
@@ -637,27 +637,27 @@ layout: linuxstat
 	# File: swap.rb | Line: 68
 	# Definition: def available
 	LinuxStat::Swap.available()
-	=> 2950652
+	=> 3111420
 
 	# File: swap.rb | Line: 8
 	# Definition: def list
 	LinuxStat::Swap.list()
-	=> {"/dev/zram0"=>[:partition, 4194300, 1243648, -2]}
+	=> {"/dev/zram0"=>[:partition, 4194300, 1082880, -2]}
 
 	# File: swap.rb | Line: 103
 	# Definition: def percent_available
 	LinuxStat::Swap.percent_available()
-	=> 70.35
+	=> 74.18
 
 	# File: swap.rb | Line: 89
 	# Definition: def percent_used
 	LinuxStat::Swap.percent_used()
-	=> 29.65
+	=> 25.82
 
 	# File: swap.rb | Line: 32
 	# Definition: def stat
 	LinuxStat::Swap.stat()
-	=> {:total=>4194300, :used=>1243648, :available=>2950652, :percent_used=>29.65, :percent_available=>70.35}
+	=> {:total=>4194300, :used=>1082880, :available=>3111420, :percent_used=>25.82, :percent_available=>74.18}
 
 	# File: swap.rb | Line: 57
 	# Definition: def total
@@ -667,69 +667,69 @@ layout: linuxstat
 	# File: swap.rb | Line: 80
 	# Definition: def used
 	LinuxStat::Swap.used()
-	=> 1243648
+	=> 1082880
 
 	</pre>
 	<h3>LinuxStat::Sysconf</h3>
 	<pre>
-	# # LinuxStat::Sysconf.child_max()
+	LinuxStat::Sysconf.child_max()
 	=> 2000000
 
-	# # LinuxStat::Sysconf.get_euid()
+	LinuxStat::Sysconf.get_euid()
 	=> 1000
 
-	# # LinuxStat::Sysconf.get_gid()
+	LinuxStat::Sysconf.get_gid()
 	=> 1000
 
-	# # LinuxStat::Sysconf.get_login()
+	LinuxStat::Sysconf.get_login()
 	=> "sourav"
 
-	# # LinuxStat::Sysconf.get_uid()
+	LinuxStat::Sysconf.get_uid()
 	=> 1000
 
-	# # LinuxStat::Sysconf.get_user()
+	LinuxStat::Sysconf.get_user()
 	=> "sourav"
 
-	# # LinuxStat::Sysconf.hostname_max()
+	LinuxStat::Sysconf.hostname_max()
 	=> 64
 
-	# # LinuxStat::Sysconf.login_name_max()
+	LinuxStat::Sysconf.login_name_max()
 	=> 256
 
-	# # LinuxStat::Sysconf.open_max()
+	LinuxStat::Sysconf.open_max()
 	=> 8192
 
-	# # LinuxStat::Sysconf.pagesize()
+	LinuxStat::Sysconf.pagesize()
 	=> 4096
 
-	# # LinuxStat::Sysconf.posix_version()
+	LinuxStat::Sysconf.posix_version()
 	=> 200809
 
-	# # LinuxStat::Sysconf.sc_clk_tck()
+	LinuxStat::Sysconf.sc_clk_tck()
 	=> 100
 
-	# # LinuxStat::Sysconf.stream_max()
+	LinuxStat::Sysconf.stream_max()
 	=> 16
 
-	# # LinuxStat::Sysconf.tty_name_max()
+	LinuxStat::Sysconf.tty_name_max()
 	=> 32
 
 	</pre>
 	<h3>LinuxStat::Uname</h3>
 	<pre>
-	# # LinuxStat::Uname.machine()
+	LinuxStat::Uname.machine()
 	=> "x86_64"
 
-	# # LinuxStat::Uname.nodename()
+	LinuxStat::Uname.nodename()
 	=> "archlinux"
 
-	# # LinuxStat::Uname.release()
+	LinuxStat::Uname.release()
 	=> "5.9.9-xanmod1-1"
 
-	# # LinuxStat::Uname.sysname()
+	LinuxStat::Uname.sysname()
 	=> "Linux"
 
-	# # LinuxStat::Uname.version()
+	LinuxStat::Uname.version()
 	=> "#1 SMP PREEMPT Fri, 20 Nov 2020 07:44:55 +0000"
 
 	</pre>
@@ -826,7 +826,6 @@ layout: linuxstat
 	=> ["sourav"]
 
 	</pre>
-
 
 	<a class="head" id="note-1" href="#note-1" content="Note 1: CPU usage, and Net usage"></a>
 	To calculate the current usage, we need to get two usages at a given interval, and subtract the 2nd from the first.

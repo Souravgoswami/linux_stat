@@ -7,11 +7,6 @@ rescue LoadError
 	abort "The Gem needs to be installed before this test can be run!"
 end
 
-module LinuxStat::CPU
-	define_singleton_method(:total_usage) do
-	end
-end
-
 # Gradient colour to strings
 class String
 	def colourize(colour = 1, flip: false)

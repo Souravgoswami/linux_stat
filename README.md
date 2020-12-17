@@ -153,10 +153,10 @@ LinuxStat::CPU.model()
 LinuxStat::CPU.stat(sleep)
 => {0=>20.0, 1=>0.0, 2=>0.0, 3=>0.0, 4=>0.0}
 
-# File: linuxstat.rb | Line: 11
-# Definition: define_singleton_method(:total_usage) do
-LinuxStat::CPU.total_usage()
-=> nil
+# File: cpu.rb | Line: 63
+# Definition: def total_usage(sleep = ticks_to_ms)
+LinuxStat::CPU.usage(sleep)
+=> 50.0
 
 # File: cpu.rb | Line: 63
 # Definition: def total_usage(sleep = ticks_to_ms)

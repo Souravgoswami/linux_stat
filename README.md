@@ -435,23 +435,23 @@ LinuxStat::OS.uptime()
 ```
 # File: prettify_bytes.rb | Line: 42
 # Definition: def convert_binary(n)
-LinuxStat::PrettifyBytes.convert_binary( = 139259240343413)
-=> "126.66 tebibytes"
+LinuxStat::PrettifyBytes.convert_binary(n = 948100170920596)
+=> "862.29 tebibytes"
 
 # File: prettify_bytes.rb | Line: 19
 # Definition: def convert_decimal(n)
-LinuxStat::PrettifyBytes.convert_decimal( = 9064429892244)
-=> "9.06 terabytes"
+LinuxStat::PrettifyBytes.convert_decimal(n = 778254889812055)
+=> "778.25 terabytes"
 
 # File: prettify_bytes.rb | Line: 90
 # Definition: def convert_short_binary(n)
-LinuxStat::PrettifyBytes.convert_short_binary( = 768519163615746)
-=> "698.96 TiB"
+LinuxStat::PrettifyBytes.convert_short_binary(n = 924133737100164)
+=> "840.49 TiB"
 
 # File: prettify_bytes.rb | Line: 65
 # Definition: def convert_short_decimal(n)
-LinuxStat::PrettifyBytes.convert_short_decimal( = 125226567793596)
-=> "125.23 TB"
+LinuxStat::PrettifyBytes.convert_short_decimal(n = 723831850276707)
+=> "723.83 TB"
 
 ```
 

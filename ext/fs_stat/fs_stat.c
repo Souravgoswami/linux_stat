@@ -1,8 +1,13 @@
 #include <sys/statvfs.h>
 #include "ruby.h"
 
-#pragma GCC optimize ("O3")
-#pragma clang optimize on
+#ifdef __GNUC__
+	#pragma GCC optimize ("O3")
+	#pragma GCC diagnostic warning "-Wall"
+#elif __clang__
+	#pragma clang optimize on
+	#pragma clang diagnostic warning "-Wall"
+#endif
 
 static VALUE statfs(VALUE obj, VALUE dir) {
 	struct statvfs buf ;

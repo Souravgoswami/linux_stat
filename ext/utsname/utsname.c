@@ -1,39 +1,49 @@
 #include <sys/utsname.h>
 #include "ruby.h"
 
-#pragma GCC optimize ("O3")
-#pragma clang optimize on
+#ifdef __GNUC__
+	#pragma GCC optimize ("O3")
+	#pragma GCC diagnostic warning "-Wall"
+#elif __clang__
+	#pragma clang optimize on
+	#pragma clang diagnostic warning "-Wall"
+#endif
 
 static struct utsname buf ;
-static short status ;
+
+static char *sysname = "", *nodename = "" ;
+static char *release = "", *version = "", *machine = "" ;
 
 void init_buf() {
-	status = uname(&buf) ;
+	short status = uname(&buf) ;
+
+	if (status > -1) {
+		sysname = buf.sysname ;
+		nodename = buf.nodename ;
+		release = buf.release ;
+		version = buf.version ;
+		machine = buf.machine ;
+	}
 }
 
 static VALUE getSysname(VALUE obj) {
-	VALUE sysname = status < 0 ? rb_str_new_cstr("") : rb_str_new_cstr(buf.sysname) ;
-	return sysname ;
+	return rb_str_new_cstr(sysname) ;
 }
 
 static VALUE getNodename(VALUE obj) {
-	VALUE nodename = status < 0 ? rb_str_new_cstr("") : rb_str_new_cstr(buf.nodename) ;
-	return nodename ;
+	return rb_str_new_cstr(nodename) ;
 }
 
 static VALUE getRelease(VALUE obj) {
-	VALUE release = status < 0 ? rb_str_new_cstr("") : rb_str_new_cstr(buf.release) ;
-	return release ;
+	return rb_str_new_cstr(release) ;
 }
 
 static VALUE getVersion(VALUE obj) {
-	VALUE version = status < 0 ? rb_str_new_cstr("") : rb_str_new_cstr(buf.version) ;
-	return version ;
+	return rb_str_new_cstr(version) ;
 }
 
 static VALUE getMachine(VALUE obj) {
-	VALUE machine = status < 0 ? rb_str_new_cstr("") : rb_str_new_cstr(buf.machine) ;
-	return machine ;
+	return rb_str_new_cstr(machine) ;
 }
 
 void Init_utsname() {

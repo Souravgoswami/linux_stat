@@ -1,8 +1,13 @@
 #include <unistd.h>
 #include "ruby.h"
 
-#pragma GCC optimize ("O3")
-#pragma clang optimize on
+#ifdef __GNUC__
+	#pragma GCC optimize ("O3")
+	#pragma GCC diagnostic warning "-Wall"
+#elif __clang__
+	#pragma clang optimize on
+	#pragma clang diagnostic warning "-Wall"
+#endif
 
 static VALUE getTick(VALUE obj) {
 	return INT2FIX(sysconf(_SC_CLK_TCK)) ;

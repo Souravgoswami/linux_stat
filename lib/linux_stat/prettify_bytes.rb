@@ -100,10 +100,7 @@ module LinuxStat
 
 			private
 			def pad_left(n, mantissa_length = 2)
-				n = n.round(mantissa_length)
-				exp, mant = n.to_s.split(?..freeze)
-				m = mant.length < mantissa_length ? mant + ?0.freeze * (mantissa_length - mant.length) : mant
-				exp + ?..freeze + m
+				sprintf("%.#{mantissa_length}f".freeze, n)
 			end
 		end
 	end

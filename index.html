@@ -40,9 +40,13 @@ layout: linuxstat
 	It can show you cpu stats and usages, memory stats and usages, swap stats and usages, battery usage, bios info,  kernel details, local ip, os details and parse os-release + lsb-release, etc.
 
 	<break></break>
+	It only works for Linux, and detecting the OS is upto the user of this gem.
+
 	<img src="https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/images/logo.jpg">
 
-	It only works for Linux, and detecting the OS is upto the user of this gem.
+	<a class="head" id="sloc" href="#sloc" content="Source LOC (no comments / blank lines are counted)"></a>
+	<img alt="Broken image! Please try refreshing this page" src="https://linuxstatloc.herokuapp.com/badge.svg" height="300px">
+
 
 	<a class="head" id="dependencies" href="#dependencies" content="Dependencies"></a>
 	<ul>
@@ -171,45 +175,50 @@ layout: linuxstat
 	</pre>
 	<h3>LinuxStat::CPU</h3>
 	<pre>
-	# File: cpu.rb | Line: 82
+	# File: cpu.rb | Line: 95
 	# Definition: def count
 	LinuxStat::CPU.count()
 	=> 4
 
-	# File: cpu.rb | Line: 101
+	# File: cpu.rb | Line: 116
 	# Definition: def cur_freq
 	LinuxStat::CPU.cur_freq()
-	=> [1946437, 1978943, 1995769, 1988158]
+	=> [2000294, 2000013, 2000346, 2000077]
 
-	# File: cpu.rb | Line: 116
+	# File: cpu.rb | Line: 131
 	# Definition: def max_freq
 	LinuxStat::CPU.max_freq()
 	=> [2000000, 2000000, 2000000, 2000000]
 
-	# File: cpu.rb | Line: 93
+	# File: cpu.rb | Line: 108
 	# Definition: def model
 	LinuxStat::CPU.model()
 	=> "Intel(R) Core(TM) i3-6006U CPU @ 2.00GHz"
 
-	# File: cpu.rb | Line: 21
-	# Definition: def stat(sleep = ticks_to_ms)
-	LinuxStat::CPU.stat(sleep)
-	=> {0=>25.0, 1=>0.0, 2=>0.0, 3=>0.0, 4=>0.0}
+	# File: cpu.rb | Line: 84
+	# Definition: def online
+	LinuxStat::CPU.online()
+	=> 4
 
-	# File: linuxstat.rb | Line: 11
-	# Definition: define_singleton_method(:total_usage) do
-	LinuxStat::CPU.total_usage()
-	=> nil
+	# File: cpu.rb | Line: 21
+	# Definition: def stat(sleep = ticks_to_ms_t5)
+	LinuxStat::CPU.stat(sleep)
+	=> {0=>10.0, 1=>16.67, 2=>0.0, 3=>0.0, 4=>0.0}
 
 	# File: cpu.rb | Line: 63
-	# Definition: def total_usage(sleep = ticks_to_ms)
+	# Definition: def total_usage(sleep = ticks_to_ms_t5)
+	LinuxStat::CPU.total_usage(sleep)
+	=> 5.26
+
+	# File: cpu.rb | Line: 63
+	# Definition: def total_usage(sleep = ticks_to_ms_t5)
 	LinuxStat::CPU.usage(sleep)
-	=> 25.0
+	=> 0.0
 
 	# File: cpu.rb | Line: 21
-	# Definition: def stat(sleep = ticks_to_ms)
+	# Definition: def stat(sleep = ticks_to_ms_t5)
 	LinuxStat::CPU.usages(sleep)
-	=> {0=>20.0, 1=>50.0, 2=>0.0, 3=>0.0, 4=>0.0}
+	=> {0=>15.0, 1=>20.0, 2=>20.0, 3=>0.0, 4=>20.0}
 
 	</pre>
 	<h3>LinuxStat::FS</h3>
@@ -672,11 +681,13 @@ layout: linuxstat
 	LinuxStat::Swap.used()
 	=> 1082880
 
-	</pre>
 	<h3>LinuxStat::Sysconf</h3>
 	<pre>
 	LinuxStat::Sysconf.child_max()
 	=> 2000000
+
+	LinuxStat::Sysconf.expr_nest_max()
+	=> 32
 
 	LinuxStat::Sysconf.get_euid()
 	=> 1000
@@ -696,17 +707,26 @@ layout: linuxstat
 	LinuxStat::Sysconf.hostname_max()
 	=> 64
 
+	LinuxStat::Sysconf.line_max()
+	=> 2048
+
 	LinuxStat::Sysconf.login_name_max()
 	=> 256
 
 	LinuxStat::Sysconf.open_max()
-	=> 8192
+	=> 1024
 
 	LinuxStat::Sysconf.pagesize()
 	=> 4096
 
 	LinuxStat::Sysconf.posix_version()
 	=> 200809
+
+	LinuxStat::Sysconf.processor_configured()
+	=> 4
+
+	LinuxStat::Sysconf.processor_online()
+	=> 4
 
 	LinuxStat::Sysconf.sc_clk_tck()
 	=> 100

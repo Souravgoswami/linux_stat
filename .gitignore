@@ -4,3 +4,9 @@ _site
 .jekyll-metadata
 vendor
 pkg
+
+# Ignore rails stuff
+node_modules
+config
+public
+tmp

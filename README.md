@@ -128,45 +128,50 @@ LinuxStat::Battery.technology()
 
 ### LinuxStat::CPU
 ```
-# File: cpu.rb | Line: 82
+# File: cpu.rb | Line: 95
 # Definition: def count
 LinuxStat::CPU.count()
 => 4
 
-# File: cpu.rb | Line: 101
+# File: cpu.rb | Line: 116
 # Definition: def cur_freq
 LinuxStat::CPU.cur_freq()
-=> [2000019, 2000008, 2000006, 1992439]
+=> [2000141, 2000023, 1999435, 2000128]
 
-# File: cpu.rb | Line: 116
+# File: cpu.rb | Line: 131
 # Definition: def max_freq
 LinuxStat::CPU.max_freq()
 => [2000000, 2000000, 2000000, 2000000]
 
-# File: cpu.rb | Line: 93
+# File: cpu.rb | Line: 108
 # Definition: def model
 LinuxStat::CPU.model()
 => "Intel(R) Core(TM) i3-6006U CPU @ 2.00GHz"
 
+# File: cpu.rb | Line: 84
+# Definition: def online
+LinuxStat::CPU.online()
+=> 4
+
 # File: cpu.rb | Line: 21
 # Definition: def stat(sleep = ticks_to_ms_t5)
 LinuxStat::CPU.stat(sleep)
-=> {0=>23.81, 1=>25.0, 2=>0.0, 3=>20.0, 4=>20.0}
+=> {0=>5.26, 1=>0.0, 2=>0.0, 3=>0.0, 4=>16.67}
 
 # File: cpu.rb | Line: 63
 # Definition: def total_usage(sleep = ticks_to_ms_t5)
 LinuxStat::CPU.total_usage(sleep)
-=> 11.11
+=> 15.0
 
 # File: cpu.rb | Line: 63
 # Definition: def total_usage(sleep = ticks_to_ms_t5)
 LinuxStat::CPU.usage(sleep)
-=> 15.0
+=> 10.0
 
 # File: cpu.rb | Line: 21
 # Definition: def stat(sleep = ticks_to_ms_t5)
 LinuxStat::CPU.usages(sleep)
-=> {0=>35.0, 1=>25.0, 2=>50.0, 3=>42.86, 4=>50.0}
+=> {0=>15.0, 1=>20.0, 2=>0.0, 3=>20.0, 4=>20.0}
 
 ```
 
@@ -652,6 +657,9 @@ LinuxStat::Swap.used()
 LinuxStat::Sysconf.child_max()
 => 2000000
 
+LinuxStat::Sysconf.expr_nest_max()
+=> 32
+
 LinuxStat::Sysconf.get_euid()
 => 1000
 
@@ -670,6 +678,9 @@ LinuxStat::Sysconf.get_user()
 LinuxStat::Sysconf.hostname_max()
 => 64
 
+LinuxStat::Sysconf.line_max()
+=> 2048
+
 LinuxStat::Sysconf.login_name_max()
 => 256
 
@@ -681,6 +692,12 @@ LinuxStat::Sysconf.pagesize()
 
 LinuxStat::Sysconf.posix_version()
 => 200809
+
+LinuxStat::Sysconf.processor_configured()
+=> 4
+
+LinuxStat::Sysconf.processor_online()
+=> 4
 
 LinuxStat::Sysconf.sc_clk_tck()
 => 100

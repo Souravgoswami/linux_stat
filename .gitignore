@@ -6,9 +6,16 @@
 /pkg/
 /spec/reports/
 /tmp/
+
 # Sometimes switching branches adds jekyll's gitignore stuff in master, ignore all of them
 _site
 .sass-cache
 .jekyll-cache
 .jekyll-metadata
 vendor
+
+# Ignore rails stuff
+node_modules
+config
+public
+tmp

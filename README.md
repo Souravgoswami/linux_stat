@@ -10,6 +10,14 @@ It only works for Linux, and detecting the OS is upto the user of this gem.
 
 ---
 
+## Source LOC (no comments / blank lines are counted):
+
+<div style="text-align:center">
+<img src="https://linuxstatloc.herokuapp.com/badge.svg" width="360px">
+</div>
+
+---
+
 ## Dependencies:
 + You need to have the C compiler installed to be able to compile the C extensions.
 On Arch Linux:

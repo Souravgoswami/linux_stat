@@ -45,6 +45,22 @@ static VALUE getPosixVersion(VALUE obj) {
 	return INT2FIX(sysconf(_SC_VERSION)) ;
 }
 
+static VALUE getLineMax(VALUE obj) {
+	return INT2FIX(sysconf(_SC_LINE_MAX)) ;
+}
+
+static VALUE getExprNestMax(VALUE obj) {
+	return INT2FIX(sysconf(_SC_EXPR_NEST_MAX)) ;
+}
+
+VALUE getProcessorConfigured(VALUE obj) {
+	return INT2FIX(sysconf(_SC_NPROCESSORS_CONF)) ;
+}
+
+VALUE getProcessorOnline(VALUE obj) {
+	return INT2FIX(sysconf(_SC_NPROCESSORS_ONLN)) ;
+}
+
 static VALUE getUser(VALUE obj) {
 	char *name = getlogin() ;
 	return name ? rb_str_new_cstr(name) : rb_str_new_cstr("") ;
@@ -75,6 +91,11 @@ void Init_sysconf() {
 	rb_define_module_function(_sysconf, "stream_max", getStreamMax, 0) ;
 	rb_define_module_function(_sysconf, "tty_name_max", getTTYNameMax, 0) ;
 	rb_define_module_function(_sysconf, "posix_version", getPosixVersion, 0) ;
+	rb_define_module_function(_sysconf, "line_max", getLineMax, 0) ;
+	rb_define_module_function(_sysconf, "expr_nest_max", getExprNestMax, 0) ;
+
+	rb_define_module_function(_sysconf, "processor_online", getProcessorOnline, 0) ;
+	rb_define_module_function(_sysconf, "processor_configured", getProcessorConfigured, 0) ;
 
 	rb_define_module_function(_sysconf, "get_uid", getUID, 0) ;
 	rb_define_module_function(_sysconf, "get_gid", getGID, 0) ;

@@ -25,7 +25,7 @@ module LinuxStat
 				sleep(sleep)
 				data2 = IO.readlines('/proc/stat').select! { |x| x[/^cpu\d*/] }.map! { |x| x.split.map!(&:to_f) }
 
-				# On devices like android, the core count can change anytime.
+				# On devices like android, the core count can change anytime (hotplugging).
 				# I had crashes on Termux.
 				# So better just count the min number of CPU and iterate over that
 				# If data.length is smaller than data2.length, we don't have enough data to compare.
@@ -76,12 +76,27 @@ module LinuxStat
 			end
 
 			##
-			# Returns the total number of CPU threads.
+			# Returns the total number of CPU threads online now.
+			#
+			# This value can change while a CPU is offline, due to kernel's hotplugging feature.
+			#
+			# If the information isn't available, it will return 0.
+			def online
+				# Let's rely on sysconf(_SC_NPROCESSORS_CONF), which is 100x faster than
+				# counting online cpu from /sys/devices/system/cpu
+
+				LinuxStat::Sysconf.processor_configured
+			end
+
+			##
+			# Returns the total number of CPU threads configured for the sysetm.
 			#
 			# If the information isn't available, it will return 0.
 			def count
-				# CPU count can change during the program runtime
-				cpuinfo.count { |x| x.start_with?('processor') }
+				# Let's rely on sysconf(_SC_NPROCESSORS_ONLN), which is 100x faster than running:
+				# IO.read('/sys/devices/system/cpu/online')[-2].to_i + 1
+
+				LinuxStat::Sysconf.processor_online
 			end
 
 			##

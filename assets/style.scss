@@ -367,7 +367,7 @@ body {
 			opacity: 0 ;
 		}
 
-		&:hover {
+		&:hover, &:target {
 			&::before {
 				opacity: 1 ;
 			}
@@ -411,7 +411,6 @@ body {
 
 		&.nowrap {
 			white-space: pre !important ;
-			// word-break: normal !important ;
 			overflow: auto ;
 		}
 

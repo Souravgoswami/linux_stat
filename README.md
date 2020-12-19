@@ -1,5 +1,7 @@
 # LinuxStat [![Ruby Gem](https://badge.fury.io/rb/linux_stat.svg)](https://rubygems.org/gems/linux_stat) ![Workflow Status](https://github.com/souravgoswami/linux_stat/workflows/LinuxStat%20Test/badge.svg)
 
+---
+
 ![logo](https://raw.githubusercontent.com/Souravgoswami/linux_stat/master/images/logo.jpg)
 
 For reading the eyecandy HTML version, visit [linux_stat](https://souravgoswami.github.io/linux_stat/).
@@ -8,13 +10,9 @@ LinuxStat lets you read status of a Linux system. It can show you cpu stats and 
 
 It only works for Linux, and detecting the OS is upto the user of this gem.
 
----
+Programming Languages Used:
 
-## Source LOC (no comments / blank lines are counted):
-
-<div style="text-align:center">
-<img src="https://linuxstatloc.herokuapp.com/badge.svg" width="360px">
-</div>
+<img src="https://linuxstatloc.herokuapp.com/badge.svg" width="240px">
 
 ---
 

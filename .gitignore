@@ -13,9 +13,3 @@ _site
 .jekyll-cache
 .jekyll-metadata
 vendor
-
-# Ignore rails stuff
-node_modules
-config
-public
-tmp

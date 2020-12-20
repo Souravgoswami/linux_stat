@@ -138,19 +138,35 @@ execute.sort.each do |c|
 		disp_meth.concat(arg ? "(#{param} = #{arg.inspect})" : "(#{param})")
 
 		time = Time.now
-		v = arg ? e.send(meth, arg) : e.send(meth)
+		ret = arg ? e.send(meth, arg) : e.send(meth)
 		time2 = Time.now
 		time = time2.-(time).*(1_000_000).round(3)
 
-		v = v.inspect
+		v = ret.inspect
 		dis = v.length > 253 ? v[0..250].strip + '...'.freeze : v
 
 		source = e.singleton_method(meth).source_location.to_a
-		src, src_meth = '', ''
+		src, src_meth, src_ret = '', '', ''
 
 		unless source.empty?
 			src << " File: #{File.split(source[0])[-1]} | Line: #{source[1]}\n"
 			src_meth << " Definition: #{IO.foreach(source[0]).first(source[1])[-1].strip}\n"
+
+			ret_frozen = ret.frozen?
+
+			src_ret << " Returns: " << (ret.frozen? ? 'Frozen ' : '') << case ret
+				when Array then 'Array | Empty Array'
+				when Complex then 'Complex | nil'
+				when Float then 'Float | nil'
+				when Hash then 'Hash | Empty Hash'
+				when Integer then 'Integer | nil'
+				when Rational then 'Rational | nil'
+				when String then "String | (Frozen) Empty String"
+				when Time then 'Time | nil'
+				when true then 'True | nil'
+				when false then 'True | nil'
+				when nil then 'True | nil'
+			end << ?\n.freeze
 
 			if MARKDOWN || HTML
 				src.prepend('#'.freeze)
@@ -158,6 +174,7 @@ execute.sort.each do |c|
 			else
 				src.prepend(?\u2B23.freeze)
 				src_meth.prepend(?\u2B23.freeze)
+				src_ret.prepend(?\u2B23.freeze)
 			end
 		end
 
@@ -167,7 +184,7 @@ execute.sort.each do |c|
 		elsif HTML
 			puts "#{src}#{src_meth}#{e}.#{disp_meth}\n=> #{dis}"
 		else
-			puts "\e[1m#{src.colourize}\e[1m#{src_meth.colourize(4)}\e[0m\e[1;38;2;80;80;255m#{e}.#{disp_meth}\e[0m\n=> #{dis}"
+			puts "\e[1m#{src.colourize}\e[1m#{src_meth.colourize(4)}\e[1m#{src_ret.colourize(5)}\e[0m\e[1;38;2;80;80;255m#{e}.#{disp_meth}\e[0m\n=> #{dis}"
 		end
 
 		puts( "(" +

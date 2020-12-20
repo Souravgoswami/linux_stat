@@ -267,10 +267,10 @@ module LinuxStat
 				idle2 = uptime - starttime2 - total_time2
 
 				totald = idle2.+(total_time2).-(idle1 + total_time)
-				cpu = totald.-(idle2 - idle1).fdiv(totald).*(100).round(2).abs./(cpu_count)
+				cpu_u = totald.-(idle2 - idle1).fdiv(totald).abs.*(100)./(cpu_count)
 
 				{
-					cpu_usage: cpu,
+					cpu_usage: cpu_u > 100 ? 100.0 : cpu_u,
 					threads: stat[19].to_i,
 					last_executed_cpu: stat[38].to_i
 				}
@@ -292,6 +292,10 @@ module LinuxStat
 			#    LinuxStat::ProcessInfo.cpu_usage
 			#
 			#    => 10.0
+			#
+			# 10.0 means it's using 10% of the total processing power of the system.
+			#
+			# The value is divided with the configured number of CPU and not online CPU.
 			#
 			# A value of 100.0 indicates it is using 100% processing power available to the system.
 			#
@@ -348,7 +352,9 @@ module LinuxStat
 				idle2 = uptime - starttime2 - total_time2
 
 				totald = idle2.+(total_time2).-(idle1 + total_time)
-				totald.-(idle2 - idle1).fdiv(totald).*(100).round(2).abs
+
+				u = totald.-(idle2 - idle1).fdiv(totald).abs.*(100)
+				u > 100 ? 100.0 : u
 			end
 
 			##

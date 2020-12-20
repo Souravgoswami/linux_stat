@@ -47,4 +47,5 @@ require "linux_stat/kernel"
 require 'linux_stat/user'
 require "linux_stat/process_info"
 
+# A short alias to LinuxStat
 LS = LinuxStat

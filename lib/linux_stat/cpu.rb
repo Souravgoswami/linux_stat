@@ -21,9 +21,9 @@ module LinuxStat
 			def stat(sleep = ticks_to_ms_t5)
 				return {} unless stat?
 
-				data = IO.readlines('/proc/stat').select! { |x| x[/^cpu\d*/] }.map! { |x| x.split.map!(&:to_f) }
+				data = IO.readlines('/proc/stat'.freeze).select { |x| x[/^cpu\d*/] }.map! { |x| x.split.map!(&:to_f) }
 				sleep(sleep)
-				data2 = IO.readlines('/proc/stat').select! { |x| x[/^cpu\d*/] }.map! { |x| x.split.map!(&:to_f) }
+				data2 = IO.readlines('/proc/stat'.freeze).select { |x| x[/^cpu\d*/] }.map! { |x| x.split.map!(&:to_f) }
 
 				# On devices like android, the core count can change anytime (hotplugging).
 				# I had crashes on Termux.
@@ -39,12 +39,10 @@ module LinuxStat
 					idle_then, idle_now  = idle + iowait, idle2 + iowait2
 					totald = idle_now.+(user2 + nice2 + sys2 + irq2 + softirq2 + steal2) - idle_then.+(user + nice + sys + irq + softirq + steal)
 
-					res = totald.-(idle_now - idle_then).fdiv(totald).*(100).round(2).abs
-					res = 0.0 if res.nan?
+					res = totald.-(idle_now - idle_then).fdiv(totald).abs.*(100)
+					res = res.nan? ? 0.0 : res > 100 ? 100.0 : res
 
-					h.merge!(
-						x => res
-					)
+					h.merge!( x => res )
 				end
 			end
 
@@ -72,7 +70,9 @@ module LinuxStat
 
 				idle_then, idle_now  = idle + iowait, idle2 + iowait2
 				totald = idle_now.+(user2 + nice2 + sys2 + irq2 + softirq2 + steal2) - idle_then.+(user + nice + sys + irq + softirq + steal)
-				totald.-(idle_now - idle_then).fdiv(totald).*(100).round(2).abs
+
+				u = totald.-(idle_now - idle_then).fdiv(totald).abs.*(100)
+				u > 100 ? 100.0 : u
 			end
 
 			##
@@ -110,33 +110,115 @@ module LinuxStat
 			end
 
 			##
-			# Returns an array with current core frequencies corresponding to the usages.
+			# Returns a Hash with current core frequencies corresponding to the CPUs.
 			#
-			# If the information isn't available, it will return an empty array.
+			# For example:
+			#    LinuxStat::CPU.cur_freq
+			#
+			#    => {"cpu0"=>1999990, "cpu1"=>2000042, "cpu2"=>2000016, "cpu3"=>2000088}
+			#
+			# If the information isn't available, it will return an empty Hash.
 			def cur_freq
-				@@cpu_freqs ||= Dir["/sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_cur_freq"]
-				@@cur_freqs_readable ||= @@cpu_freqs.all?(&File.method(:readable?))
+				@@cur_f ||= cpus.map { |x|
+					[File.split(x)[-1], File.join(x, 'cpufreq/scaling_cur_freq'.freeze)]
+				}
 
-				if @@cur_freqs_readable
-					@@cpu_freqs.map { |x| IO.read(x).to_i }
-				else
-					[]
-				end
+				h = {}
+				@@cur_f.each { |id, file|
+					h.merge!(id => IO.read(file).to_i) if File.readable?(file)
+				}
+
+				h
 			end
 
 			##
-			# Returns an array with max core frequencies corresponding to the usages.
+			# Returns a Hash with max core frequencies corresponding to the CPUs.
 			#
-			# If the information isn't available, it will return an empty array.
-			def max_freq
-				@@max_freqs ||= Dir["/sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_max_freq"]
-				@@max_freqs_readable ||= @@max_freqs.all?(&File.method(:readable?))
+			# For example:
+			#    LinuxStat::CPU.min_freq
+			#
+			#    => {"cpu0"=>2000000, "cpu1"=>2000000, "cpu2"=>2000000, "cpu3"=>2000000}
+			#
+			# If the information isn't available, it will return an empty Hash.
+			def min_freq
+				@@min_f ||= cpus.map { |x|
+					[File.split(x)[-1], File.join(x, 'cpufreq/scaling_min_freq'.freeze)]
+				}
 
-				if @@max_freqs_readable
-					@@max_freqs.map { |x| IO.read(x).to_i }
-				else
-					[]
-				end
+				h = {}
+				@@min_f.each { |id, file|
+					h.merge!(id => IO.read(file).to_i) if File.readable?(file)
+				}
+
+				h
+			end
+
+			##
+			# Returns a Hash with max core frequencies corresponding to the CPUs.
+			#
+			# For example:
+			#    LinuxStat::CPU.max_freq
+			#
+			#    => {"cpu0"=>2000000, "cpu1"=>2000000, "cpu2"=>2000000, "cpu3"=>2000000}
+			#
+			# If the information isn't available, it will return an empty Hash.
+			def max_freq
+				@@min_f ||= cpus.map { |x|
+					[File.split(x)[-1], File.join(x, 'cpufreq/scaling_max_freq'.freeze)]
+				}
+
+				h = {}
+				@@min_f.each { |id, file|
+					h.merge!(id => IO.read(file).to_i) if File.readable?(file)
+				}
+
+				h
+			end
+
+			##
+			# Returns the corresponding governor of each CPU.
+			#
+			# The return type is a Hash.
+			#
+			# For example:
+			#    LinuxStat::CPU.governor
+			#
+			#    => {"cpu0"=>"powersave", "cpu1"=>"powersave", "cpu2"=>"performance", "cpu3"=>"performance"}
+			#
+			# If the information isn't available, it will return an empty Hash.
+			def governor
+				@@scaling_g ||= cpus.map { |x|
+					[File.split(x)[-1], File.join(x, 'cpufreq/scaling_governor'.freeze)]
+				}
+
+				h = {}
+				@@scaling_g.each { |id, file|
+					h.merge!(id => IO.read(file).tap(&:strip!)) if File.readable?(file)
+				}
+
+				h
+			end
+
+			##
+			# Returns an array of governors for each CPU as a Hash.
+			#
+			# For example:
+			#    LinuxStat::CPU.available_governors
+			#
+			#    => {"cpu0"=>["performance", "powersave"], "cpu1"=>["performance", "powersave"], "cpu2"=>["performance", "powersave"], "cpu3"=>["performance", "powersave"]}
+			#
+			# If the information isn't available, it will return an empty Hash.
+			def available_governors
+				@@scaling_av_g ||= cpus.map { |x|
+					[File.split(x)[-1], File.join(x, 'cpufreq/scaling_available_governors'.freeze)]
+				}
+
+				h = {}
+				@@scaling_av_g.each { |id, file|
+					h.merge!(id => IO.read(file).split.each(&:strip!)) if File.readable?(file)
+				}
+
+				h
 			end
 
 			alias usages stat
@@ -144,7 +226,7 @@ module LinuxStat
 
 			private
 			def cpuinfo
-				File.readable?('/proc/cpuinfo') ? IO.readlines('/proc/cpuinfo') : []
+				File.readable?('/proc/cpuinfo') ? IO.readlines('/proc/cpuinfo').freeze : [].freeze
 			end
 
 			def stat?
@@ -156,6 +238,10 @@ module LinuxStat
 			# If the ticks is 100, it will return 0.05
 			def ticks_to_ms_t5
 				@@ms_t5 ||= 1.0 / LinuxStat::Sysconf.sc_clk_tck * 5
+			end
+
+			def cpus
+				@@all_cpu = Dir["/sys/devices/system/cpu/cpu[0-9]*/"].sort!.freeze
 			end
 		end
 	end

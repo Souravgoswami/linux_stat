@@ -267,7 +267,7 @@ module LinuxStat
 				idle2 = uptime - starttime2 - total_time2
 
 				totald = idle2.+(total_time2).-(idle1 + total_time)
-				cpu = totald.-(idle2 - idle1).fdiv(totald).*(100).round(2).abs./(LinuxStat::CPU.count)
+				cpu = totald.-(idle2 - idle1).fdiv(totald).*(100).round(2).abs./(cpu_count)
 
 				{
 					cpu_usage: cpu,
@@ -299,29 +299,8 @@ module LinuxStat
 			#
 			# This method is more efficient than running LinuxStat::ProcessInfo.cpu_stat()
 			def cpu_usage(pid: $$, sleep: ticks_to_ms_t5)
-				file = "/proc/#{pid}/stat"
-				return nil unless File.readable?(file)
-
-				ticks = get_ticks
-
-				utime, stime, starttime = IO.read(file)
-					.split.values_at(13, 14, 21).map(&:to_f)
-				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
-
-				total_time = utime + stime
-				idle1 = uptime - starttime - total_time
-
-				sleep(sleep)
-
-				utime2, stime2, starttime2 = IO.read(file)
-					.split.values_at(13, 14, 21).map(&:to_f)
-				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
-
-				total_time2 = utime2 + stime2
-				idle2 = uptime - starttime2 - total_time2
-
-				totald = idle2.+(total_time2).-(idle1 + total_time)
-				totald.-(idle2 - idle1).fdiv(totald).*(100).round(2).abs./(LinuxStat::CPU.count)
+				u = thread_usage(pid: pid, sleep: sleep)
+				u ? u./(cpu_count) : u
 			end
 
 			##
@@ -606,6 +585,10 @@ module LinuxStat
 
 			def pagesize
 				@@pagesize ||= LinuxStat::Sysconf.pagesize
+			end
+
+			def cpu_count
+				@@nprocessors_conf = LinuxStat::CPU.count
 			end
 		end
 	end

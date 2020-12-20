@@ -6,7 +6,7 @@ module LinuxStat
 			#
 			# The return type is an Array of Integers.
 			def list
-				Dir['/proc/*'].select! { |x|
+				Dir['/proc/*'].select { |x|
 					pid = File.split(x)[1]
 					pid.to_i.to_s == pid
 				}.map! { |x| File.split(x)[-1].to_i }

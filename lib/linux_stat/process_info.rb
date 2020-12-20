@@ -246,18 +246,20 @@ module LinuxStat
 			# The :last_executed_cpu also returns an Integer indicating the last executed cpu of the process.
 			def cpu_stat(pid: $$, sleep: ticks_to_ms_t5)
 				file = "/proc/#{pid}/stat"
-				return {} unless File.readable?(file)
-
 				ticks = get_ticks
 
+				return {} unless File.readable?(file)
 				utime, stime, starttime = IO.read(file)
 					.split.values_at(13, 14, 21).map(&:to_f)
+
 				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
 
 				total_time = utime + stime
 				idle1 = uptime - starttime - total_time
 
 				sleep(sleep)
+
+				return {} unless File.readable?(file)
 				stat = IO.read(file).split
 
 				utime2, stime2, starttime2 = stat.values_at(13, 14, 21).map(&:to_f)
@@ -304,12 +306,12 @@ module LinuxStat
 			# This method is more efficient than running LinuxStat::ProcessInfo.cpu_stat()
 			def cpu_usage(pid: $$, sleep: ticks_to_ms_t5)
 				file = "/proc/#{pid}/stat"
-				return nil unless File.readable?(file)
-
 				ticks = get_ticks
 
+				return nil unless File.readable?(file)
 				utime, stime, starttime = IO.read(file)
 					.split.values_at(13, 14, 21).map(&:to_f)
+
 				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
 
 				total_time = utime + stime
@@ -317,8 +319,10 @@ module LinuxStat
 
 				sleep(sleep)
 
+				return nil unless File.readable?(file)
 				utime2, stime2, starttime2 = IO.read(file)
 					.split.values_at(13, 14, 21).map(&:to_f)
+
 				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
 
 				total_time2 = utime2 + stime2
@@ -354,12 +358,12 @@ module LinuxStat
 			# But if the info isn't available, it will return nil.
 			def thread_usage(pid: $$, sleep: ticks_to_ms_t5)
 				file = "/proc/#{pid}/stat"
-				return nil unless File.readable?(file)
-
 				ticks = get_ticks
 
+				return nil unless File.readable?(file)
 				utime, stime, starttime = IO.read(file)
 					.split.values_at(13, 14, 21).map(&:to_f)
+
 				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
 
 				total_time = utime + stime
@@ -367,8 +371,10 @@ module LinuxStat
 
 				sleep(sleep)
 
+				return nil unless File.readable?(file)
 				utime2, stime2, starttime2 = IO.read(file)
 					.split.values_at(13, 14, 21).map(&:to_f)
+
 				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
 
 				total_time2 = utime2 + stime2

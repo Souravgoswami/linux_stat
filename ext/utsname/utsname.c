@@ -1,12 +1,14 @@
 #include <sys/utsname.h>
 #include "ruby.h"
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER)
 	#pragma GCC optimize ("O3")
 	#pragma GCC diagnostic warning "-Wall"
-#elif __clang__
+#elif defined(__clang__)
 	#pragma clang optimize on
 	#pragma clang diagnostic warning "-Wall"
+#elif defined(__INTEL_COMPILER)
+	#pragma intel optimization_level 3
 #endif
 
 static struct utsname buf ;

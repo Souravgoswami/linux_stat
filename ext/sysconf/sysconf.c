@@ -1,12 +1,14 @@
 #include <unistd.h>
 #include "ruby.h"
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER)
 	#pragma GCC optimize ("O3")
 	#pragma GCC diagnostic warning "-Wall"
-#elif __clang__
+#elif defined(__clang__)
 	#pragma clang optimize on
 	#pragma clang diagnostic warning "-Wall"
+#elif defined(__INTEL_COMPILER)
+	#pragma intel optimization_level 3
 #endif
 
 static VALUE getTick(VALUE obj) {
@@ -53,11 +55,11 @@ static VALUE getExprNestMax(VALUE obj) {
 	return INT2FIX(sysconf(_SC_EXPR_NEST_MAX)) ;
 }
 
-VALUE getProcessorConfigured(VALUE obj) {
+static VALUE getProcessorConfigured(VALUE obj) {
 	return INT2FIX(sysconf(_SC_NPROCESSORS_CONF)) ;
 }
 
-VALUE getProcessorOnline(VALUE obj) {
+static VALUE getProcessorOnline(VALUE obj) {
 	return INT2FIX(sysconf(_SC_NPROCESSORS_ONLN)) ;
 }
 

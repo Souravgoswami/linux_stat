@@ -2,7 +2,7 @@ module LinuxStat
 	module Filesystem
 		class << self
 			##
-			# = stat(fs = '/')
+			# = stat(fs = '.')
 			#
 			# Where fs is the directory of the file system (like / or /tmp/ or /run/media/thumbdrive).
 			#
@@ -16,7 +16,7 @@ module LinuxStat
 			#    {:total=>119981191168, :free=>43155574784, :used=>76825616384, :available=>43155574784}
 			#
 			# If the stat can't be acquired, this method will return an empty Hash.
-			def stat(fs = ?/.freeze)
+			def stat(fs = ?..freeze)
 				s = stat_raw(fs)
 				return {} if s.empty?
 				s.default = 0
@@ -29,14 +29,14 @@ module LinuxStat
 			end
 
 			##
-			# = total(fs = '/')
+			# = total(fs = '.')
 			#
 			# Where fs is the directory of the file system (like / or /tmp/ or /run/media/thumbdrive).
 			#
 			# It returns the total size of a given disk in bytes.
 			#
 			# If the stat can't be acquired, this method will return nil.
-			def total(fs = ?/.freeze)
+			def total(fs = ?..freeze)
 				s = stat_raw(fs)
 				return nil if s.empty?
 				s.default = 0
@@ -44,7 +44,7 @@ module LinuxStat
 			end
 
 			##
-			# = free(fs = '/')
+			# = free(fs = '.')
 			#
 			# Where fs is the directory of the file system (like / or /tmp/ or /run/media/thumbdrive).
 			#
@@ -55,7 +55,7 @@ module LinuxStat
 			# Free returns the size of free blocks.
 			#
 			# If the stat can't be acquired, this method will return an empty Hash.
-			def free(fs = ?/.freeze)
+			def free(fs = ?..freeze)
 				s = stat_raw(fs)
 				return nil if s.empty?
 				s.default = 0
@@ -63,14 +63,14 @@ module LinuxStat
 			end
 
 			##
-			# = used(fs = '/')
+			# = used(fs = '.')
 			#
 			# Where fs is the directory of the file system (like / or /tmp/ or /run/media/thumbdrive).
 			#
 			# It returns the used space of a given disk in bytes.
 			#
 			# If the stat can't be acquired, this method will return nil.
-			def used(fs = ?/.freeze)
+			def used(fs = ?..freeze)
 				s = stat_raw(fs)
 				return nil if s.empty?
 				s.default = 0
@@ -78,7 +78,7 @@ module LinuxStat
 			end
 
 			##
-			# = available(fs = '/')
+			# = available(fs = '.')
 			#
 			# Where fs is the directory of the file system (like / or /tmp/ or /run/media/thumbdrive).
 			#
@@ -89,7 +89,7 @@ module LinuxStat
 			# Available returns the size of free blocks for unpriviledged users.
 			#
 			# If the stat can't be acquired, this method will return an empty Hash.
-			def available(fs = ?/.freeze)
+			def available(fs = ?..freeze)
 				s = stat_raw(fs)
 				return nil if s.empty?
 				s.default = 0
@@ -97,7 +97,7 @@ module LinuxStat
 			end
 
 			##
-			# = stat_raw(fs = '/')
+			# = stat_raw(fs = '.')
 			#
 			# Where fs is the directory of the file system (like / or /tmp/ or /run/media/thumbdrive).
 			#
@@ -105,7 +105,7 @@ module LinuxStat
 			#    {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>10535967, :block_avail_unpriv=>10535967, :inodes=>58612160, :free_inodes=>56718550, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
 			#
 			# If the stat can't be acquired, this method will return an empty Hash.
-			def stat_raw(fs = ?/.freeze)
+			def stat_raw(fs = ?..freeze)
 				LinuxStat::FS.stat(fs)
 			end
 		end

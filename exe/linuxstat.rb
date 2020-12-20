@@ -76,8 +76,8 @@ MARKDOWN, HTML = hash[:markdown], hash[:html]
 
 # Print time each method takes unless --no-time or -nt option is passed
 PRINT_TIME = (MARKDOWN || HTML) ? false : !ARGV.any? { |x| x[/^\-\-no-time$/] || x[/^\-nt$/] }
-
-%w(--markdown -md --no-time -nt --html -html).each(&ARGV.method(:delete))
+PRINT_TYPE = ARGV.any? { |x| x[/^\-(\-show\-type|t)$/] }
+%w(--markdown -md --no-time -nt --html -html --show-type -t).each(&ARGV.method(:delete))
 
 # Run only desired classes / modules
 constants = LinuxStat.constants
@@ -154,33 +154,34 @@ execute.sort.each do |c|
 			src_meth << " Definition:\t#{IO.foreach(source[0]).first(source[1])[-1].strip}\n"
 
 			src_ret << " Returns:\t" << case ret
-				when Array then 'Avail: Array | UnAvail: Empty Array'
-				when Complex then 'Avail: Complex | UnAvail: nil'
-				when Float then 'Avail: Float | UnAvail: nil'
-				when Hash then 'Avail: Hash | UnAvail: Empty Hash'
-				when Integer then 'Avail: Integer | UnAvail: nil'
-				when Rational then 'Avail: Rational | UnAvail: nil'
-				when String then "Avail: String | UnAvail: (Frozen) Empty String"
-				when Time then 'Avail: Time | UnAvail: nil'
-				when true then 'Avail: True | UnAvail: nil'
-				when false then 'Avail: True | UnAvail: nil'
-				when nil then 'Avail: True | UnAvail: nil'
-			end << ?\n.freeze
+				when Array then 'Array | Empty Array'
+				when Complex then 'Complex | nil'
+				when Float then 'Float | nil'
+				when Hash then 'Hash | Empty Hash'
+				when Integer then 'Integer | nil'
+				when Rational then 'Rational | nil'
+				when String then "String | (Frozen) Empty String"
+				when Time then 'Time | nil'
+				when true, false then 'True or False | nil'
+				when nil then 'nil'
+				else ''
+			end << ?\n.freeze if PRINT_TYPE
 
 			if MARKDOWN || HTML
 				src.prepend('#'.freeze)
 				src_meth.prepend('#'.freeze)
+				src_ret.prepend(?#.freeze) if PRINT_TYPE
 			else
 				src.prepend(HEXAGONS.rotate![0].freeze)
 				src_meth.prepend(HEXAGONS.rotate![0].freeze)
-				src_ret.prepend(HEXAGONS.rotate![0].freeze)
+				src_ret.prepend(HEXAGONS.rotate![0].freeze) if PRINT_TYPE
 			end
 		end
 
 		if MARKDOWN
-			puts "#{src}#{src_meth}#{e}.#{disp_meth}\n=> #{dis}"
+			puts "#{src}#{src_meth}#{src_ret}#{e}.#{disp_meth}\n=> #{dis}"
 		elsif HTML
-			puts "#{src}#{src_meth}#{e}.#{disp_meth}\n=> #{dis}"
+			puts "#{src}#{src_meth}#{src_ret}#{e}.#{disp_meth}\n=> #{dis}"
 		else
 			puts "\e[1m#{src.colourize}\e[1m#{src_meth.colourize(6)}\e[1m#{src_ret.colourize(1)}\e[0m\e[1;38;2;80;80;255m#{e}.#{disp_meth}\e[0m\n=> #{dis}"
 		end

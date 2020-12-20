@@ -12,7 +12,7 @@ It only works for Linux, and detecting the OS is upto the user of this gem.
 
 Programming Languages Used:
 
-<img src="https://linuxstatloc.herokuapp.com/badge.svg" width="240px">
+<img src="https://linuxstatloc.herokuapp.com/badge.svg" width="260px">
 
 ---
 
@@ -1228,6 +1228,16 @@ Note that the CPU count can differ due to hotplugging feature. So if you see the
 Issues regarding running LinuxStat on termux are also welcomed.
 
 ---
+
+## Cloning this Repo
+Users of this gem are requested to follow the above installation step to install this gem.
+
+This repo is only for development purpose. It has C extensions that could do worst to your stable app.
+Cloning, compiling code from this repo for a production app may seg fault and crash the whole app directly.
+
+Gems on Rubygems are released after various tests.
+
+So just install the gem, don't clone this repo just because the version is bumped here with new features, and the gem is not out on Rubygems.org.
 
 ## Development
 After checking out the repo, compile and install this gem onto your local machine with `bundle exec rake install`

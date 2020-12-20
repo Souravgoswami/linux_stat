@@ -14,8 +14,10 @@ module LinuxStat
 			#
 			# And the consecutive ones are the real core usages.
 			#
-			# On a system with 4 threads, the output will be like::
-			#    {0=>84.38, 1=>100.0, 2=>50.0, 3=>87.5, 4=>87.5}
+			# For example, on a system with 4 threads:
+			#    LinuxStat::CPU.stat
+			#
+			#    => {0=>84.38, 1=>100.0, 2=>50.0, 3=>87.5, 4=>87.5}
 			#
 			# If the information is not available, it will return an empty Hash
 			def stat(sleep = ticks_to_ms_t5)
@@ -40,7 +42,7 @@ module LinuxStat
 					totald = idle_now.+(user2 + nice2 + sys2 + irq2 + softirq2 + steal2) - idle_then.+(user + nice + sys + irq + softirq + steal)
 
 					res = totald.-(idle_now - idle_then).fdiv(totald).abs.*(100)
-					res = res.nan? ? 0.0 : res > 100 ? 100.0 : res
+					res = res.nan? ? 0.0 : res > 100 ? 100.0 : res.round(2)
 
 					h.merge!( x => res )
 				end
@@ -72,7 +74,7 @@ module LinuxStat
 				totald = idle_now.+(user2 + nice2 + sys2 + irq2 + softirq2 + steal2) - idle_then.+(user + nice + sys + irq + softirq + steal)
 
 				u = totald.-(idle_now - idle_then).fdiv(totald).abs.*(100)
-				u > 100 ? 100.0 : u
+				u > 100 ? 100.0 : u.round(2)
 			end
 
 			##

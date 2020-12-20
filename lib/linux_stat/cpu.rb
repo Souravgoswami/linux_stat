@@ -85,7 +85,7 @@ module LinuxStat
 				# Let's rely on sysconf(_SC_NPROCESSORS_CONF), which is 100x faster than
 				# counting online cpu from /sys/devices/system/cpu
 
-				LinuxStat::Sysconf.processor_configured
+				LinuxStat::Sysconf.processor_online
 			end
 
 			##
@@ -96,7 +96,7 @@ module LinuxStat
 				# Let's rely on sysconf(_SC_NPROCESSORS_ONLN), which is 100x faster than running:
 				# IO.read('/sys/devices/system/cpu/online')[-2].to_i + 1
 
-				LinuxStat::Sysconf.processor_online
+				LinuxStat::Sysconf.processor_configured
 			end
 
 			##

@@ -270,7 +270,7 @@ module LinuxStat
 				cpu_u = totald.-(idle2 - idle1).fdiv(totald).abs.*(100)./(cpu_count)
 
 				{
-					cpu_usage: cpu_u > 100 ? 100.0 : cpu_u,
+					cpu_usage: cpu_u > 100 ? 100.0 : cpu_u.round(2),
 					threads: stat[19].to_i,
 					last_executed_cpu: stat[38].to_i
 				}
@@ -303,8 +303,31 @@ module LinuxStat
 			#
 			# This method is more efficient than running LinuxStat::ProcessInfo.cpu_stat()
 			def cpu_usage(pid: $$, sleep: ticks_to_ms_t5)
-				u = thread_usage(pid: pid, sleep: sleep)
-				u ? u./(cpu_count) : u
+				file = "/proc/#{pid}/stat"
+				return nil unless File.readable?(file)
+
+				ticks = get_ticks
+
+				utime, stime, starttime = IO.read(file)
+					.split.values_at(13, 14, 21).map(&:to_f)
+				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
+
+				total_time = utime + stime
+				idle1 = uptime - starttime - total_time
+
+				sleep(sleep)
+
+				utime2, stime2, starttime2 = IO.read(file)
+					.split.values_at(13, 14, 21).map(&:to_f)
+				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
+
+				total_time2 = utime2 + stime2
+				idle2 = uptime - starttime2 - total_time2
+
+				totald = idle2.+(total_time2).-(idle1 + total_time)
+
+				u = totald.-(idle2 - idle1).fdiv(totald).abs.*(100)./(cpu_count)
+				u > 100 ? 100.0 : u.round(2)
 			end
 
 			##
@@ -354,7 +377,9 @@ module LinuxStat
 				totald = idle2.+(total_time2).-(idle1 + total_time)
 
 				u = totald.-(idle2 - idle1).fdiv(totald).abs.*(100)
-				u > 100 ? 100.0 : u
+
+				cpu_count_t100 = cpu_count * 100
+				u > cpu_count_t100 ? cpu_count_t100 : u.round(2)
 			end
 
 			##
@@ -594,7 +619,7 @@ module LinuxStat
 			end
 
 			def cpu_count
-				@@nprocessors_conf = LinuxStat::CPU.count
+				@@nprocessors_conf ||= LinuxStat::CPU.count
 			end
 		end
 	end

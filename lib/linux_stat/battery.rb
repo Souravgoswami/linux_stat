@@ -98,12 +98,25 @@ module LinuxStat
 			#
 			# If the battery is not present or the information is not available, it will return nil.
 			def charge
-				return nil unless charge_now_readable?
-				charge_now = IO.read(File.join(PATH, 'charge_now')).to_i
-				charge_full = IO.read(File.join(PATH, 'charge_full')).to_i
+				@@charge_now_file ||= File.join(PATH, 'charge_now')
+				@@charge_full_file ||= File.join(PATH, 'charge_full')
+
+				@@charge_now_readable ||= File.readable?(@@charge_now_file) && File.readable?(@@charge_full_file)
+				return nil unless @@charge_now_readable
+
+				charge_now = IO.read(@@charge_now_file).to_i
+				charge_full = IO.read(@@charge_full_file).to_i
 
 				percentage = charge_now.*(100).fdiv(charge_full)
-				percentage = percentage > 100 ? 100.0 : percentage < 0 ? 0.0 : percentage
+				percentage > 100 ? 100.0 : percentage < 0 ? 0.0 : percentage
+			end
+
+			def voltage_now
+				@@voltage_file ||= File.join(PATH, 'voltage_now'.freeze)
+				@@voltage_readable ||= File.readable?(@@voltage_file)
+				return nil unless @@voltage_readable
+
+				IO.read(@@voltage_file, 16).to_f.fdiv(1000000)
 			end
 
 			private
@@ -121,11 +134,6 @@ module LinuxStat
 
 			def status_readable?
 				@@status_readable ||= File.readable?(File.join(PATH, 'status'))
-			end
-
-			def charge_now_readable?
-				@@charge_now_readable ||= File.readable?(File.join(PATH, 'charge_now')) &&
-					File.readable?(File.join(PATH, 'charge_full'))
 			end
 		end
 	end

@@ -117,7 +117,7 @@ module LinuxStat
 				val = IO.readlines('/proc/swaps').drop(1)
 				return [[], []] if val.empty?
 
-				val.map { |x|
+				val.map! { |x|
 					x.strip.split.values_at(2, 3).map!(&:to_i)
 				}.transpose
 			end

@@ -121,7 +121,7 @@ module LinuxStat
 					hour: h,
 					minute: m,
 					second: s
-				}
+				}.freeze
 			end
 
 			private
@@ -143,7 +143,7 @@ module LinuxStat
 			end
 
 			def uptime_readable?
-				@@uptime_readable = File.readable?('/proc/uptime')
+				@@uptime_readable ||= File.readable?('/proc/uptime')
 			end
 		end
 	end

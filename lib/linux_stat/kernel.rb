@@ -185,7 +185,7 @@ module LinuxStat
 
 			private
 			def splitted
-				@@string_splitted ||= string.split
+				@@string_splitted ||= string.split.freeze
 			end
 		end
 	end

@@ -87,6 +87,7 @@ execute = constants.map(&:downcase).map.with_index { |x, i|
 }.compact
 
 execute.replace(constants) if execute.empty?
+HEXAGONS = %W(\u2b22 \u2b23 \u2B53 \u2B1F)
 
 execute.sort.each do |c|
 	e = eval("LinuxStat::#{c}")
@@ -149,42 +150,39 @@ execute.sort.each do |c|
 		src, src_meth, src_ret = '', '', ''
 
 		unless source.empty?
-			src << " File: #{File.split(source[0])[-1]} | Line: #{source[1]}\n"
-			src_meth << " Definition: #{IO.foreach(source[0]).first(source[1])[-1].strip}\n"
+			src << " File:\t\t#{File.split(source[0])[-1]} | Line: #{source[1]}\n"
+			src_meth << " Definition:\t#{IO.foreach(source[0]).first(source[1])[-1].strip}\n"
 
-			ret_frozen = ret.frozen?
-
-			src_ret << " Returns: " << (ret.frozen? ? 'Frozen ' : '') << case ret
-				when Array then 'Array | Empty Array'
-				when Complex then 'Complex | nil'
-				when Float then 'Float | nil'
-				when Hash then 'Hash | Empty Hash'
-				when Integer then 'Integer | nil'
-				when Rational then 'Rational | nil'
-				when String then "String | (Frozen) Empty String"
-				when Time then 'Time | nil'
-				when true then 'True | nil'
-				when false then 'True | nil'
-				when nil then 'True | nil'
+			src_ret << " Returns:\t" << case ret
+				when Array then 'Avail: Array | UnAvail: Empty Array'
+				when Complex then 'Avail: Complex | UnAvail: nil'
+				when Float then 'Avail: Float | UnAvail: nil'
+				when Hash then 'Avail: Hash | UnAvail: Empty Hash'
+				when Integer then 'Avail: Integer | UnAvail: nil'
+				when Rational then 'Avail: Rational | UnAvail: nil'
+				when String then "Avail: String | UnAvail: (Frozen) Empty String"
+				when Time then 'Avail: Time | UnAvail: nil'
+				when true then 'Avail: True | UnAvail: nil'
+				when false then 'Avail: True | UnAvail: nil'
+				when nil then 'Avail: True | UnAvail: nil'
 			end << ?\n.freeze
 
 			if MARKDOWN || HTML
 				src.prepend('#'.freeze)
 				src_meth.prepend('#'.freeze)
 			else
-				src.prepend(?\u2B23.freeze)
-				src_meth.prepend(?\u2B23.freeze)
-				src_ret.prepend(?\u2B23.freeze)
+				src.prepend(HEXAGONS.rotate![0].freeze)
+				src_meth.prepend(HEXAGONS.rotate![0].freeze)
+				src_ret.prepend(HEXAGONS.rotate![0].freeze)
 			end
 		end
-
 
 		if MARKDOWN
 			puts "#{src}#{src_meth}#{e}.#{disp_meth}\n=> #{dis}"
 		elsif HTML
 			puts "#{src}#{src_meth}#{e}.#{disp_meth}\n=> #{dis}"
 		else
-			puts "\e[1m#{src.colourize}\e[1m#{src_meth.colourize(4)}\e[1m#{src_ret.colourize(5)}\e[0m\e[1;38;2;80;80;255m#{e}.#{disp_meth}\e[0m\n=> #{dis}"
+			puts "\e[1m#{src.colourize}\e[1m#{src_meth.colourize(6)}\e[1m#{src_ret.colourize(1)}\e[0m\e[1;38;2;80;80;255m#{e}.#{disp_meth}\e[0m\n=> #{dis}"
 		end
 
 		puts( "(" +

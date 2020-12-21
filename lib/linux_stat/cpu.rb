@@ -78,27 +78,47 @@ module LinuxStat
 			end
 
 			##
-			# Returns the total number of CPU threads online now.
+			# Returns the total number of CPU online in the sysetm.
 			#
-			# This value can change while a CPU is offline, due to kernel's hotplugging feature.
+			# It opens /sys/devices/system/cpu/offline and
+			# performs various job to get one Ruby array.
 			#
-			# If the information isn't available, it will return 0.
+			# If the information isn't available, it will return an empty Array.
 			def online
-				# Let's rely on sysconf(_SC_NPROCESSORS_CONF), which is 100x faster than
-				# counting online cpu from /sys/devices/system/cpu
+				@@online_file ||= '/sys/devices/system/cpu/online'.freeze
+				@@online_readable ||= File.readable?(@@online_file)
+				return [] unless @@online_readable
 
-				LinuxStat::Sysconf.processor_online
+				ret = []
+				IO.read(@@online_file).split(?,.freeze).each { |x|
+					x.strip!
+					c = x.split(?-.freeze).map(&:to_i)
+					ret.concat(c.length == 2 ? Range.new(*c).to_a : c)
+				}
+
+				ret
 			end
 
 			##
-			# Returns the total number of CPU threads configured for the sysetm.
+			# Returns the total number of CPU offline in the sysetm.
 			#
-			# If the information isn't available, it will return 0.
-			def count
-				# Let's rely on sysconf(_SC_NPROCESSORS_ONLN), which is 100x faster than running:
-				# IO.read('/sys/devices/system/cpu/online')[-2].to_i + 1
+			# It opens /sys/devices/system/cpu/offline and
+			# performs various job to get one Ruby array.
+			#
+			# If the information isn't available, it will return an empty Array.
+			def offline
+				@@offline_file ||= '/sys/devices/system/cpu/offline'.freeze
+				@@offline_readable ||= File.readable?(@@offline_file)
+				return [] unless @@offline_readable
 
-				LinuxStat::Sysconf.processor_configured
+				ret = []
+				IO.read(@@offline_file).split(?,.freeze).each { |x|
+					x.strip!
+					c = x.split(?-.freeze).map(&:to_i)
+					ret.concat(c.length == 2 ? Range.new(*c).to_a : c)
+				}
+
+				ret
 			end
 
 			##

@@ -90,7 +90,38 @@ module LinuxStat
 			##
 			# Returns the total number of CPU online in the sysetm.
 			#
+			# It first reads /proc/stat, if that fails, it will
+			# read /sys/devices/system/cpu/online,
+			# if that fails it will open /proc/cpuinfo.
+			# If neither of the procedures work, it will get the
+			# LinuxStat::Sysconf.processor_online
+			#
 			# It opens /sys/devices/system/cpu/offline and
+			# performs various job to get one Ruby array.
+			#
+			# If the information isn't available, it will return an empty Array.
+			def count_online
+				@@cpuinfo_file ||= '/proc/cpuinfo'.freeze
+				@@cpuinfo_readable ||= File.readable?(@@cpuinfo_file)
+
+				@@stat_file ||= '/proc/stat'
+
+				if stat?
+					onln_count = IO.readlines(@@stat_file).count { |x| x.strip[/\Acpu.*\d.*\z/] }
+					onln_count == 0 ? 0 : onln_count - 1
+				elsif (get_online = online)
+					get_online.length
+				elsif @@cpuinfo_readable
+					IO.readlines(@@cpuinfo_file).count { |x| x.strip[/\Aprocessor.*\d*\z/] }
+				else
+					LinuxStat::Sysconf.processor_online
+				end
+			end
+
+			##
+			# Returns the total number of CPU online in the sysetm.
+			#
+			# It opens /sys/devices/system/cpu/onfline and
 			# performs various job to get one Ruby array.
 			#
 			# If the information isn't available, it will return an empty Array.

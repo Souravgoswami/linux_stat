@@ -78,6 +78,16 @@ module LinuxStat
 			end
 
 			##
+			# Returns the total number of CPU available for the sysetm.
+			#
+			# It returns an Integer.
+			#
+			# If the information isn't available, it will return an empty Array.
+			def count
+				@@cpu_count ||= LinuxStat::Sysconf.processor_configured
+			end
+
+			##
 			# Returns the total number of CPU online in the sysetm.
 			#
 			# It opens /sys/devices/system/cpu/offline and

@@ -555,7 +555,9 @@ module LinuxStat
 			# For example:
 			#    LinuxStat::ProcessInfo.running_time 14183
 			#
-			#    => 1947.619999999999
+			#    => 1947.61
+			#
+			# It always rounds the float number upto 2 decimal places
 			#
 			# If the info isn't available or the argument passed doesn't exist as a process ID, it will return nil.
 			def running_time(pid = $$)
@@ -565,7 +567,8 @@ module LinuxStat
 				@@u_readable ||= File.readable?(uptime)
 				return nil unless @@u_readable && File.readable?(stat_file)
 
-				IO.foreach(uptime, ' '.freeze).next.to_f - (IO.read(stat_file).split[21].to_i / get_ticks)
+				IO.foreach(uptime, ' '.freeze).next.to_f
+					.-(IO.read(stat_file).split[21].to_f / get_ticks).round(2)
 			end
 
 			##

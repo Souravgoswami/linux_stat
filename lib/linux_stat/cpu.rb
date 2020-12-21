@@ -104,16 +104,18 @@ module LinuxStat
 				@@cpuinfo_file ||= '/proc/cpuinfo'.freeze
 				@@cpuinfo_readable ||= File.readable?(@@cpuinfo_file)
 
-				@@stat_file ||= '/proc/stat'
+				@@stat_file ||= '/proc/stat'.freeze
 
-				if stat?
-					onln_count = IO.readlines(@@stat_file).count { |x| x.strip[/\Acpu.*\d.*\z/] }
-					onln_count == 0 ? 0 : onln_count - 1
-				elsif (get_online = online)
+				# Not much slow, not blazing fast, somewhat reliable
+				get_online = online
+
+				if !get_online.empty?
 					get_online.length
 				elsif @@cpuinfo_readable
+					# Way slower but reliable!
 					IO.readlines(@@cpuinfo_file).count { |x| x.strip[/\Aprocessor.*\d*\z/] }
 				else
+					# Way faster but absolutely unrealiable!
 					LinuxStat::Sysconf.processor_online
 				end
 			end
@@ -121,21 +123,32 @@ module LinuxStat
 			##
 			# Returns the total number of CPU online in the sysetm.
 			#
-			# It opens /sys/devices/system/cpu/onfline and
+			# It will read /proc/stat to get the info.
+			#
+			# If the info isn't available, it reads /sys/devices/system/cpu/onfline and
 			# performs various job to get one Ruby array.
 			#
 			# If the information isn't available, it will return an empty Array.
 			def online
 				@@online_file ||= '/sys/devices/system/cpu/online'.freeze
 				@@online_readable ||= File.readable?(@@online_file)
-				return [] unless @@online_readable
+
+				@@stat_file ||= '/proc/stat'.freeze
 
 				ret = []
-				IO.read(@@online_file).split(?,.freeze).each { |x|
-					x.strip!
-					c = x.split(?-.freeze).map(&:to_i)
-					ret.concat(c.length == 2 ? Range.new(*c).to_a : c)
-				}
+
+				if stat?
+					IO.readlines(@@stat_file).first(5).map { |x|
+						v = x.strip[/\Acpu\d*/] &.[](/\d/)
+						ret << v.to_i if v
+					}
+				elsif @@online_readable
+					IO.read(@@online_file).split(?,.freeze).each { |x|
+						x.strip!
+						c = x.split(?-.freeze).map(&:to_i)
+						ret.concat(c.length == 2 ? Range.new(*c).to_a : c)
+					}
+				end
 
 				ret
 			end

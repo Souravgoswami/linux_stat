@@ -82,7 +82,7 @@ module LinuxStat
 			#
 			# It returns an Integer.
 			#
-			# If the information isn't available, it will return an empty Array.
+			# If the information isn't available, it will return nil.
 			def count
 				@@cpu_count ||= LinuxStat::Sysconf.processor_configured
 			end
@@ -313,7 +313,8 @@ module LinuxStat
 			# ticks to ms times 5
 			# If the ticks is 100, it will return 0.05
 			def ticks_to_ms_t5
-				@@ms_t5 ||= 1.0 / LinuxStat::Sysconf.sc_clk_tck * 5
+				@@sc_clk_tck ||= LinuxStat::Sysconf.sc_clk_tck.to_i
+				@@ms_t5 ||= 1.0 / (@@sc_clk_tck < 1 ? 100 : @@sc_clk_tck) * 5
 			end
 
 			def cpus

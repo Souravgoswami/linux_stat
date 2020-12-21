@@ -645,7 +645,8 @@ module LinuxStat
 
 			private
 			def get_ticks
-				@@ticks ||= Sysconf.sc_clk_tck
+				@@sc_clk_tck ||= LinuxStat::Sysconf.sc_clk_tck
+				@@ticks ||= @@sc_clk_tck < 1 ? 100 : @@sc_clk_tck
 			end
 
 			# Just to avoid multiple calculations!...
@@ -656,7 +657,7 @@ module LinuxStat
 			end
 
 			def pagesize
-				@@pagesize ||= LinuxStat::Sysconf.pagesize
+				@@pagesize ||= LinuxStat::Sysconf.pagesize.to_i
 			end
 
 			def cpu_count

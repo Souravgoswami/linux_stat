@@ -23,7 +23,6 @@ require 'linux_stat/prettify_bytes'
 # But might be required by other module functions in "Dependent Modules" section
 require "linux_stat/battery"
 require "linux_stat/bios"
-require "linux_stat/cpu"
 require "linux_stat/memory"
 require "linux_stat/net"
 require "linux_stat/process"
@@ -31,6 +30,10 @@ require "linux_stat/swap"
 
 # Dependent Modules
 # Modules that can have reverse dependency
+
+# LinuxStat::CPU.nproc dependent modules
+require "linux_stat/cpu"
+require "linux_stat/nproc"
 
 # LinuxStat::Uname dependent modules
 require 'linux_stat/utsname'

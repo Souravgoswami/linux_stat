@@ -3,7 +3,6 @@
 #endif
 
 #include <sched.h>
-#include <unistd.h>
 #include "ruby.h"
 
 #if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER)
@@ -16,20 +15,17 @@
 	#pragma intel optimization_level 3
 #endif
 
-static VALUE nproc(VALUE obj) {
+static VALUE count_cpu_for_pid(VALUE obj, VALUE pid) {
 	cpu_set_t set ;
 	CPU_ZERO(&set) ;
-	sched_getaffinity(0, sizeof(set), &set) ;
-	return INT2FIX(CPU_COUNT(&set)) ;
-}
+	short int stat = sched_getaffinity(FIX2INT(pid), sizeof(set), &set) ;
 
-static VALUE count(VALUE obj) {
-	return INT2FIX(sysconf(_SC_NPROCESSORS_CONF)) ;
+	if (stat < 0) return Qnil ;
+	return INT2FIX(CPU_COUNT(&set)) ;
 }
 
 void Init_nproc() {
 	VALUE _linux_stat = rb_define_module("LinuxStat") ;
-	VALUE _cpu = rb_define_module_under(_linux_stat, "CPU") ;
-	rb_define_module_function(_cpu, "nproc", nproc, 0) ;
-	rb_define_module_function(_cpu, "count", count, 0) ;
+	VALUE _nproc = rb_define_module_under(_linux_stat, "Nproc") ;
+	rb_define_module_function(_nproc, "count_cpu_for_pid", count_cpu_for_pid, 1) ;
 }

@@ -12,55 +12,94 @@
 #endif
 
 static VALUE getTick(VALUE obj) {
-	return INT2FIX(sysconf(_SC_CLK_TCK)) ;
+	short int val = sysconf(_SC_CLK_TCK) ;
+	if (val < 0) return Qnil ;
+
+	return INT2FIX(val) ;
 }
 
 static VALUE getChildMax(VALUE obj) {
-	return INT2FIX(sysconf(_SC_CHILD_MAX)) ;
+	short int val = sysconf(_SC_CHILD_MAX) ;
+	if (val < 0) return Qnil ;
+
+	return INT2FIX(val) ;
 }
 
 static VALUE getHostnameMax(VALUE obj) {
-	return INT2FIX(sysconf(_SC_HOST_NAME_MAX)) ;
+	short int val = sysconf(_SC_HOST_NAME_MAX) ;
+	if (val < 0) return Qnil ;
+
+	return INT2FIX(val) ;
 }
 
 static VALUE getLoginNameMax(VALUE obj) {
-	return INT2FIX(sysconf(_SC_LOGIN_NAME_MAX)) ;
+	short int val = sysconf(_SC_LOGIN_NAME_MAX) ;
+	if (val < 0) return Qnil ;
+
+	return INT2FIX(val) ;
 }
 
 static VALUE getOpenMax(VALUE obj) {
-	return INT2FIX(sysconf(_SC_OPEN_MAX)) ;
+	short int val = sysconf(_SC_OPEN_MAX) ;
+	if (val < 0) return Qnil ;
+
+	return INT2FIX(val) ;
 }
 
 static VALUE getPageSize(VALUE obj) {
-	return INT2FIX(sysconf(_SC_PAGESIZE)) ;
+	short int val = sysconf(_SC_PAGESIZE) ;
+	if (val < 0) return Qnil ;
+
+	return INT2FIX(val) ;
 }
 
 static VALUE getStreamMax(VALUE obj) {
-	return INT2FIX(sysconf(_SC_STREAM_MAX)) ;
+	short int val = sysconf(_SC_STREAM_MAX) ;
+	if (val < 0) return Qnil ;
+
+	return INT2FIX(val) ;
 }
 
 static VALUE getTTYNameMax(VALUE obj) {
-	return INT2FIX(sysconf(_SC_TTY_NAME_MAX)) ;
+	short int val = sysconf(_SC_TTY_NAME_MAX) ;
+	if (val < 0) return Qnil ;
+
+	return INT2FIX(val) ;
 }
 
 static VALUE getPosixVersion(VALUE obj) {
-	return INT2FIX(sysconf(_SC_VERSION)) ;
+	short int val = sysconf(_SC_VERSION) ;
+	if (val < 0) return Qnil ;
+
+	return INT2FIX(val) ;
 }
 
 static VALUE getLineMax(VALUE obj) {
-	return INT2FIX(sysconf(_SC_LINE_MAX)) ;
+	short int val = sysconf(_SC_LINE_MAX) ;
+	if (val < 0) return Qnil ;
+
+	return INT2FIX(val) ;
 }
 
 static VALUE getExprNestMax(VALUE obj) {
-	return INT2FIX(sysconf(_SC_EXPR_NEST_MAX)) ;
+	short int val = sysconf(_SC_EXPR_NEST_MAX) ;
+	if (val < 0) return Qnil ;
+
+	return INT2FIX(val) ;
 }
 
 static VALUE getProcessorConfigured(VALUE obj) {
-	return INT2FIX(sysconf(_SC_NPROCESSORS_CONF)) ;
+	short int val = sysconf(_SC_NPROCESSORS_CONF) ;
+	if (val < 0) return Qnil ;
+
+	return INT2FIX(val) ;
 }
 
 static VALUE getProcessorOnline(VALUE obj) {
-	return INT2FIX(sysconf(_SC_NPROCESSORS_ONLN)) ;
+	short int val = sysconf(_SC_NPROCESSORS_ONLN) ;
+	if (val < 0) return Qnil ;
+
+	return INT2FIX(val) ;
 }
 
 static VALUE getUser(VALUE obj) {

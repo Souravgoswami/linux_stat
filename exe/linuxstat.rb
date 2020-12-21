@@ -82,6 +82,11 @@ PRINT_TYPE = ARGV.any? { |x| x[/^\-(\-show\-type|t)$/] }
 # Run only desired classes / modules
 constants = LinuxStat.constants
 
+# Modules to delete from documentation and testing
+%i(
+	Nproc
+).each(&constants.method(:delete))
+
 execute = constants.map(&:downcase).map.with_index { |x, i|
 	constants[i] if ARGV.find { |y| y.downcase.to_sym == x }
 }.compact

@@ -144,7 +144,7 @@ LinuxStat::Battery.voltage_now()
 
 ### LinuxStat::CPU
 ```
-# File:		cpu.rb | Line: 243
+# File:		cpu.rb | Line: 287
 # Definition:	def available_governors
 LinuxStat::CPU.available_governors()
 => {"cpu0"=>["performance", "powersave"], "cpu1"=>["performance", "powersave"], "cpu2"=>["performance", "powersave"], "cpu3"=>["performance", "powersave"]}
@@ -154,60 +154,65 @@ LinuxStat::CPU.available_governors()
 LinuxStat::CPU.count()
 => 4
 
-# File:		cpu.rb | Line: 153
+# File:		cpu.rb | Line: 103
+# Definition:	def count_online
+LinuxStat::CPU.count_online()
+=> 3
+
+# File:		cpu.rb | Line: 197
 # Definition:	def cur_freq
 LinuxStat::CPU.cur_freq()
-=> {"cpu0"=>1923309, "cpu1"=>2000053, "cpu2"=>2000046, "cpu3"=>2000086}
+=> {"cpu0"=>2000085, "cpu1"=>2000018, "cpu2"=>1999998, "cpu3"=>2000029}
 
-# File:		cpu.rb | Line: 221
+# File:		cpu.rb | Line: 265
 # Definition:	def governor
 LinuxStat::CPU.governor()
 => {"cpu0"=>"performance", "cpu1"=>"performance", "cpu2"=>"performance", "cpu3"=>"performance"}
 
-# File:		cpu.rb | Line: 197
+# File:		cpu.rb | Line: 241
 # Definition:	def max_freq
 LinuxStat::CPU.max_freq()
 => {"cpu0"=>2000000, "cpu1"=>2000000, "cpu2"=>2000000, "cpu3"=>2000000}
 
-# File:		cpu.rb | Line: 175
+# File:		cpu.rb | Line: 219
 # Definition:	def min_freq
 LinuxStat::CPU.min_freq()
 => {"cpu0"=>2000000, "cpu1"=>2000000, "cpu2"=>2000000, "cpu3"=>2000000}
 
-# File:		cpu.rb | Line: 140
+# File:		cpu.rb | Line: 184
 # Definition:	def model
 LinuxStat::CPU.model()
 => "Intel(R) Core(TM) i3-6006U CPU @ 2.00GHz"
 
-# File:		cpu.rb | Line: 119
+# File:		cpu.rb | Line: 163
 # Definition:	def offline
 LinuxStat::CPU.offline()
-=> []
+=> [2]
 
-# File:		cpu.rb | Line: 97
+# File:		cpu.rb | Line: 132
 # Definition:	def online
 LinuxStat::CPU.online()
-=> [0, 1, 2, 3]
+=> [0, 1, 3]
 
 # File:		cpu.rb | Line: 23
 # Definition:	def stat(sleep = ticks_to_ms_t5)
 LinuxStat::CPU.stat(sleep)
-=> {0=>5.26, 1=>0.0, 2=>0.0, 3=>20.0, 4=>0.0}
+=> {0=>20.0, 1=>20.0, 2=>0.0, 3=>33.33}
 
 # File:		cpu.rb | Line: 63
 # Definition:	def total_usage(sleep = ticks_to_ms_t5)
 LinuxStat::CPU.total_usage(sleep)
-=> 10.0
+=> 7.14
 
 # File:		cpu.rb | Line: 63
 # Definition:	def total_usage(sleep = ticks_to_ms_t5)
 LinuxStat::CPU.usage(sleep)
-=> 5.0
+=> 7.14
 
 # File:		cpu.rb | Line: 23
 # Definition:	def stat(sleep = ticks_to_ms_t5)
 LinuxStat::CPU.usages(sleep)
-=> {0=>5.56, 1=>0.0, 2=>0.0, 3=>16.67, 4=>0.0}
+=> {0=>14.29, 1=>0.0, 2=>0.0, 3=>20.0}
 
 ```
 
@@ -1009,7 +1014,12 @@ By using `LinuxStat::CPU.online.count` you count the actual online CPU on your s
 
 Any n number of CPU can get hotplugged in and out, and this will report that correctly.
 
-It just gets the info from /sys/devices/system/cpu/online, and parses the output.
+It just gets the info from /proc/stat; but if it fails it will read /sys/devices/system/cpu/online
+and parse the output to get an array.
+
+4. The `LinuxStat::CPU.count_online`
+It's a more robust method that counts the online CPU. It shouldn't fail in most if not all cases!
+But if it fails for some really spooky reasons, it will return nil.
 
 4. The `LinuxStat::CPU.offline()`:
 

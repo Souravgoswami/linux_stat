@@ -611,6 +611,38 @@ module LinuxStat
 				IO.foreach(file, ' ').first(19)[-1].to_i
 			end
 
+			##
+			# = nproc(pid = $$)
+			# Returns the cpu allocated to the process.
+			#
+			# The output value is an Integer.
+			#
+			# For example:
+			#    $ taskset -c 0 irb
+			#
+			#    irb(main):001:0> require 'linux_stat'
+			#
+			#    => true
+			#
+			#    irb(main):002:0> LinuxStat::ProcessInfo.nproc
+			#
+			#    => 1
+			#
+			#    irb(main):003:0> LinuxStat::ProcessInfo.nproc 11562
+			#
+			#    => 3
+			#
+			#    irb(main):004:0> LinuxStat::ProcessInfo.nproc 12513
+			#
+			#    => 4
+			#
+			# If the info isn't available or the argument passed doesn't exist as a process ID, it will return nil.
+			def nproc(pid = $$)
+				LinuxStat::Nproc.count_cpu_for_pid(pid)
+			end
+
+			alias count_cpu nproc
+
 			private
 			def get_ticks
 				@@ticks ||= Sysconf.sc_clk_tck

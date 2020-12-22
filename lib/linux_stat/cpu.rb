@@ -138,7 +138,7 @@ module LinuxStat
 				ret = []
 
 				if stat?
-					IO.readlines(@@stat_file).first(5).map { |x|
+					IO.readlines(@@stat_file).map { |x|
 						v = x.strip[/\Acpu\d*/] &.[](/\d/)
 						ret << v.to_i if v
 					}

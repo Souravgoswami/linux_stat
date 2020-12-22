@@ -63,9 +63,9 @@ module LinuxStat
 			def total_usage(sleep = ticks_to_ms_t5)
 				return nil unless stat?
 
-				data = IO.foreach('/proc/stat').first.split.tap(&:shift).map!(&:to_f)
+				data = IO.foreach('/proc/stat'.freeze).first.split.tap(&:shift).map!(&:to_f)
 				sleep(sleep)
-				data2 = IO.foreach('/proc/stat').first.split.tap(&:shift).map!(&:to_f)
+				data2 = IO.foreach('/proc/stat'.freeze).first.split.tap(&:shift).map!(&:to_f)
 
 				user, nice, sys, idle, iowait, irq, softirq, steal = *data
 				user2, nice2, sys2, idle2, iowait2, irq2, softirq2, steal2 = *data2

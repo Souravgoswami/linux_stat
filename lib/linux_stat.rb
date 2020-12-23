@@ -27,6 +27,7 @@ require "linux_stat/memory"
 require "linux_stat/net"
 require "linux_stat/process"
 require "linux_stat/swap"
+require "linux_stat/usb"
 
 # Dependent Modules
 # Modules that can have reverse dependency

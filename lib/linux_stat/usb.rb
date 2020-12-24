@@ -1,7 +1,7 @@
 module LinuxStat
 	module USB
 		class << self
-			def devices_stat
+			def devices_stat(hwdata: true)
 				Dir['/sys/bus/usb/devices/*/'.freeze].sort!.map! { |x|
 					id_vendor_file = File.join(x, 'idVendor'.freeze)
 					next unless File.readable?(id_vendor_file)
@@ -38,7 +38,7 @@ module LinuxStat
 					b_max_packet_size0_file = File.join(x, 'bMaxPacketSize0'.freeze)
 					b_max_packet_size0 = File.readable?(b_max_packet_size0_file) ? IO.read(b_max_packet_size0_file).to_i : ''.freeze
 
-					query = query_hwdata(id_vendor, id_product)
+					query = hwdata ? query_hwdata(id_vendor, id_product) : {}
 
 					removable.downcase!
 					is_removable = if removable == 'removable'.freeze
@@ -75,7 +75,7 @@ module LinuxStat
 				Dir['/sys/bus/usb/devices/*/'.freeze].count { |x|
 					id_vendor_file = File.join(x, 'idVendor'.freeze)
 					id_product_file = File.join(x, 'idProduct'.freeze)
-					File.readable?(id_vendor_file) && File.readable?(id_vendor_file)
+					File.readable?(id_vendor_file) && File.readable?(id_product_file)
 				}
 			end
 
@@ -95,10 +95,8 @@ module LinuxStat
 					while (i += 1) < file_data_size
 						x = file_data[i]
 
-						_stripped = x.strip
-						next if _stripped[0] == ?#.freeze || _stripped[0] == ?\n.freeze
-
-						next if x == ?\n.freeze || x[0] == ?#.freeze
+						_lstripped = x.lstrip
+						next if _lstripped == ?#.freeze || _lstripped.empty?
 
 						if x.start_with?(?\t.freeze)
 							data = x.tap(&:strip!)

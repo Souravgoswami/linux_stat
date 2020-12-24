@@ -1,6 +1,49 @@
 module LinuxStat
 	module USB
 		class << self
+			##
+			# = devices_stat(hwdata: true)
+			#
+			# Returns details about the devices found in /sys/bus/usb/devices/
+			#
+			# The return value is an Array of multiple Hashes. If there's no info available,
+			# it will rather return an empty Array.
+			#
+			# On Android Termux for example, it can not list the directories because they are
+			# not readable the the regular user.
+			#
+			# It can have information like:
+			#
+			# id, vendor id, product id, manufacturer, serial, bus number, dev number,
+			# b_max_power, b_max_packet_size, etc.
+			#
+			# An example of the returned sample from a test machine is:
+			#    LinuxStat::USB.devices_stat
+			#
+			#    [{:path=>"/sys/bus/usb/devices/1-1.2/", :id=>"04d9:1203", :vendor_id=>"04d9", :product_id=>"1203", :bus_num=>1, :dev_num=>4, :hwdata=>{:vendor=>"Holtek Semiconductor, Inc.", :product=>"Keyboard"}, :authorized=>true, :b_max_power=>"100mA", :b_max_packet_size0=>8}
+			#
+			# Right, it's an array of Hashes.
+			#
+			# It also takes one option. The hwdata, which is true by default.
+			#
+			# Information about usb devices is found inside /usr/share/hwdata/usb.ids
+			#
+			# The data contains the vendor and the product.
+			#
+			# If the option is enabled, it will try look at /usr/share/hwdata/usb.ids
+			#
+			# But the file will be read only once. The consecutive calls to this method
+			# won't open the hwdata all the times.
+			#
+			# But if there's no hwdata, the Hash returned by this method will not contain
+			# hwdata key.
+			#
+			# The data is only populated if it's available. For example, if there's no
+			# manufacturer available for the product, the returned Hash will not contain the
+			# information about the manufacturer.
+			#
+			# Also note that if there's no info available or no USB devices, it will return an empty
+			# Hash.
 			def devices_stat(hwdata: true)
 				Dir['/sys/bus/usb/devices/*/'.freeze].sort!.map! { |x|
 					id_vendor_file = File.join(x, 'idVendor'.freeze)
@@ -71,6 +114,19 @@ module LinuxStat
 				}.tap(&:compact!)
 			end
 
+			##
+			# Opens /sys/bus/usb/devices, and counts the total number of
+			# devices connected to the USB interface.
+			# The return type is an integer.
+			#
+			# It checks for devices with vendor and product id file.
+			# If there's no such file, it will not count them as a USB device.
+			#
+			# It could be also an integrated hub or a webcam, as well as
+			# external hotpluggable devices like printer, USB storage devices,
+			# USB mouse, USB keyboard, USB joypad etc.
+			#
+			# But if the information isn't available, it will return nil.
 			def count
 				Dir['/sys/bus/usb/devices/*/'.freeze].count { |x|
 					id_vendor_file = File.join(x, 'idVendor'.freeze)

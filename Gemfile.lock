@@ -1,12 +1,12 @@
 PATH
   remote: .
   specs:
-    linux_stat (0.9.0)
+    linux_stat (1.0.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    rake (13.0.2)
+    rake (13.0.3)
 
 PLATFORMS
   ruby

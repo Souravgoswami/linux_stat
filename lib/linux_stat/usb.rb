@@ -1,7 +1,7 @@
 module LinuxStat
 	module USB
 		class << self
-			def device_stat
+			def devices_stat
 				Dir['/sys/bus/usb/devices/*/'.freeze].sort!.map! { |x|
 					id_vendor_file = File.join(x, 'idVendor'.freeze)
 					next unless File.readable?(id_vendor_file)
@@ -71,6 +71,16 @@ module LinuxStat
 				}.tap(&:compact!)
 			end
 
+			def count
+				Dir['/sys/bus/usb/devices/*/'.freeze].count { |x|
+					id_vendor_file = File.join(x, 'idVendor'.freeze)
+					id_product_file = File.join(x, 'idProduct'.freeze)
+					File.readable?(id_vendor_file) && File.readable?(id_vendor_file)
+				}
+			end
+
+			alias count_devices count
+
 			private
 			def hwdata
 				@@hwdata_file ||= "/usr/share/hwdata/usb.ids"
@@ -105,14 +115,16 @@ module LinuxStat
 
 					ret.freeze
 				else
-					[].freeze
+					[]
 				end
 			end
 
 			def query_hwdata(vendor_id, product_id)
 				vendor = hwdata[vendor_id]
-				[ vendor[0], vendor[1][product_id] ] if vendor
+				{vendor: vendor[0], product: vendor[1][product_id]} if vendor
 			end
 		end
 	end
 end
+
+p LinuxStat::USB.count

@@ -132,7 +132,7 @@ module LinuxStat
 			# But if the information isn't available, it will return nil.
 			def count
 				@@sys_usb_readable ||= File.readable?('/sys/bus/usb/devices/')
-				return [] unless @@sys_usb_readable
+				return nil unless @@sys_usb_readable
 
 				Dir['/sys/bus/usb/devices/*/'.freeze].count { |x|
 					id_vendor_file = File.join(x, 'idVendor'.freeze)

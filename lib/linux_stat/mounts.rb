@@ -62,7 +62,7 @@ module LinuxStat
 			end
 
 			##
-			# mount_point(dev = root)
+			# = mount_point(dev = root)
 			#
 			# Where device = block device.
 			#
@@ -94,7 +94,7 @@ module LinuxStat
 			end
 
 			##
-			# list_devices_mount_point()
+			# = list_devices_mount_point()
 			#
 			# It shows all the block devices corresponding to mount points.
 			#
@@ -120,7 +120,7 @@ module LinuxStat
 			end
 
 			##
-			# devices_stat
+			# = devices_stat
 			#
 			# [ Not to confuse this method with device_stat(dev) which shows only one device's info ]
 			#
@@ -162,7 +162,7 @@ module LinuxStat
 			end
 
 			##
-			# device_stat(dev = root)
+			# = device_stat(dev = root)
 			#
 			# [ Not to confuse this method with devices_stat() which shows all devices ]
 			#

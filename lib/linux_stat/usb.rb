@@ -115,16 +115,18 @@ module LinuxStat
 
 					ret.freeze
 				else
-					[]
+					{}
 				end
 			end
 
 			def query_hwdata(vendor_id, product_id)
 				vendor = hwdata[vendor_id]
-				{vendor: vendor[0], product: vendor[1][product_id]} if vendor
+				if vendor
+					{vendor: vendor[0], product: vendor[1][product_id]}
+				else
+					{}
+				end
 			end
 		end
 	end
 end
-
-p LinuxStat::USB.count

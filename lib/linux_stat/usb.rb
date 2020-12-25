@@ -158,9 +158,11 @@ module LinuxStat
 						x = file_data[i]
 
 						_lstripped = x.lstrip
-						next if _lstripped == ?#.freeze || _lstripped.empty?
+						next if _lstripped[0] == ?#.freeze || _lstripped.empty?
 
-						if x.start_with?(?\t.freeze)
+						if x[0] == ?\t.freeze
+							next unless vendor_id
+
 							data = x.tap(&:strip!)
 							device_id = data[/\A.*?\s/].to_s.strip
 							device = data[device_id.length..-1].to_s.strip
@@ -173,12 +175,11 @@ module LinuxStat
 						end
 					end
 
-					ret.freeze
+					ret
 				else
 					{}
 				end
 			end
-
 			def query_hwdata(vendor_id, product_id)
 				vendor = hwdata[vendor_id]
 				if vendor

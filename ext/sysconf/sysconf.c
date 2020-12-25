@@ -19,28 +19,28 @@ static VALUE getTick(VALUE obj) {
 }
 
 static VALUE getChildMax(VALUE obj) {
-	short int val = sysconf(_SC_CHILD_MAX) ;
+	long long int val = sysconf(_SC_CHILD_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getHostnameMax(VALUE obj) {
-	short int val = sysconf(_SC_HOST_NAME_MAX) ;
+	int val = sysconf(_SC_HOST_NAME_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getLoginNameMax(VALUE obj) {
-	short int val = sysconf(_SC_LOGIN_NAME_MAX) ;
+	int val = sysconf(_SC_LOGIN_NAME_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getOpenMax(VALUE obj) {
-	short int val = sysconf(_SC_OPEN_MAX) ;
+	int val = sysconf(_SC_OPEN_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
@@ -54,35 +54,35 @@ static VALUE getPageSize(VALUE obj) {
 }
 
 static VALUE getStreamMax(VALUE obj) {
-	short int val = sysconf(_SC_STREAM_MAX) ;
+	int val = sysconf(_SC_STREAM_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getTTYNameMax(VALUE obj) {
-	short int val = sysconf(_SC_TTY_NAME_MAX) ;
+	int val = sysconf(_SC_TTY_NAME_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getPosixVersion(VALUE obj) {
-	short int val = sysconf(_SC_VERSION) ;
+	int val = sysconf(_SC_VERSION) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getLineMax(VALUE obj) {
-	short int val = sysconf(_SC_LINE_MAX) ;
+	int val = sysconf(_SC_LINE_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getExprNestMax(VALUE obj) {
-	short int val = sysconf(_SC_EXPR_NEST_MAX) ;
+	int val = sysconf(_SC_EXPR_NEST_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;

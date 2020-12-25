@@ -3,7 +3,9 @@ module LinuxStat
 		class << self
 			##
 			# Reads /etc/os-release and returns a Hash. For example:
-			#    {:NAME=>"Arch Linux", :PRETTY_NAME=>"Arch Linux", :ID=>"arch", :BUILD_ID=>"rolling", :ANSI_COLOR=>"38;2;23;147;209", :HOME_URL=>"https://www.archlinux.org/", :DOCUMENTATION_URL=>"https://wiki.archlinux.org/", :SUPPORT_URL=>"https://bbs.archlinux.org/", :BUG_REPORT_URL=>"https://bugs.archlinux.org/", :LOGO=>"archlinux"}
+			#    LinuxStat::OS.os_release
+			#
+			#    => {:NAME=>"Arch Linux", :PRETTY_NAME=>"Arch Linux", :ID=>"arch", :BUILD_ID=>"rolling", :ANSI_COLOR=>"38;2;23;147;209", :HOME_URL=>"https://www.archlinux.org/", :DOCUMENTATION_URL=>"https://wiki.archlinux.org/", :SUPPORT_URL=>"https://bbs.archlinux.org/", :BUG_REPORT_URL=>"https://bugs.archlinux.org/", :LOGO=>"archlinux"}
 			#
 			# If the info isn't available, it will return an empty Hash.
 			#
@@ -13,13 +15,14 @@ module LinuxStat
 			# Because changing the /etc/lsb-release
 			# isn't expected in runtime.
 			def os_release
-				# cached (memoized) ; as changing the value in runtime is unexpected
 				@@os_release ||= File.readable?('/etc/os-release') ? release('/etc/os-release') : {}
 			end
 
 			##
 			# Reads /etc/lsb-release and returns a Hash. For example:
-			#    {:LSB_VERSION=>"1.4", :DISTRIB_ID=>"Arch", :DISTRIB_RELEASE=>"rolling", :DISTRIB_DESCRIPTION=>"Arch Linux"}
+			#    LinuxStat::OS.lsb_release
+			#
+			#    => {:LSB_VERSION=>"1.4", :DISTRIB_ID=>"Arch", :DISTRIB_RELEASE=>"rolling", :DISTRIB_DESCRIPTION=>"Arch Linux"}
 			#
 			# If the info isn't available, it will return an empty Hash.
 			#
@@ -28,7 +31,6 @@ module LinuxStat
 			# The information is also cached, and once loaded, won't change in runtime.
 			# Because changing the /etc/lsb-release isn't expected in runtime.
 			def lsb_release
-				# cached (memoized) ; as changing the value in runtime is unexpected
 				@@lsb_release ||= File.readable?('/etc/lsb-release') ? release('/etc/lsb-release') : {}
 			end
 
@@ -104,7 +106,9 @@ module LinuxStat
 
 			##
 			# Reads /proc/uptime and returns the system uptime:
-			#    {:hour=>10, :minute=>34, :second=>12.59}
+			#    LinuxStat::OS.uptime
+			#
+			#    => {:hour=>10, :minute=>34, :second=>12.59}
 			#
 			# If the stat isn't available, an empty hash is returned.
 			def uptime

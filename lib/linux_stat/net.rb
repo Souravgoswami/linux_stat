@@ -17,7 +17,9 @@ module LinuxStat
 			# Returns the total bytes received and transmitted as Hash.
 			#
 			# For example:
-			#    {:received=>56602867, :transmitted=>6940922}
+			#    LinuxStat::Net.usage
+			#
+			#    => {:received=>56602867, :transmitted=>6940922}
 			#
 			# But if the status isn't available it will return an empty Hash.
 			def total_bytes
@@ -68,7 +70,9 @@ module LinuxStat
 			# The return type is a Hash, containg the current internet usage (received, transmit) in B/s.
 			#
 			# For example:
-			#    {:received=>436060.0, :transmitted=>50350.0}
+			#    LinuxStat::Net.usage
+			#
+			#    => {:received=>436060.0, :transmitted=>50350.0}
 			#
 			# If the system transmits 100 kb in the interval,
 			#

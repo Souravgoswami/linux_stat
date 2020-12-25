@@ -180,6 +180,7 @@ module LinuxStat
 					{}
 				end
 			end
+
 			def query_hwdata(vendor_id, product_id)
 				vendor = hwdata[vendor_id]
 				if vendor

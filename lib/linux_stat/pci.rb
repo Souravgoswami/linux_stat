@@ -2,9 +2,15 @@ module LinuxStat
 	module PCI
 		class << self
 			##
-			# = devices_stat(hwdata: true)
+			# = devices_info(hwdata: true)
 			#
-			# Returns details about the devices found in /sys/bus/pci/devices/
+			# [ Not to be confused with devices_stat ]
+			#
+			# Take a look at system_stat for more results.
+			#
+			# Returns details about the devices found in /proc/bus/pci/devices file.
+			#
+			# The details doesn't contain a lot of details, it's short and opens just one file once.
 			#
 			# The return value is an Array of multiple Hashes. If there's no info available,
 			# it will rather return an empty Array.
@@ -14,13 +20,12 @@ module LinuxStat
 			#
 			# It can have information like:
 			#
-			# path, id, vendor, device, subvendor, sub_device,
-			# kernel_driver, revision, irq, enable, hwdata.
+			# id, vendor, device, irq, and kernel_driver
 			#
 			# An example of the returned sample from a test machine is:
-			#    LinuxStat::PCI.devices_stat
+			#    LinuxStat::PCI.devices_info
 			#
-			#    => [{:path=>"/sys/bus/pci/devices/0000:00:00.0/", :id=>"8086:1904", :vendor=>"8086", :device=>"1904", :sub_vendor=>"1028", :sub_device=>"077d", :kernel_driver=>"skl_uncore", :revision=>"0x08", :irq=>0, :enable=>false, :hwdata=>{:vendor=>"Intel Corporation", :product=>"Xeon E3-1200 v5/E3-1500 v5/6th Gen Core Processor Host Bridge/DRAM Registers", :sub_system=>nil}}
+			#    => [{:id=>"8086:1904", :vendor=>"8086", :device=>"1904", :irq=>0, :kernel_driver=>"skl_uncore", :hwdata=>{:vendor=>"Intel Corporation", :product=>"Xeon E3-1200 v5/E3-1500 v5/6th Gen Core Processor Host Bridge/DRAM Registers"}}]
 			#
 			# Right, it's an Array of Hashes.
 			#
@@ -44,9 +49,85 @@ module LinuxStat
 			#
 			# Also note that if there's no info available or no PCI enabled devices, it will return an empty
 			# Hash.
+			def devices_info(hwdata: true)
+				@@proc_pci_readable ||= File.readable?('/proc/bus/pci/devices')
+				return {} unless @@proc_pci_readable
+
+				IO.readlines('/proc/bus/pci/devices'.freeze).map! { |dev|
+					x = dev.split
+
+					vendor = x[1][0..3]
+					device = x[1][4..-1]
+					irq = x[2].to_i(16)
+					kernel_driver = x[-1]
+
+					query = if hwdata
+						query_hwdata(vendor, device)
+					else
+						{}
+					end
+
+					ret = {
+						id: "#{vendor}:#{device}",
+						vendor: vendor, device: device,
+						irq: irq,
+						kernel_driver: kernel_driver
+					}
+
+					ret.merge!(hwdata: query) unless query.empty?
+
+					ret
+				}
+			end
+
+			##
+			# = devices_stat(hwdata: true)
+			#
+			# Returns details about the devices found in /sys/bus/pci/devices/
+			#
+			# The return value is an Array of multiple Hashes. If there's no info available,
+			# it will rather return an empty Array.
+			#
+			# On Android Termux for example, it can not list the directories because they are
+			# not readable the the regular user.
+			#
+			# It can have information like:
+			#
+			# path, id, vendor, device, subvendor, sub_device,
+			# kernel_driver, revision, irq, enable, hwdata.
+			#
+			# An example of the returned sample from a test machine is:
+			#    LinuxStat::PCI.devices_stat
+			#
+			#    => [{:path=>"/sys/bus/pci/devices/0000:00:00.0/", :id=>"8086:1904", :vendor=>"8086", :device=>"1904", :sub_vendor=>"1028", :sub_device=>"077d", :kernel_driver=>"skl_uncore", :revision=>"0x08", :irq=>0, :enable=>false, :hwdata=>{:vendor=>"Intel Corporation", :product=>"Xeon E3-1200 v5/E3-1500 v5/6th Gen Core Processor Host Bridge/DRAM Registers", :sub_system=>nil}}]
+			#
+			# Right, it's an Array of Hashes.
+			#
+			# It also takes one option. The hwdata, which is true by default.
+			#
+			# Information about usb devices is found inside /usr/share/hwdata/pci.ids
+			#
+			# The data contains the vendor and the product, the subvendor and the subproduct.
+			#
+			# If the option is enabled, it will try read /usr/share/hwdata/pci.ids
+			#
+			# But the file will be read only once. The consecutive calls to this method
+			# won't open the hwdata all the times.
+			#
+			# But if there's no hwdata, the Hash returned by this method will not contain
+			# hwdata key.
+			#
+			# The data is only populated if it's available. For example, if there's no
+			# manufacturer available for the product, the returned Hash will not contain the
+			# information about the manufacturer.
+			#
+			# If there's no /sys/bus/pci/devices/, it will call LinuxStat::PCI.devices_info
+			#
+			# Also note that if there's no info available or no PCI enabled devices, it will return an empty
+			# Hash.
 			def devices_stat(hwdata: true)
 				@@sys_pci_readable ||= File.readable?('/sys/bus/pci/devices/')
-				return [] unless @@sys_pci_readable
+				return devices_info(hwdata: hwdata) unless @@sys_pci_readable
 
 				Dir['/sys/bus/pci/devices/*/'.freeze].sort!.map! { |x|
 					_vendor_file = File.join(x, 'vendor'.freeze)
@@ -71,8 +152,8 @@ module LinuxStat
 					uevent = File.readable?(_uevent) ? IO.foreach(_uevent) : nil
 
 					kernel_driver = if uevent
-						uevent.find { |x|
-							x.split(?=.freeze)[0].to_s.tap(&:strip!) == 'DRIVER'.freeze
+						uevent.find { |_x|
+							_x.split(?=.freeze)[0].to_s.tap(&:strip!) == 'DRIVER'.freeze
 						} &.split(?=) &.[](1) &.tap(&:strip!)
 					else
 						nil
@@ -116,23 +197,34 @@ module LinuxStat
 			end
 
 			##
-			# Opens /sys/bus/pci/devices, and counts the total number of
-			# devices connected to the PCI.
-			# The return type is an integer.
+			# Reads /proc/bus/pci/devices, counts and returns the total number of lines.
 			#
+			# But if the information isn't available, it will look into the contents of
+			# /sys/bus/pci/devices, and counts the total number of
+			# devices connected to the PCI.
 			# It checks for devices with vendor and device id files.
 			# If there's no such file, it will not count them as a PCI connected device.
 			#
+			# The return type is an integer.
+			#
 			# But if the information isn't available, it will return nil.
 			def count
+				@@proc_pci_readable ||= File.readable?('/proc/bus/pci/devices')
 				@@sys_pci_readable ||= File.readable?('/sys/bus/pci/devices/')
-				return nil unless @@sys_pci_readable
 
-				Dir['/sys/bus/pci/devices/*/'.freeze].count { |x|
-					id_vendor_file = File.join(x, 'vendor'.freeze)
-					id_product_file = File.join(x, 'device'.freeze)
-					File.readable?(id_vendor_file) && File.readable?(id_product_file)
-				}
+				if @@proc_pci_readable
+					IO.readlines('/proc/bus/pci/devices'.freeze).length
+
+				elsif @@sys_pci_readable
+					Dir['/sys/bus/pci/devices/*/'.freeze].count { |x|
+						id_vendor_file = File.join(x, 'vendor'.freeze)
+						id_product_file = File.join(x, 'device'.freeze)
+						File.readable?(id_vendor_file) && File.readable?(id_product_file)
+					}
+
+				else
+					nil
+				end
 			end
 
 			alias count_devices count
@@ -206,7 +298,7 @@ module LinuxStat
 
 					if sub_vendor_id && sub_device_id
 						sub_product = vendor.dig(1, product_id, 1, sub_vendor_id, sub_device_id)
-						ret.merge!(sub_system: sub_product)
+						ret.merge!(sub_system: sub_product) if sub_product
 					end
 
 					ret

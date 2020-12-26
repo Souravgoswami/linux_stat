@@ -14,13 +14,13 @@ module LinuxStat
 			#
 			# It can have information like:
 			#
-			# id, vendor id, product id, manufacturer, serial, bus number, dev number,
+			# path, id, vendor id, product id, manufacturer, serial, bus number, dev number,
 			# b_max_power, b_max_packet_size, etc.
 			#
 			# An example of the returned sample from a test machine is:
 			#    LinuxStat::USB.devices_stat
 			#
-			#    [{:path=>"/sys/bus/usb/devices/1-1.2/", :id=>"04d9:1203", :vendor_id=>"04d9", :product_id=>"1203", :bus_num=>1, :dev_num=>4, :hwdata=>{:vendor=>"Holtek Semiconductor, Inc.", :product=>"Keyboard"}, :authorized=>true, :b_max_power=>"100mA", :b_max_packet_size0=>8}
+			#    => [{:path=>"/sys/bus/usb/devices/1-1.2/", :id=>"04d9:1203", :vendor_id=>"04d9", :product_id=>"1203", :bus_num=>1, :dev_num=>4, :hwdata=>{:vendor=>"Holtek Semiconductor, Inc.", :product=>"Keyboard"}, :authorized=>true, :b_max_power=>"100mA", :b_max_packet_size0=>8}
 			#
 			# Right, it's an array of Hashes.
 			#
@@ -114,6 +114,8 @@ module LinuxStat
 
 					ret.merge!(b_max_power: b_max_power) unless b_max_power.empty?
 					ret.merge!(b_max_packet_size0: b_max_packet_size0) if b_max_packet_size0
+
+					ret
 				}.tap(&:compact!)
 			end
 
@@ -163,19 +165,19 @@ module LinuxStat
 						if x[0] == ?\t.freeze
 							next unless vendor_id
 
-							data = x.tap(&:strip!)
-							device_id = data[/\A.*?\s/].to_s.strip
-							device = data[device_id.length..-1].to_s.strip
+							x.strip!
+							device_id = x[/\A.*?\s/].to_s.strip
+							device = x[device_id.length..-1].to_s.strip
 							ret[vendor_id][1][device_id] = device
 						else
-							data = x
-							vendor_id = data[/\A.*?\s/].to_s.strip
-							vendor = data[vendor_id.length..-1].to_s.strip
+							x.strip!
+							vendor_id = x[/\A.*?\s/].to_s.strip
+							vendor = x[vendor_id.length..-1].to_s.strip
 							ret[vendor_id] = [vendor, {}]
 						end
 					end
 
-					ret
+					ret.freeze
 				else
 					{}
 				end

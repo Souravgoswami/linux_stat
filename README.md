@@ -1007,11 +1007,11 @@ Well this section actually demystifies the methods.
 1. The good old `LinuxStat::CPU.count()`:
 
 It gets the configured CPU for the system. It doesn't count for hotplugged CPU.
-If 3 out of 4 CPU are hotplugged out, it will still show 4. It calles `sysconf(_SC_NPROCESSORS_CONF)`
+If 3 out of 4 CPU are hotplugged out, it will still show 4. It calls `sysconf(_SC_NPROCESSORS_CONF)`
 
 2. The mysterious `LinuxStat::ProcessInfo.nproc(pid = $$)`:
 
-[ Also aliased to `LinuxStat::ProcessInfo.count_cpu()`  ]
+[ Also aliased to `LinuxStat::ProcessInfo.count_cpu()` ]
 
 It returns the number of processors, like the other 3 methods.
 Without any arguments, it's like running `require 'etc' ; puts Etc.nprocessors`
@@ -1075,7 +1075,7 @@ and parse the output to get an array.
 It's a more robust method that counts the online CPU. It shouldn't fail in most if not all cases!
 But if it fails for some really spooky reasons, it will return nil.
 
-4. The `LinuxStat::CPU.offline()`:
+5. The `LinuxStat::CPU.offline()`:
 
 This returns the number of offline CPU as an Array. It doesn't get affected by taskset or anything.
 
@@ -1093,13 +1093,13 @@ Any n number of CPU can get hotplugged in and out, and this will report that cor
 
 It just gets the info from /sys/devices/system/cpu/offline, and parses the output.
 
-5. The `LinuxStat::Sysconf.processor_configured()`:
+6. The `LinuxStat::Sysconf.processor_configured()`:
 
 Sounds repetitive! Actually yes, this is written in C, and it is called by `LinuxStat::CPU.count`.
 
 The difference is that `LinuxStat::CPU.count` caches the return value, and this method doesn't.
 
-6. The `LinuxStat::Sysconf.processor_online()`:
+7. The `LinuxStat::Sysconf.processor_online()`:
 
 This may again sound repititive to LinuxStat::CPU.online, but it's actually not!
 

@@ -195,7 +195,7 @@ body {
 		transition-delay: 0s !important ;
 
 		& .text {
-			filter: drop-shadow(0 0 4px #ffff) ;
+			text-shadow: 0 0 6px #ffff ;
 			color: #fff !important ;
 			transition-delay: 0s ;
 		}
@@ -444,10 +444,6 @@ body {
 			display: inline-flex ;
 			align-items: center ;
 			user-select: none ;
-		}
-
-		dollar, hash {
-			display: block ;
 		}
 
 		dollar::before {

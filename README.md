@@ -10,7 +10,7 @@ LinuxStat lets you read status of a Linux system. It can show you cpu stats and 
 
 It only works for Linux, and detecting the OS is upto the user of this gem.
 
-Programming Languages Used:
+Languages Used:
 
 <img src="https://linuxstatloc.herokuapp.com/badge.svg" width="260px">
 
@@ -1376,7 +1376,14 @@ Right, the get_login() can return an empty string. But LinuxStat::User.get_user 
 
 ## Note 7: Hwdata
 The PCI and USB modules actually rely on hwdata found in /usr/share/hwdata/.
-But if the directory is not available, it won't show hwdata related information.
+The LS::USB.devices_stat and LS::PCI.devices_stat returns the information in a Hash:
+
+```
+$ ruby -r linux_stat -e "puts LS::USB.devices_stat.to_s[0..200]"
+[{:path=>"/sys/bus/usb/devices/1-1.2/", :id=>"04d9:1203", :vendor_id=>"04d9", :product_id=>"1203", :bus_num=>1, :dev_num=>7, :hwdata=>{:vendor=>"Holtek Semiconductor, Inc.", :product=>"Keyboard"}, :aut
+```
+
+But if the files are not available, it won't return hwdata related information.
 
 So it's suggested to install hwdata. But you might face issues with heroku and
 other online PaaS where you can't install it. So Version 1.1.1+ comes with a module function called `hwdata_file = file`.
@@ -1390,7 +1397,7 @@ LS::USB.hwdata_file = File.join(__dir__, 'hwdata', 'usb.ids')
 
 Assuming that you have `pci.ids` and `usb.ids` under ./hwdata directory.
 
-On rails, you can put this (replace `__dir__` with `Rails.root` inside environment.rb).
+On rails, you can put this (replace `__dir__` with `Rails.root`) inside environment.rb.
 
 But do note that the file can be set only once. It's suggested to do that in the beginning of your app.
 

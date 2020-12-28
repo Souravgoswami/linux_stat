@@ -196,7 +196,7 @@ module LinuxStat
 						ret
 					rescue StandardError
 					end
-				}
+				}.tap(&:compact!)
 			end
 
 			##

@@ -102,7 +102,7 @@ module LinuxStat
 			##
 			# Uses utsname.h to determine the system nodename
 			#
-			# It returns String but if the info isn't available, it will return an empty String
+			# It returns String but if the info isn't available, it will return an empty String.
 			def nodename
 				LinuxStat::Uname.nodename
 			end
@@ -111,7 +111,7 @@ module LinuxStat
 			# Returns the hostname from LinuxStat::Sysconf.hostname.
 			#
 			# The return type is String.
-			# If the info info isn't available, it will return 'localhost'.
+			# If the info info isn't available, it will return an empty String.
 			def hostname
 				LinuxStat::Sysconf.hostname
 			end

@@ -73,7 +73,7 @@ module LinuxStat
 					manufacturer = File.readable?(manufacturer_file) ? IO.read(manufacturer_file).strip : ''.freeze
 
 					removable_file = File.join(x, 'removable'.freeze)
-					removable = File.readable?(removable_file) ? IO.read(removable_file).strip : ''.freeze
+					removable = File.readable?(removable_file) ? IO.read(removable_file).strip.downcase : ''.freeze
 
 					authorized_file = File.join(x, 'authorized'.freeze)
 					authorized = File.readable?(authorized_file) ? IO.read(authorized_file).to_i : ''.freeze
@@ -86,7 +86,6 @@ module LinuxStat
 
 					query = hwdata ? query_hwdata(id_vendor, id_product) : {}
 
-					removable.downcase!
 					is_removable = if removable == 'removable'.freeze
 						true
 					elsif removable == 'unknown'.freeze

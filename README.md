@@ -37,6 +37,32 @@ On Debian based systems:
 
 ---
 
+## Optional Dependencies
+
+You need hwdata to decode vendor and product ids if you use LinuxStat::USB and/or LinuxStat::PCI
+
+You can install hwdata simply.
+
++ Arch:
+
+```
+sudo pacman -S hwids
+```
+
++ Debian based systems:
+
+```
+sudo apt install hwdata
+```
+
+But without hwdata, it won't show such information.
+
+You can also point to a downloaded copy of hwdata (pci.ids / usb.ids) file.
+
+Follow [Note 7](https://github.com/Souravgoswami/linux_stat#note-7-hwdata) below for more information on that.
+
+---
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -88,7 +114,7 @@ LinuxStat::BIOS.version()
 # File:		battery.rb | Line: 105
 # Definition:	def charge
 LinuxStat::Battery.charge()
-=> 100.0
+=> 95.73550551030186
 
 # File:		battery.rb | Line: 122
 # Definition:	def charge_full_design_wh
@@ -108,7 +134,7 @@ LinuxStat::Battery.charging?()
 # File:		battery.rb | Line: 184
 # Definition:	def devices_stat
 LinuxStat::Battery.devices_stat()
-=> {:AC=>{:type=>"Mains", :online=>1}, :BAT0=>{:model=>"DELL CYMGM77", :manufacturer=>"Samsung SDI", :type=>"Battery", :status=>"Full", :capacity=>100, :voltage_min_design=>11.4, :charge_full_design=>3.684, :charge_full_design_wh=>42.0, :voltage_now=>12....
+=> {:AC=>{:type=>"Mains", :online=>1}, :BAT0=>{:model=>"DELL CYMGM77", :manufacturer=>"Samsung SDI", :type=>"Battery", :status=>"Charging", :capacity=>95, :voltage_min_design=>11.4, :charge_full_design=>3.684, :charge_full_design_wh=>42.0, :voltage_now=>...
 
 # File:		battery.rb | Line: 87
 # Definition:	def discharging?
@@ -118,7 +144,7 @@ LinuxStat::Battery.discharging?()
 # File:		battery.rb | Line: 96
 # Definition:	def full?
 LinuxStat::Battery.full?()
-=> true
+=> false
 
 # File:		battery.rb | Line: 47
 # Definition:	def manufacturer
@@ -138,12 +164,12 @@ LinuxStat::Battery.present?()
 # File:		battery.rb | Line: 16
 # Definition:	def stat
 LinuxStat::Battery.stat()
-=> {:model=>"DELL CYMGM77", :manufacturer=>"Samsung SDI", :technology=>"Li-ion", :status=>"Full", :charge=>100.0, :charging=>true, :discharging=>false, :full=>true}
+=> {:model=>"DELL CYMGM77", :manufacturer=>"Samsung SDI", :technology=>"Li-ion", :status=>"Charging", :charge=>95.73550551030186, :charging=>true, :discharging=>false, :full=>false}
 
 # File:		battery.rb | Line: 68
 # Definition:	def status
 LinuxStat::Battery.status()
-=> "Full"
+=> "Charging"
 
 # File:		battery.rb | Line: 57
 # Definition:	def technology
@@ -153,7 +179,7 @@ LinuxStat::Battery.technology()
 # File:		battery.rb | Line: 160
 # Definition:	def voltage_now
 LinuxStat::Battery.voltage_now()
-=> 12.541
+=> 12.887
 
 ```
 
@@ -177,7 +203,7 @@ LinuxStat::CPU.count_online()
 # File:		cpu.rb | Line: 197
 # Definition:	def cur_freq
 LinuxStat::CPU.cur_freq()
-=> {"cpu0"=>2000006, "cpu1"=>2000050, "cpu2"=>2000024, "cpu3"=>2000195}
+=> {"cpu0"=>2000115, "cpu1"=>2000016, "cpu2"=>2000066, "cpu3"=>2000240}
 
 # File:		cpu.rb | Line: 265
 # Definition:	def governor
@@ -212,29 +238,29 @@ LinuxStat::CPU.online()
 # File:		cpu.rb | Line: 23
 # Definition:	def stat(sleep = ticks_to_ms_t5)
 LinuxStat::CPU.stat(sleep)
-=> {0=>9.52, 1=>0.0, 2=>0.0, 3=>0.0, 4=>0.0}
+=> {0=>19.05, 1=>20.0, 2=>16.67, 3=>16.67, 4=>16.67}
 
 # File:		cpu.rb | Line: 63
 # Definition:	def total_usage(sleep = ticks_to_ms_t5)
 LinuxStat::CPU.total_usage(sleep)
-=> 0.0
+=> 5.0
 
 # File:		cpu.rb | Line: 63
 # Definition:	def total_usage(sleep = ticks_to_ms_t5)
 LinuxStat::CPU.usage(sleep)
-=> 14.29
+=> 0.0
 
 # File:		cpu.rb | Line: 23
 # Definition:	def stat(sleep = ticks_to_ms_t5)
 LinuxStat::CPU.usages(sleep)
-=> {0=>5.0, 1=>0.0, 2=>20.0, 3=>20.0, 4=>16.67}
+=> {0=>13.64, 1=>0.0, 2=>16.67, 3=>0.0, 4=>20.0}
 
 ```
 
 ### LinuxStat::FS
 ```
 LinuxStat::FS.stat(arg = "/")
-=> {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>10607830, :block_avail_unpriv=>10607830, :inodes=>58612160, :free_inodes=>56826206, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
+=> {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>10866159, :block_avail_unpriv=>10866159, :inodes=>58612160, :free_inodes=>56826110, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
 
 ```
 
@@ -243,22 +269,22 @@ LinuxStat::FS.stat(arg = "/")
 # File:		filesystem.rb | Line: 92
 # Definition:	def available(fs = ?..freeze)
 LinuxStat::Filesystem.available(fs)
-=> 43449671680
+=> 44507787264
 
 # File:		filesystem.rb | Line: 58
 # Definition:	def free(fs = ?..freeze)
 LinuxStat::Filesystem.free(fs)
-=> 43449671680
+=> 44507787264
 
 # File:		filesystem.rb | Line: 19
 # Definition:	def stat(fs = ?..freeze)
 LinuxStat::Filesystem.stat(fs)
-=> {:total=>119981191168, :free=>43449671680, :used=>76531519488}
+=> {:total=>119981191168, :free=>44507787264, :used=>75473403904}
 
 # File:		filesystem.rb | Line: 108
 # Definition:	def stat_raw(fs = ?..freeze)
 LinuxStat::Filesystem.stat_raw(fs)
-=> {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>10607830, :block_avail_unpriv=>10607830, :inodes=>58612160, :free_inodes=>56826206, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
+=> {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>10866159, :block_avail_unpriv=>10866159, :inodes=>58612160, :free_inodes=>56826110, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
 
 # File:		filesystem.rb | Line: 39
 # Definition:	def total(fs = ?..freeze)
@@ -268,7 +294,7 @@ LinuxStat::Filesystem.total(fs)
 # File:		filesystem.rb | Line: 73
 # Definition:	def used(fs = ?..freeze)
 LinuxStat::Filesystem.used(fs)
-=> 76531519488
+=> 75473403904
 
 ```
 
@@ -331,22 +357,22 @@ LinuxStat::Kernel.version()
 # File:		memory.rb | Line: 50
 # Definition:	def available
 LinuxStat::Memory.available()
-=> 1000240
+=> 477784
 
 # File:		memory.rb | Line: 81
 # Definition:	def percent_available
 LinuxStat::Memory.percent_available()
-=> 26.07
+=> 12.46
 
 # File:		memory.rb | Line: 70
 # Definition:	def percent_used
 LinuxStat::Memory.percent_used()
-=> 73.93
+=> 87.54
 
 # File:		memory.rb | Line: 11
 # Definition:	def stat
 LinuxStat::Memory.stat()
-=> {:total=>3836036, :used=>2835796, :available=>1000240, :percent_used=>73.93, :percent_available=>26.07}
+=> {:total=>3836036, :used=>3358252, :available=>477784, :percent_used=>87.54, :percent_available=>12.46}
 
 # File:		memory.rb | Line: 40
 # Definition:	def total
@@ -356,7 +382,7 @@ LinuxStat::Memory.total()
 # File:		memory.rb | Line: 60
 # Definition:	def used
 LinuxStat::Memory.used()
-=> 2835796
+=> 3358252
 
 ```
 
@@ -365,7 +391,7 @@ LinuxStat::Memory.used()
 # File:		mounts.rb | Line: 179
 # Definition:	def device_stat(dev = root)
 LinuxStat::Mounts.device_stat(dev)
-=> {:mountpoint=>"/", :total=>119981191168, :free=>43449671680, :available=>43449671680, :used=>76531519488, :percent_used=>63.79, :percent_free=>36.21, :percent_available=>36.21}
+=> {:mountpoint=>"/", :total=>119981191168, :free=>44507787264, :available=>44507787264, :used=>75473403904, :percent_used=>62.9, :percent_free=>37.1, :percent_available=>37.1}
 
 # File:		mounts.rb | Line: 137
 # Definition:	def devices_stat
@@ -375,17 +401,17 @@ LinuxStat::Mounts.devices_stat()
 # File:		mounts.rb | Line: 11
 # Definition:	def list
 LinuxStat::Mounts.list()
-=> ["proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0", "sys /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0", "dev /dev devtmpfs rw,nosuid,relatime,size=1909256k,nr_inodes=477314,mode=755,inode64 0 0", "run /run tmpfs rw,nosuid,nodev,relatime,mode=755...
+=> ["proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0", "sys /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0", "dev /dev devtmpfs rw,nosuid,relatime,size=1909248k,nr_inodes=477312,mode=755,inode64 0 0", "run /run tmpfs rw,nosuid,nodev,relatime,mode=755...
 
 # File:		mounts.rb | Line: 20
 # Definition:	def list_devices
 LinuxStat::Mounts.list_devices()
-=> ["proc", "sys", "dev", "run", "/dev/sda2", "securityfs", "tmpfs", "devpts", "tmpfs", "cgroup2", "cgroup", "pstore", "none", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "systemd-1", "mqu...
+=> ["proc", "sys", "dev", "run", "/dev/sda2", "securityfs", "tmpfs", "devpts", "tmpfs", "cgroup2", "cgroup", "pstore", "none", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "cgroup", "systemd-1", "hug...
 
 # File:		mounts.rb | Line: 109
 # Definition:	def list_devices_mount_point
 LinuxStat::Mounts.list_devices_mount_point()
-=> {"proc"=>"/proc", "sys"=>"/sys", "dev"=>"/dev", "run"=>"/run", "/dev/sda2"=>"/", "securityfs"=>"/sys/kernel/security", "tmpfs"=>"/run/user/1000", "devpts"=>"/dev/pts", "cgroup2"=>"/sys/fs/cgroup/unified", "cgroup"=>"/sys/fs/cgroup/pids", "pstore"=>"/s...
+=> {"proc"=>"/proc", "sys"=>"/sys", "dev"=>"/dev", "run"=>"/run", "/dev/sda2"=>"/", "securityfs"=>"/sys/kernel/security", "tmpfs"=>"/run/user/1000", "devpts"=>"/dev/pts", "cgroup2"=>"/sys/fs/cgroup/unified", "cgroup"=>"/sys/fs/cgroup/cpuset", "pstore"=>"...
 
 # File:		mounts.rb | Line: 80
 # Definition:	def mount_point(dev = root)
@@ -410,7 +436,7 @@ LinuxStat::Mounts.root_mount_options()
 # File:		mounts.rb | Line: 56
 # Definition:	def tmpfs
 LinuxStat::Mounts.tmpfs()
-=> {"/dev/shm"=>"tmpfs /dev/shm tmpfs rw,nosuid,nodev,inode64 0 0", "/sys/fs/cgroup"=>"tmpfs /sys/fs/cgroup tmpfs ro,nosuid,nodev,noexec,size=4096k,nr_inodes=1024,mode=755,inode64 0 0", "/tmp"=>"tmpfs /tmp tmpfs rw,nosuid,nodev,relatime,size=4194304k,ino...
+=> {"/dev/shm"=>"tmpfs /dev/shm tmpfs rw,nosuid,nodev,inode64 0 0", "/sys/fs/cgroup"=>"tmpfs /sys/fs/cgroup tmpfs ro,nosuid,nodev,noexec,size=4096k,nr_inodes=1024,mode=755,inode64 0 0", "/ramdisk"=>"tmpfs /ramdisk tmpfs rw,nosuid,nodev,relatime,size=6291...
 
 ```
 
@@ -429,17 +455,17 @@ LinuxStat::Net.ipv4_private()
 # File:		net.rb | Line: 25
 # Definition:	def total_bytes
 LinuxStat::Net.total_bytes()
-=> {:received=>4509667469, :transmitted=>172614974}
+=> {:received=>473253199, :transmitted=>35211379}
 
 # File:		net.rb | Line: 43
 # Definition:	def total_bytes_received
 LinuxStat::Net.total_bytes_received()
-=> 4509667469
+=> 473253199
 
 # File:		net.rb | Line: 56
 # Definition:	def total_bytes_transmitted
 LinuxStat::Net.total_bytes_transmitted()
-=> 172614974
+=> 35211379
 
 # File:		net.rb | Line: 84
 # Definition:	def usage(interval = 0.1)
@@ -488,7 +514,7 @@ LinuxStat::OS.os_release()
 # File:		os.rb | Line: 114
 # Definition:	def uptime
 LinuxStat::OS.uptime()
-=> {:hour=>8, :minute=>50, :second=>58.38}
+=> {:hour=>9, :minute=>25, :second=>50.38}
 
 ```
 
@@ -514,29 +540,44 @@ LinuxStat::PCI.devices_info(hwdata:)
 LinuxStat::PCI.devices_stat(hwdata:)
 => [{:path=>"/sys/bus/pci/devices/0000:00:00.0/", :id=>"8086:1904", :vendor=>"8086", :device=>"1904", :sub_vendor=>"1028", :sub_device=>"077d", :kernel_driver=>"skl_uncore", :revision=>"0x08", :irq=>0, :enable=>false, :hwdata=>{:vendor=>"Intel Corporatio...
 
+# File:		pci.rb | Line: 259
+# Definition:	def hwdata_file
+LinuxStat::PCI.hwdata_file()
+=> "/usr/share/hwdata/pci.ids"
+
+# File:		pci.rb | Line: 248
+# Definition:	def hwdata_file_set?
+LinuxStat::PCI.hwdata_file_set?()
+=> true
+
+# File:		pci.rb | Line: 275
+# Definition:	def initialize_hwdata
+LinuxStat::PCI.initialize_hwdata()
+=> false
+
 ```
 
 ### LinuxStat::PrettifyBytes
 ```
 # File:		prettify_bytes.rb | Line: 42
 # Definition:	def convert_binary(n)
-LinuxStat::PrettifyBytes.convert_binary(n = 339049244499630)
-=> "308.36 tebibytes"
+LinuxStat::PrettifyBytes.convert_binary(n = 419383956999155)
+=> "381.43 tebibytes"
 
 # File:		prettify_bytes.rb | Line: 19
 # Definition:	def convert_decimal(n)
-LinuxStat::PrettifyBytes.convert_decimal(n = 963970414034560)
-=> "963.97 terabytes"
+LinuxStat::PrettifyBytes.convert_decimal(n = 74171973456499)
+=> "74.17 terabytes"
 
 # File:		prettify_bytes.rb | Line: 90
 # Definition:	def convert_short_binary(n)
-LinuxStat::PrettifyBytes.convert_short_binary(n = 954637976904599)
-=> "868.24 TiB"
+LinuxStat::PrettifyBytes.convert_short_binary(n = 992896974803970)
+=> "903.03 TiB"
 
 # File:		prettify_bytes.rb | Line: 65
 # Definition:	def convert_short_decimal(n)
-LinuxStat::PrettifyBytes.convert_short_decimal(n = 464855754781732)
-=> "464.86 TB"
+LinuxStat::PrettifyBytes.convert_short_decimal(n = 448181119260617)
+=> "448.18 TB"
 
 ```
 
@@ -545,17 +586,17 @@ LinuxStat::PrettifyBytes.convert_short_decimal(n = 464855754781732)
 # File:		process.rb | Line: 19
 # Definition:	def count
 LinuxStat::Process.count()
-=> 203
+=> 199
 
 # File:		process.rb | Line: 71
 # Definition:	def idle
 LinuxStat::Process.idle()
-=> [3, 4, 7, 9, 12, 23, 30, 37, 39, 45, 99, 100, 101, 104, 105, 106, 107, 108, 116, 117, 119, 122, 131, 134, 140, 152, 153, 172, 174, 176, 177, 181, 185, 186, 187, 188, 189, 190, 212, 233, 282, 339, 341, 351, 3101, 3102, 3103, 3104, 3105, 3106, 20589, 20...
+=> [3, 4, 7, 9, 12, 23, 30, 37, 39, 45, 99, 100, 101, 104, 105, 106, 107, 108, 116, 117, 119, 122, 131, 134, 140, 164, 166, 169, 170, 173, 175, 180, 181, 182, 183, 184, 185, 186, 188, 231, 275, 315, 323, 333, 3142, 3143, 3144, 3145, 3146, 3147, 10193, 11...
 
 # File:		process.rb | Line: 8
 # Definition:	def list
 LinuxStat::Process.list()
-=> [1, 2, 3, 4, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 99, 100, 101, 104, 105, 106, 107, 108, 111, 113, 114, 116, 117, 119, 122, 131, 134, 140,...
+=> [1, 2, 3, 4, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 99, 100, 101, 104, 105, 106, 107, 108, 109, 113, 114, 116, 117, 119, 122, 131, 134, 140,...
 
 # File:		process.rb | Line: 25
 # Definition:	def names
@@ -565,12 +606,12 @@ LinuxStat::Process.names()
 # File:		process.rb | Line: 97
 # Definition:	def running
 LinuxStat::Process.running()
-=> [28, 23778, 24066]
+=> [4259, 12094, 13037]
 
 # File:		process.rb | Line: 58
 # Definition:	def sleeping
 LinuxStat::Process.sleeping()
-=> [1, 2, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 38, 40, 41, 42, 43, 44, 46, 47, 48, 111, 113, 114, 171, 173, 191, 221, 239, 309, 311, 314, 315, 316, 338, 340, 366, 367, 368, 369, 383, 386, 389, 404, 407, 411,...
+=> [1, 2, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 38, 40, 41, 42, 43, 44, 46, 47, 48, 109, 113, 114, 163, 165, 189, 218, 232, 271, 302, 314, 316, 319, 321, 322, 324, 325, 326, 327, 345, 348, 376, 403, 405, 406,...
 
 # File:		process.rb | Line: 37
 # Definition:	def types
@@ -604,7 +645,7 @@ LinuxStat::ProcessInfo.count_cpu(pid)
 # File:		process_info.rb | Line: 247
 # Definition:	def cpu_stat(pid: $$, sleep: ticks_to_ms_t5)
 LinuxStat::ProcessInfo.cpu_stat(pid:, sleep:)
-=> {:cpu_usage=>0.0, :threads=>1, :last_executed_cpu=>2}
+=> {:cpu_usage=>0.0, :threads=>1, :last_executed_cpu=>3}
 
 # File:		process_info.rb | Line: 307
 # Definition:	def cpu_usage(pid: $$, sleep: ticks_to_ms_t5)
@@ -619,17 +660,17 @@ LinuxStat::ProcessInfo.gid(pid)
 # File:		process_info.rb | Line: 433
 # Definition:	def last_executed_cpu(pid = $$)
 LinuxStat::ProcessInfo.last_executed_cpu(pid)
-=> 2
+=> 3
 
 # File:		process_info.rb | Line: 114
 # Definition:	def mem_stat(pid = $$)
 LinuxStat::ProcessInfo.mem_stat(pid)
-=> {:memory=>27025.408, :virtual_memory=>98074.624, :resident_memory=>33210.368}
+=> {:memory=>26685.44, :virtual_memory=>97878.016, :resident_memory=>32849.92}
 
 # File:		process_info.rb | Line: 147
 # Definition:	def memory(pid = $$)
 LinuxStat::ProcessInfo.memory(pid)
-=> 27025.408
+=> 26685.44
 
 # File:		process_info.rb | Line: 607
 # Definition:	def nice(pid = $$)
@@ -649,22 +690,22 @@ LinuxStat::ProcessInfo.owner(pid)
 # File:		process_info.rb | Line: 197
 # Definition:	def resident_memory(pid = $$)
 LinuxStat::ProcessInfo.resident_memory(pid)
-=> 33210.368
+=> 32849.92
 
 # File:		process_info.rb | Line: 563
 # Definition:	def running_time(pid = $$)
 LinuxStat::ProcessInfo.running_time(pid)
-=> 1.05
+=> 1.04
 
 # File:		process_info.rb | Line: 544
 # Definition:	def start_time(pid = $$)
 LinuxStat::ProcessInfo.start_time(pid)
-=> 2020-12-27 04:20:42 +0530
+=> 2020-12-28 21:00:34 +0530
 
 # File:		process_info.rb | Line: 513
 # Definition:	def start_time_epoch(pid = $$)
 LinuxStat::ProcessInfo.start_time_epoch(pid)
-=> 1609023042
+=> 1609169434
 
 # File:		process_info.rb | Line: 592
 # Definition:	def state(pid = $$)
@@ -684,7 +725,7 @@ LinuxStat::ProcessInfo.threads(pid)
 # File:		process_info.rb | Line: 23
 # Definition:	def total_io(pid = $$)
 LinuxStat::ProcessInfo.total_io(pid)
-=> {:read_bytes=>0, :write_bytes=>0}
+=> {:read_bytes=>86016, :write_bytes=>0}
 
 # File:		process_info.rb | Line: 446
 # Definition:	def uid(pid = $$)
@@ -694,7 +735,7 @@ LinuxStat::ProcessInfo.uid(pid)
 # File:		process_info.rb | Line: 172
 # Definition:	def virtual_memory(pid = $$)
 LinuxStat::ProcessInfo.virtual_memory(pid)
-=> 98213.888
+=> 98148.352
 
 ```
 
@@ -708,27 +749,27 @@ LinuxStat::Swap.any?()
 # File:		swap.rb | Line: 68
 # Definition:	def available
 LinuxStat::Swap.available()
-=> 3759868
+=> 2912056
 
 # File:		swap.rb | Line: 8
 # Definition:	def list
 LinuxStat::Swap.list()
-=> {"/dev/zram0"=>[:partition, 4194300, 434432, -2]}
+=> {"/dev/zram0"=>[:partition, 4194300, 1282244, -2]}
 
 # File:		swap.rb | Line: 103
 # Definition:	def percent_available
 LinuxStat::Swap.percent_available()
-=> 89.64
+=> 69.43
 
 # File:		swap.rb | Line: 89
 # Definition:	def percent_used
 LinuxStat::Swap.percent_used()
-=> 10.36
+=> 30.57
 
 # File:		swap.rb | Line: 32
 # Definition:	def stat
 LinuxStat::Swap.stat()
-=> {:total=>4194300, :used=>434432, :available=>3759868, :percent_used=>10.36, :percent_available=>89.64}
+=> {:total=>4194300, :used=>1282244, :available=>2912056, :percent_used=>30.57, :percent_available=>69.43}
 
 # File:		swap.rb | Line: 57
 # Definition:	def total
@@ -738,14 +779,14 @@ LinuxStat::Swap.total()
 # File:		swap.rb | Line: 80
 # Definition:	def used
 LinuxStat::Swap.used()
-=> 434432
+=> 1282244
 
 ```
 
 ### LinuxStat::Sysconf
 ```
 LinuxStat::Sysconf.child_max()
-=> 2000000
+=> 14915
 
 LinuxStat::Sysconf.expr_nest_max()
 => 32
@@ -805,17 +846,32 @@ LinuxStat::Sysconf.tty_name_max()
 # File:		usb.rb | Line: 135
 # Definition:	def count
 LinuxStat::USB.count()
-=> 11
+=> 10
 
 # File:		usb.rb | Line: 135
 # Definition:	def count
 LinuxStat::USB.count_devices()
-=> 11
+=> 10
 
 # File:		usb.rb | Line: 47
 # Definition:	def devices_stat(hwdata: true)
 LinuxStat::USB.devices_stat(hwdata:)
-=> [{:path=>"/sys/bus/usb/devices/1-1.2/", :id=>"04d9:1203", :vendor_id=>"04d9", :product_id=>"1203", :bus_num=>1, :dev_num=>4, :hwdata=>{:vendor=>"Holtek Semiconductor, Inc.", :product=>"Keyboard"}, :authorized=>true, :b_max_power=>"100mA", :b_max_packe...
+=> [{:path=>"/sys/bus/usb/devices/1-1.2/", :id=>"04d9:1203", :vendor_id=>"04d9", :product_id=>"1203", :bus_num=>1, :dev_num=>7, :hwdata=>{:vendor=>"Holtek Semiconductor, Inc.", :product=>"Keyboard"}, :authorized=>true, :b_max_power=>"100mA", :b_max_packe...
+
+# File:		usb.rb | Line: 175
+# Definition:	def hwdata_file
+LinuxStat::USB.hwdata_file()
+=> "/usr/share/hwdata/usb.ids"
+
+# File:		usb.rb | Line: 164
+# Definition:	def hwdata_file_set?
+LinuxStat::USB.hwdata_file_set?()
+=> true
+
+# File:		usb.rb | Line: 191
+# Definition:	def initialize_hwdata
+LinuxStat::USB.initialize_hwdata()
+=> false
 
 ```
 
@@ -1305,7 +1361,65 @@ irb(main):004:0> LinuxStat::User.get_login
 
 Right, the get_login() can return an empty string. But LinuxStat::User.get_user also aliased as LinuxStat::User.get_current_user shouldn't return an empty string under most circumstances.
 
-## Note 7: PrettifyBytes
+## Note 7: Hwdata
+The PCI and USB modules actually rely on hwdata found in /usr/share/hwdata/.
+But if the directory is not available, it won't show hwdata related information.
+
+So it's suggested to install hwdata. But you might face issues with heroku and
+other online PaaS where you can't install it. So Version 1.1.1+ comes with a module function called `hwdata_file = file`.
+
++ You can use any usb.ids or pci.ids files:
+
+```
+LS::PCI.hwdata_file = File.join(__dir__, 'hwdata', 'pci.ids')
+LS::USB.hwdata_file = File.join(__dir__, 'hwdata', 'usb.ids')
+```
+
+Assuming that you have `pci.ids` and `usb.ids` under ./hwdata directory.
+
+On rails, you can put this (replace `__dir__` with `Rails.root` inside environment.rb).
+
+But do note that the file can be set only once. It's suggested to do that in the beginning of your app.
+
++ There's one method to check if the hwdata file was already set:
+
+```
+irb(main):001:0' require 'linux_stat'
+=> true
+
+irb(main):002:0> LS::USB.hwdata_file_set?
+=> false
+
+irb(main):003:0> LS::USB.devices_stat ; ''
+=> ""
+
+irb(main):004:0> LS::USB.hwdata_file_set?
+=> true
+```
+
+It works on USB and PCI modules.
+
+Once the file is set, calling `LS::PCI.hwdata_file = file` is futile.
+
++ Initializing hwdata can take 0.1 to 0.2 seconds at the first, so there's a method to initialize_hwdata at first:
+
+```
+irb(main):001:0> require 'linux_stat'
+=> true
+
+irb(main):002:0> LS::PCI.initialize_hwdata
+=> true
+
+irb(main):003:0> LS::PCI.initialize_hwdata
+=> false
+```
+
+It will return true if it worked, else it will return false. It's intended to be done once.
+
+If you don't initialize and call methods that utilizes hwdata, they will call it and the first
+call may take 0.1 to 0.2 seconds, the consecutive calls will then take under a millisecond.
+
+## Note 8: PrettifyBytes
 Often times we need to work with KB, MB GB, TB, or KiB, MiB, GiB, TiB, etc.
 And we need some work to convert bytes to those units.
 Because LinuxStat provides a lot of data in bytes, and kilobytes, it's quite tedious to convert them all the time.

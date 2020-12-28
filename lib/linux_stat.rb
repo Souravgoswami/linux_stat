@@ -15,8 +15,8 @@
 
 # Miscellaneous Modules
 # Independed and LinuxStat's miscellaneous modules
-require "linux_stat/version"
 require 'linux_stat/prettify_bytes'
+require "linux_stat/version"
 
 # Independed Modules
 # Modules that doesn't have any dependency on its own

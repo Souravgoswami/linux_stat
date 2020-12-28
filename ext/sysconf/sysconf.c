@@ -119,6 +119,15 @@ static VALUE getEUID(VALUE obj) {
 	return INT2FIX(geteuid()) ;
 }
 
+static VALUE getHostname(VALUE obj) {
+	int h_max = sysconf(_SC_HOST_NAME_MAX) + 1 ;
+	char hostname[h_max] ;
+
+	short int status = gethostname(hostname, h_max) ;
+
+	return (status < 0) ? rb_str_new_cstr("") : rb_str_new_cstr(hostname) ;
+}
+
 void Init_sysconf() {
 	VALUE _linux_stat = rb_define_module("LinuxStat") ;
 	VALUE _sysconf = rb_define_module_under(_linux_stat, "Sysconf") ;
@@ -144,4 +153,6 @@ void Init_sysconf() {
 
 	rb_define_module_function(_sysconf, "get_user", getUser, 0) ;
 	rb_define_module_function(_sysconf, "get_login", getUser, 0) ;
+
+	rb_define_module_function(_sysconf, "hostname", getHostname, 0) ;
 }

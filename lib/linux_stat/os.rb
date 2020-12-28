@@ -51,11 +51,43 @@ module LinuxStat
 						v[:DISTRIB_DESCRIPTION]
 					elsif v.key?(:DISTRIB_ID)
 						v[:DISTRIB_ID]
-					elsif File.readable?('/etc/issue')
-						IO.read('/etc/issue').strip
+					elsif File.readable?('/etc/issue'.freeze)
+						IO.read('/etc/issue'.freeze, encoding: 'ASCII-8bit').strip
 					else
 						'Unknown'.freeze
 					end
+				end
+			end
+
+			##
+			# Gives you the version of the OS you are using.
+			#
+			# On ArchLinux for example:
+			#    LinuxStat::OS.version
+			#
+			#    => "rolling"
+			#
+			# On Ubuntu 20.04:
+			#    LinuxStat::OS.version
+			#
+			#    => "20.04"
+			#
+			# On CentOS 26:
+			#    LinuxStat::OS.version
+			#
+			#    => "26"
+			#
+			# The return type is String.
+			# But if the information isn't available, it will return an empty frozen String.
+			def version
+				@@distrib_version ||= if os_release.key?(:VERSION_ID)
+					os_release[:VERSION_ID]
+				elsif lsb_release.key?(:DISTRIB_RELEASE)
+					lsb_release[:DISTRIB_RELEASE]
+				elsif os_release.key?(:VERSION)
+					os_release[:VERSION]
+				else
+					''.freeze
 				end
 			end
 
@@ -72,20 +104,16 @@ module LinuxStat
 			#
 			# It returns String but if the info isn't available, it will return an empty String
 			def nodename
-				@@nodename ||= LinuxStat::Uname.nodename
+				LinuxStat::Uname.nodename
 			end
 
 			##
-			# Reads /etc/hostname and returns the hostname.
+			# Returns the hostname from LinuxStat::Sysconf.hostname.
 			#
 			# The return type is String.
 			# If the info info isn't available, it will return 'localhost'.
 			def hostname
-				@@hostname ||= if File.exist?('/etc/hostname')
-					IO.read('/etc/hostname').strip
-				else
-					'localhost'
-				end
+				LinuxStat::Sysconf.hostname
 			end
 
 			##
@@ -114,7 +142,7 @@ module LinuxStat
 			def uptime
 				return {} unless uptime_readable?
 
-				uptime = IO.read('/proc/uptime').to_f
+				uptime = IO.read('/proc/uptime'.freeze).to_f
 				uptime_i = uptime.to_i
 
 				h = uptime_i / 3600
@@ -128,16 +156,21 @@ module LinuxStat
 				}.freeze
 			end
 
+			alias distrib_version version
+
 			private
 			def release(file)
 				IO.readlines(file, 4096).reduce({}) { |h, x|
 					x.strip!
 					next h if x.empty?
 
-					splitted = x.split(?=)
+					splitted = x.split(?=.freeze)
 
-					key = splitted[0].to_s.strip
-					value = splitted[1..-1].join(?=).to_s.strip
+					key = splitted[0].to_s
+					key.strip!
+
+					value = splitted[1..-1].join(?=.freeze).to_s
+					value.strip!
 
 					value[0] = ''.freeze if value[0] == ?".freeze
 					value[-1] = ''.freeze if value[-1] == ?".freeze

@@ -143,11 +143,63 @@ module LinuxStat
 				}
 			end
 
+			##
+			# hwdata_file = file
+			#
+			# Lets you set the hwdata_file about usb.ids.
+			#
+			# The hwdata file about usb.ids contains vendor name and product name information about
+			# devices. This is then mapped by the other methods that utilizes hwdata/usb.ids.
+			#
+			# Do note that this method is intended to run only once, at the beginning.
+			# If you use any other method that utilizes hwdata/usb.ids, before
+			# calling this method, this method will not work.
+			def hwdata_file=(file)
+				@@hwdata_file ||= file.freeze
+			end
+
+			##
+			# Checks if hwdata_file is already initialized or not.
+			# Once it's initialized, calling hwdata_file = 'something/usb.ids' is futile.
+			def hwdata_file_set?
+				@@hwdata_file ||= nil
+				!!@@hwdata_file
+			end
+
+			##
+			# Returns the hwdata_file as string.
+			#
+			# If hwdata_file isn't set, it will return an empty frozen string.
+			#
+			# Once it's set, it can't be changed.
+			def hwdata_file
+				@@hwdata_file ||= nil
+				@@hwdata_file ? @@hwdata_file : ''.freeze
+			end
+
+			##
+			# Initializes hwdata
+			#
+			# hwdata can take upto 0.1 to 0.2 seconds to get initialized.
+			#
+			# Calling this method will load hwdata for future use.
+			#
+			# Once it's initialized, hwdata_file can't be changed.
+			#
+			# If this method initializes hwdata, it will return true
+			# Othewise this method will return false.
+			def initialize_hwdata
+				@@hwdata ||= nil
+				init = !@@hwdata
+				hwdata
+				init
+			end
+
 			alias count_devices count
 
 			private
 			def hwdata
-				@@hwdata_file ||= "/usr/share/hwdata/usb.ids"
+				@@hwdata_file ||= "/usr/share/hwdata/usb.ids".freeze
 
 				@@hwdata ||= if File.readable?(@@hwdata_file)
 					file_data = IO.readlines(@@hwdata_file, encoding: 'ASCII-8BIT')

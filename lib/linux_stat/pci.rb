@@ -130,69 +130,72 @@ module LinuxStat
 				return devices_info(hwdata: hwdata) unless @@sys_pci_readable
 
 				Dir['/sys/bus/pci/devices/*/'.freeze].sort!.map! { |x|
-					_vendor_file = File.join(x, 'vendor'.freeze)
-					next unless File.readable?(_vendor_file)
-					vendor = IO.read(_vendor_file).to_i(16).to_s(16)
-					prepend_0(vendor)
+					begin
+						_vendor_file = File.join(x, 'vendor'.freeze)
+						next unless File.readable?(_vendor_file)
+						vendor = IO.read(_vendor_file).to_i(16).to_s(16)
+						prepend_0(vendor)
 
-					_device_file = File.join(x, 'device'.freeze)
-					next unless File.readable?(_device_file)
-					device = IO.read(_device_file).to_i(16).to_s(16)
-					prepend_0(device)
+						_device_file = File.join(x, 'device'.freeze)
+						next unless File.readable?(_device_file)
+						device = IO.read(_device_file).to_i(16).to_s(16)
+						prepend_0(device)
 
-					_sub_vendor_file = File.join(x, 'subsystem_vendor'.freeze)
-					sub_vendor = File.readable?(_sub_vendor_file) ? IO.read(_sub_vendor_file).to_i(16).to_s(16) : nil
-					prepend_0(sub_vendor) if sub_vendor
+						_sub_vendor_file = File.join(x, 'subsystem_vendor'.freeze)
+						sub_vendor = File.readable?(_sub_vendor_file) ? IO.read(_sub_vendor_file).to_i(16).to_s(16) : nil
+						prepend_0(sub_vendor) if sub_vendor
 
-					_sub_device_file = File.join(x, 'subsystem_device'.freeze)
-					sub_device = File.readable?(_sub_device_file) ? IO.read(_sub_device_file).to_i(16).to_s(16) : nil
-					prepend_0(sub_device) if sub_device
+						_sub_device_file = File.join(x, 'subsystem_device'.freeze)
+						sub_device = File.readable?(_sub_device_file) ? IO.read(_sub_device_file).to_i(16).to_s(16) : nil
+						prepend_0(sub_device) if sub_device
 
-					_uevent = File.join(x, 'uevent'.freeze)
-					uevent = File.readable?(_uevent) ? IO.foreach(_uevent) : nil
+						_uevent = File.join(x, 'uevent'.freeze)
+						uevent = File.readable?(_uevent) ? IO.foreach(_uevent) : nil
 
-					kernel_driver = if uevent
-						uevent.find { |_x|
-							_x.split(?=.freeze)[0].to_s.tap(&:strip!) == 'DRIVER'.freeze
-						} &.split(?=) &.[](1) &.tap(&:strip!)
-					else
-						nil
+						kernel_driver = if uevent
+							uevent.find { |_x|
+								_x.split(?=.freeze)[0].to_s.tap(&:strip!) == 'DRIVER'.freeze
+							} &.split(?=) &.[](1) &.tap(&:strip!)
+						else
+							nil
+						end
+
+						_revision_file = File.join(x, 'revision'.freeze)
+						revision = File.readable?(_revision_file) ? IO.read(_revision_file).tap(&:strip!) : ''.freeze
+
+						_irq_file = File.join(x, 'irq'.freeze)
+						irq = File.readable?(_irq_file) ? IO.read(_irq_file).to_i : nil
+
+						_enable_file = File.join(x, 'enable'.freeze)
+						enable = File.readable?(_enable_file) ? IO.read(_enable_file).to_i  == 1 : nil
+
+						query = if hwdata && sub_vendor && sub_device
+							query_hwdata(vendor, device, sub_vendor, sub_device)
+						elsif hwdata && sub_vendor
+							query_hwdata(vendor, device, sub_vendor)
+						elsif hwdata
+							query_hwdata(vendor, device)
+						else
+							{}
+						end
+
+						ret = {
+							path: x, id: "#{vendor}:#{device}",
+							vendor: vendor, device: device
+						}
+
+						ret.merge!(sub_vendor: sub_vendor) if sub_vendor
+						ret.merge!(sub_device: sub_device) if sub_device
+
+						ret.merge!(kernel_driver: kernel_driver) if kernel_driver
+						ret.merge!(revision: revision) unless revision.empty?
+						ret.merge!(irq: irq) if irq
+						ret.merge!(enable: enable) unless enable.nil?
+						ret.merge!(hwdata: query) unless query.empty?
+
+						ret
+					rescue StandardError
 					end
-
-					_revision_file = File.join(x, 'revision'.freeze)
-					revision = File.readable?(_revision_file) ? IO.read(_revision_file).tap(&:strip!) : ''.freeze
-
-					_irq_file = File.join(x, 'irq'.freeze)
-					irq = File.readable?(_irq_file) ? IO.read(_irq_file).to_i : nil
-
-					_enable_file = File.join(x, 'enable'.freeze)
-					enable = File.readable?(_enable_file) ? IO.read(_enable_file).to_i  == 1 : nil
-
-					query = if hwdata && sub_vendor && sub_device
-						query_hwdata(vendor, device, sub_vendor, sub_device)
-					elsif hwdata && sub_vendor
-						query_hwdata(vendor, device, sub_vendor)
-					elsif hwdata
-						query_hwdata(vendor, device)
-					else
-						{}
-					end
-
-					ret = {
-						path: x, id: "#{vendor}:#{device}",
-						vendor: vendor, device: device
-					}
-
-					ret.merge!(sub_vendor: sub_vendor) if sub_vendor
-					ret.merge!(sub_device: sub_device) if sub_device
-
-					ret.merge!(kernel_driver: kernel_driver) if kernel_driver
-					ret.merge!(revision: revision) unless revision.empty?
-					ret.merge!(irq: irq) if irq
-					ret.merge!(enable: enable) unless enable.nil?
-					ret.merge!(hwdata: query) unless query.empty?
-
-					ret
 				}
 			end
 

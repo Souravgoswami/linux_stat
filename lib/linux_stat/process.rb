@@ -6,10 +6,17 @@ module LinuxStat
 			#
 			# The return type is an Array of Integers.
 			def list
-				Dir['/proc/*'].select { |x|
-					pid = File.split(x)[1]
-					pid.to_i.to_s == pid
-				}.map! { |x| File.split(x)[-1].to_i }
+				d = Dir['/proc/*'.freeze]
+				ret, i = [], -1
+				count = d.length
+
+				while(i += 1) < count
+					pid = File.split(d[i])[1]
+					pid_i = pid.to_i
+					ret << pid_i if pid_i.to_s == pid
+				end
+
+				ret
 			end
 
 			##
@@ -17,28 +24,42 @@ module LinuxStat
 			#
 			# The return type is Integer.
 			def count
-				list.count
+				list.length
 			end
 
 			##
 			# Returns all the id of processes mapped with their names as a Hash.
 			def names
-				list.reduce({}) { |h, x|
+				h, i = {}, -1
+
+				l = list
+				count = l.length
+
+				while(i += 1) < count
+					x = l[i]
+
 					begin
-						h.merge!( x => IO.foreach(File.join('/proc', x.to_s, 'status')).first.split[1] )
-					rescue Exception
-						h
+						h.merge!( x => IO.foreach("/proc/#{x}/status").first.split[1])
+					rescue StandardError
 					end
-				}
+				end
+				h
 			end
 
 			##
 			# Returns all the id of processes mapped with their status as a Hash.
 			def types
-				list.reduce({}) { |h, x|
+				h, i = {}, -1
+
+				l = list
+				count = l.length
+
+				while(i += 1) < count
+					x = l[i]
+
 					begin
 						h.merge!(x =>
-							case IO.read(File.join('/proc', x.to_s, 'stat')).split[2]
+							case IO.foreach("/proc/#{x}/stat", ' '.freeze).first(3)[-1][0]
 								when ?S.freeze then :sleeping
 								when ?I.freeze then :idle
 								when ?Z.freeze then :zombie
@@ -46,10 +67,11 @@ module LinuxStat
 								else :unknown
 							end
 						)
-					rescue Exception
-						h
+					rescue StandardError
 					end
-				}
+				end
+
+				h
 			end
 
 			##
@@ -58,8 +80,8 @@ module LinuxStat
 			def sleeping
 				list.select { |x|
 					begin
-						IO.read(File.join('/proc', x.to_s, 'stat')).split[2] == ?S
-					rescue Exception
+						IO.foreach("/proc/#{x}/stat", ' '.freeze).first(3)[-1][0] == ?S.freeze
+					rescue StandardError
 						nil
 					end
 				}
@@ -71,8 +93,8 @@ module LinuxStat
 			def idle
 				list.select { |x|
 					begin
-						IO.read(File.join('/proc', x.to_s, 'stat')).split[2] == ?I
-					rescue Exception
+						IO.foreach("/proc/#{x}/stat", ' '.freeze).first(3)[-1][0] == ?I.freeze
+					rescue StandardError
 						nil
 					end
 				}
@@ -84,8 +106,8 @@ module LinuxStat
 			def zombie
 				list.select { |x|
 					begin
-						IO.read(File.join('/proc', x.to_s, 'stat')).split[2] == ?Z
-					rescue Exception
+						IO.foreach("/proc/#{x}/stat", ' '.freeze).first(3)[-1][0] == ?Z.freeze
+					rescue StandardError
 						nil
 					end
 				}
@@ -97,8 +119,8 @@ module LinuxStat
 			def running
 				list.select { |x|
 					begin
-						IO.read(File.join('/proc', x.to_s, 'stat')).split[2] == ?R
-					rescue Exception
+						IO.foreach("/proc/#{x}/stat", ' '.freeze).first(3)[-1][0] == ?R.freeze
+					rescue StandardError
 						nil
 					end
 				}

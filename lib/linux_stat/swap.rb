@@ -8,7 +8,7 @@ module LinuxStat
 			def list
 				return {} unless swaps_readable?
 
-				file = IO.readlines('/proc/swaps').drop(1)
+				file = IO.readlines('/proc/swaps'.freeze).drop(1)
 				file.reduce({}) do |h, x|
 					name, *stats = x.strip.split
 					h.merge!(name => stats.map! { |v| v.to_i.to_s == v ? v.to_i : v.to_sym })
@@ -20,7 +20,7 @@ module LinuxStat
 			#
 			# If the info isn't available, it will return an empty Hash.
 			def any?
-				!!IO.foreach('/proc/swaps').drop(1).first
+				!!IO.foreach('/proc/swaps'.freeze).first(2)[1]
 			end
 
 			# Show aggregated used and available swap.
@@ -114,7 +114,7 @@ module LinuxStat
 			def read_usage
 				return [[], []] unless swaps_readable?
 
-				val = IO.readlines('/proc/swaps').drop(1)
+				val = IO.readlines('/proc/swaps'.freeze).drop(1)
 				return [[], []] if val.empty?
 
 				val.map! { |x|
@@ -123,7 +123,7 @@ module LinuxStat
 			end
 
 			def swaps_readable?
-				@@swaps_readable ||= File.readable?('/proc/swaps')
+				@@swaps_readable ||= File.readable?('/proc/swaps'.freeze)
 			end
 		end
 	end

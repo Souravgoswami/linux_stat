@@ -55,6 +55,7 @@ module LinuxStat
 			# But if the status isn't available it will return an empty Hash.
 			def gids
 				return {} unless passwd_readable?
+
 				passwd_splitted.reduce({}) { |h, x|
 					h.merge!(x[0].to_sym => x[3].to_i)
 				}
@@ -103,7 +104,7 @@ module LinuxStat
 
 				uid, gid = LinuxStat::Sysconf.get_uid, LinuxStat::Sysconf.get_gid
 
-				username = ''
+				username = ''.freeze
 				passwd.each { |x|
 					splitted = x.split(?:).freeze
 					if splitted[2].to_i == uid && splitted[3].to_i == gid
@@ -187,7 +188,7 @@ module LinuxStat
 			def username_by_gid(gid = get_gid)
 				return ''.freeze unless passwd_readable?
 
-				username = ''
+				username = ''.freeze
 				passwd.each do |x|
 					splitted = x.split(?:.freeze)
 					if splitted[2].to_i == gid
@@ -314,7 +315,7 @@ module LinuxStat
 			def home_by_gid(id = get_gid)
 				return ''.freeze unless passwd_readable?
 
-				home = ''
+				home = ''.freeze
 				passwd.each do |x|
 					splitted = x.split(?:.freeze)
 

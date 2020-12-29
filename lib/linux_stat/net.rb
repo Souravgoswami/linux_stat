@@ -86,13 +86,13 @@ module LinuxStat
 
 				data = IO.readlines(DEV).drop(2)
 				indices = find_index_of_bytes
-				data.reject! { |x| x.strip.start_with?('lo:') }
+				data.reject! { |x| x.strip.start_with?('lo:'.freeze) }
 				r, t = data.map { |x| x.split.values_at(*indices).map(&:to_i) }.transpose.map(&:sum)
 
 				sleep(interval)
 
 				data2 = IO.readlines(DEV).drop(2)
-				data2.reject! { |x| x.strip.start_with?('lo:') }
+				data2.reject! { |x| x.strip.start_with?('lo:'.freeze) }
 				r2, t2 = data2.map { |x| x.split.values_at(*indices).map(&:to_i) }.transpose.map(&:sum)
 
 				# Measure the difference
@@ -118,8 +118,8 @@ module LinuxStat
 
 					r.each_with_index { |x, i|
 						downcased = x.downcase
-						h.merge!(:r => i) if downcased.start_with?('receive')
-						h.merge!(:t => i) if downcased.start_with?('transmit')
+						h.merge!(:r => i) if downcased.start_with?('receive'.freeze)
+						h.merge!(:t => i) if downcased.start_with?('transmit'.freeze)
 					}
 
 					data_0 = data.next.gsub(?|.freeze, ' %'.freeze)

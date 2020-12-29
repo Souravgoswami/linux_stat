@@ -11,7 +11,7 @@ module LinuxStat
 			def stat
 				return {} unless meminfo?
 
-				memory = IO.foreach('/proc/meminfo').first(3)
+				memory = IO.foreach('/proc/meminfo'.freeze).first(3)
 
 				total = memory[0].split[1].to_i
 				available = memory[2].split[1].to_i
@@ -39,7 +39,7 @@ module LinuxStat
 			# It retuns an Integer but if the info is not available, it will return nil.
 			def total
 				return nil unless meminfo?
-				IO.foreach('/proc/meminfo').first.split[1].to_i
+				IO.foreach('/proc/meminfo'.freeze).first.split[1].to_i
 			end
 
 			##
@@ -49,7 +49,7 @@ module LinuxStat
 			# It retuns an Integer but if the info is not available, it will return nil
 			def available
 				return nil unless meminfo?
-				IO.foreach('/proc/meminfo').first(3)[-1].split[1].to_i
+				IO.foreach('/proc/meminfo'.freeze).first(3)[-1].split[1].to_i
 			end
 
 			##
@@ -59,7 +59,7 @@ module LinuxStat
 			# It retuns an Integer but if the info is not available, it will return nil.
 			def used
 				return nil unless meminfo?
-				memory = IO.foreach('/proc/meminfo').first(3)
+				memory = IO.foreach('/proc/meminfo'.freeze).first(3)
 				memory[0].split[1].to_i - memory[2].split[1].to_i
 			end
 
@@ -69,7 +69,7 @@ module LinuxStat
 			# It retuns an Integer but if the info is not available, it will return nil
 			def percent_used
 				return nil unless meminfo?
-				memory = IO.foreach('/proc/meminfo').first(3)
+				memory = IO.foreach('/proc/meminfo'.freeze).first(3)
 				total = memory[0].split[1].to_i
 				total.-(memory[2].split[1].to_i).*(100).fdiv(total).round(2)
 			end
@@ -80,13 +80,13 @@ module LinuxStat
 			# It retuns an Integer but if the info is not available,  it will return nil
 			def percent_available
 				return nil unless meminfo?
-				memory = IO.foreach('/proc/meminfo').first(3)
+				memory = IO.foreach('/proc/meminfo'.freeze).first(3)
 				memory[2].split[1].to_i.*(100).fdiv(memory[0].split[1].to_i).round(2)
 			end
 
 			private
 			def meminfo?
-				@@readable ||= File.readable?('/proc/meminfo')
+				@@readable ||= File.readable?('/proc/meminfo'.freeze)
 			end
 		end
 	end

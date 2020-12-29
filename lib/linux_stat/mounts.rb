@@ -209,17 +209,17 @@ module LinuxStat
 
 			private
 			def mount_readable?
-				@@mount_readable ||= File.readable?('/proc/mounts')
+				@@mount_readable ||= File.readable?('/proc/mounts'.freeze)
 			end
 
 			def mounts
 				return [] unless mount_readable?
-				IO.readlines('/proc/mounts').each(&:strip!)
+				IO.readlines('/proc/mounts'.freeze).each(&:strip!)
 			end
 
 			def find_root
 				return [] unless mount_readable?
-				@@root ||= IO.foreach('/proc/mounts').find { |x| x.split[1] == '/'.freeze }.split
+				@@root ||= IO.foreach('/proc/mounts'.freeze).find { |x| x.split[1] == '/'.freeze }.split
 			end
 
 			def fs_info(dev)

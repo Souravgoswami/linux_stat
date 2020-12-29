@@ -52,7 +52,7 @@ module LinuxStat
 					elsif v.key?(:DISTRIB_ID)
 						v[:DISTRIB_ID]
 					elsif File.readable?('/etc/issue'.freeze)
-						IO.read('/etc/issue'.freeze, encoding: 'ASCII-8bit').strip
+						IO.read('/etc/issue'.freeze, encoding: 'ASCII-8bit'.freeze).strip
 					else
 						'Unknown'.freeze
 					end

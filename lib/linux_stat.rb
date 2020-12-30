@@ -28,6 +28,7 @@ require "linux_stat/net"
 require "linux_stat/pci"
 require "linux_stat/process"
 require "linux_stat/swap"
+require "linux_stat/thermal"
 require "linux_stat/usb"
 
 # Dependent Modules

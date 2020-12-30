@@ -1,4 +1,6 @@
 module LinuxStat
+	# Shows various User related information of the current system.
+
 	module User
 		class << self
 			##

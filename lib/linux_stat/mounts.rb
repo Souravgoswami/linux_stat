@@ -1,4 +1,6 @@
 module LinuxStat
+	# Shows various Mounted device related information of the current system.
+
 	module Mounts
 		class << self
 			##

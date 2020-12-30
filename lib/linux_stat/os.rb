@@ -1,4 +1,6 @@
 module LinuxStat
+	# Shows various OS related information of the current system.
+
 	module OS
 		class << self
 			##

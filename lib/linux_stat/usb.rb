@@ -1,4 +1,6 @@
 module LinuxStat
+	# Shows various USB device related information of the current system.
+
 	module USB
 		class << self
 			##

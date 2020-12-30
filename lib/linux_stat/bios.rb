@@ -1,4 +1,6 @@
 module LinuxStat
+	# Shows various BIOS related information of the current system.
+
 	module BIOS
 		class << self
 			##

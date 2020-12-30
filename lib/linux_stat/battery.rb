@@ -1,4 +1,6 @@
 module LinuxStat
+	# Shows various battery related information of the current system.
+
 	module Battery
 		PATH = "/sys/class/power_supply/BAT0".freeze
 

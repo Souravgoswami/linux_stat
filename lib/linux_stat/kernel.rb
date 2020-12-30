@@ -1,4 +1,6 @@
 module LinuxStat
+	# Shows various Kernel related information of the current system.
+
 	module Kernel
 		class << self
 			##

@@ -1,4 +1,6 @@
 module LinuxStat
+	# Shows various Filesystem related information of the current system.
+
 	module Filesystem
 		class << self
 			##

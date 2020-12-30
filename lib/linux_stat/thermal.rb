@@ -1,4 +1,7 @@
 module LinuxStat
+	# Sensors are available to /sys/class/hwmon
+	# This module just reads the files inside them to get the sensor information.
+
 	module Thermal
 		class << self
 			##

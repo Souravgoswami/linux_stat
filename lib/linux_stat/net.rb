@@ -1,4 +1,6 @@
 module LinuxStat
+	# Shows various Net related information of the current system.
+
 	module Net
 		class << self
 			DEV = '/proc/net/dev'.freeze

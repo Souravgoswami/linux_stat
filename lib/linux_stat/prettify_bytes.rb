@@ -1,4 +1,11 @@
 module LinuxStat
+	# Helps you convert bytes to a unit like:
+	#
+	# 1. kilobyte, megabyte, gigabyte, terabyte, petabyte, exabyte, zettabyte, yottabyte
+	# 2. kibibyte, mebibyte, gibibyte, tebibyte, pebibyte, exbibyte, zebibyte, yobibyte
+	# 3. kB, MB, GB, TB, PB, EB, ZB, YB
+	# 4. kiB, MiB, GiB, TiB, PiB, EiB, ZiB, YiB
+
 	module PrettifyBytes
 		class << self
 			##

@@ -1,4 +1,6 @@
 module LinuxStat
+	# Shows various Swap devices related information of the current system.
+
 	module Swap
 		class << self
 			##

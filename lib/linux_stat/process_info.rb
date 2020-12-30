@@ -1,4 +1,11 @@
 module LinuxStat
+	# Shows various information about a process that is either
+	# running, sleeping, idle or a zombie.
+	# Most methods can take a PID, but some uses polling to calculate
+	# something, they can accept options instead of arguments.
+	# Consult the documentation on the specific methods
+	# for more details on that.
+
 	module ProcessInfo
 		class << self
 			##

@@ -1,4 +1,6 @@
 module LinuxStat
+	# Shows various CPU related information of the current system.
+
 	module CPU
 		class << self
 			##

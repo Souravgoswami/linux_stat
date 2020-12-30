@@ -1,4 +1,6 @@
 module LinuxStat
+	# Shows various PCI device related information of the current system.
+
 	module PCI
 		class << self
 			##

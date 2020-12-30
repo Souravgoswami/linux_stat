@@ -1,4 +1,6 @@
 module LinuxStat
+	# Shows various Memory related information of the current system.
+
 	module Memory
 		class << self
 			##

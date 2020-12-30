@@ -1,4 +1,7 @@
 module LinuxStat
+	# Shows various information about a process that is either
+	# running, sleeping, idle or a zombie.
+
 	module Process
 		class << self
 			##

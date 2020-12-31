@@ -854,6 +854,30 @@ LinuxStat::Sysconf.tty_name_max()
 
 ```
 
+### LinuxStat::Thermal
+```
+# File:		thermal.rb | Line: 57
+# Definition:	def count_fans
+LinuxStat::Thermal.count_fans()
+=> 1
+
+# File:		thermal.rb | Line: 49
+# Definition:	def count_sensors
+LinuxStat::Thermal.count_sensors()
+=> 8
+
+# File:		thermal.rb | Line: 41
+# Definition:	def fans
+LinuxStat::Thermal.fans()
+=> [{:path=>"/sys/class/hwmon/hwmon4", :name=>"dell_smm", :label=>"Processor Fan", :rpm=>0}]
+
+# File:		thermal.rb | Line: 23
+# Definition:	def temperatures
+LinuxStat::Thermal.temperatures()
+=> [{:path=>"/sys/class/hwmon/hwmon4", :name=>"dell_smm", :label=>"SODIMM", :temperature=>36.0}, {:path=>"/sys/class/hwmon/hwmon4", :name=>"dell_smm", :label=>"CPU", :temperature=>46.0}, {:path=>"/sys/class/hwmon/hwmon4", :name=>"dell_smm", :label=>"Ambi...
+
+```
+
 ### LinuxStat::USB
 ```
 # File:		usb.rb | Line: 135

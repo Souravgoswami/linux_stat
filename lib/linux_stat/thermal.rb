@@ -57,6 +57,8 @@ module LinuxStat
 			#
 			# The return type is an Integer.
 			def count_fans
+				return 0 unless hwmon_readable?
+
 				Dir["/sys/class/hwmon/hwmon[0-9]*/fan[0-9]*_input".freeze].size
 			end
 

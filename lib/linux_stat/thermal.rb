@@ -1,6 +1,8 @@
 module LinuxStat
 	# Sensors are available to /sys/class/hwmon
 	# This module just reads the files inside them to get the sensor information.
+	#
+	# https://www.kernel.org/doc/Documentation/thermal/sysfs-api.txt
 
 	module Thermal
 		class << self
@@ -45,6 +47,8 @@ module LinuxStat
 			#
 			# The return type is an Integer.
 			def count_sensors
+				return 0 unless hwmon_readable?
+
 				Dir["/sys/class/hwmon/hwmon[0-9]*/temp[0-9]*_input".freeze].size
 			end
 
@@ -57,7 +61,13 @@ module LinuxStat
 			end
 
 			private
+			def hwmon_readable?
+				@@hwmon_readable ||= File.readable?("/sys/class/hwmon/")
+			end
+
 			def query_hwmon(mon, key, div = false)
+				return [] unless hwmon_readable?
+
 				name = dir = ''.freeze
 
 				files = Dir["/sys/class/hwmon/hwmon[0-9]*/#{mon}[0-9]*_input".freeze]

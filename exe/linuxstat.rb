@@ -113,24 +113,9 @@ execute.sort.each do |c|
 
 	meths.each do |meth|
 		arg = nil
-		params = e.method(meth).parameters
 
-		param = ''
-
-		params.each do |p|
-			case p[0]
-				when :opt
-					param << "#{p[1]}, "
-				when :key
-					param << "#{p[1]}:, "
-				when :req
-					param << "#{p[1] || 'arg'}, "
-			end
-		end
-
-		param.delete_suffix!(", ")
-
-		if e.method(meth).arity > 0
+		arity = e.method(meth).arity
+		if arity > 0 || arity == -2
 			if c == :PrettifyBytes
 				arg = rand(10 ** 15)
 			elsif c == :FS
@@ -140,8 +125,23 @@ execute.sort.each do |c|
 			end
 		end
 
+		params = e.method(meth).parameters
+		param = ''
+		params.each do |p|
+			case p[0]
+				when :opt
+					param << "#{p[1]}, "
+				when :key
+					param << "#{p[1]}:, "
+				when :req
+					_arg = arg ? " = #{arg.inspect}" : ''.freeze
+					param << "#{p[1] || 'arg'}#{_arg}, "
+			end
+		end
+		param.delete_suffix!(", ")
+
 		disp_meth = "#{meth}"
-		disp_meth.concat(arg ? "(#{param} = #{arg.inspect})" : "(#{param})")
+		disp_meth.concat(arg ? "(#{param})" : "(#{param})")
 
 		time = Time.now
 		ret = arg ? e.send(meth, arg) : e.send(meth)

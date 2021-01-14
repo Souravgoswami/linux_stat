@@ -23,13 +23,13 @@ module LinuxStat
 			# LinuxStat::PrettifyBytes.convert_decimal(1024 ** 3)
 			#
 			# => "1.07 gigabytes"
-			def convert_decimal(n)
+			def convert_decimal(n, precision: 2)
 				@@d_units ||= %W(#{''} kilo mega giga tera peta exa zetta)
 					.map.with_index { |x, i| [x, 1000.**(i + 1)] }
 				unit = @@d_units.find { |x| n < x[1] } || ['yotta'.freeze, 10 ** 27]
 
 				converted = n.fdiv(unit[1] / 1000).round(2)
-				"#{pad_left(converted)} #{unit[0]}byte#{?s.freeze if converted != 1}"
+				"#{pad_left(converted, precision)} #{unit[0]}byte#{?s.freeze if converted != 1}"
 			end
 
 			# Converts a number to binary byte units and outputs with the IEC prefix
@@ -46,13 +46,13 @@ module LinuxStat
 			# LinuxStat::PrettifyBytes.convert_binary(1024 ** 3)
 			#
 			# => "1.0 gibibyte"
-			def convert_binary(n)
+			def convert_binary(n, precision: 2)
 				@@b_units ||= %W(#{''} kibi mebi gibi tebi pebi exbi zebi)
 					.map.with_index { |x, i| [x, 1024.**(i + 1)] }
 				unit = @@b_units.find { |x| n < x[1] } || ['yobi'.freeze, 10 ** 27]
 
 				converted = n.fdiv(unit[1] / 1024).round(2)
-				"#{pad_left(converted)} #{unit[0]}byte#{?s.freeze if converted != 1}"
+				"#{pad_left(converted, precision)} #{unit[0]}byte#{?s.freeze if converted != 1}"
 			end
 
 			# Converts a number to decimal byte units
@@ -69,13 +69,13 @@ module LinuxStat
 			# LinuxStat::PrettifyBytes.convert_short_decimal(1024 ** 3)
 			#
 			# => "1.07 GB"
-			def convert_short_decimal(n)
+			def convert_short_decimal(n, precision: 2)
 				@@sd_units ||= %W(#{''} k M G T P E Z)
 					.map.with_index { |x, i| [x, 1000.**(i + 1)] }
 				unit = @@sd_units.find { |x| n < x[1] } || [?Y.freeze, 10 ** 27]
 
 				converted = n.fdiv(unit[1] / 1000).round(2)
-				"#{pad_left(converted)} #{unit[0]}B"
+				"#{pad_left(converted, precision)} #{unit[0]}B"
 			end
 
 			##
@@ -94,15 +94,15 @@ module LinuxStat
 			# LinuxStat::PrettifyBytes.convert_short_binary(1024 ** 3)
 			#
 			# => "1.0 GiB"
-			def convert_short_binary(n)
-				return "#{n} B" if n < 1024
+			def convert_short_binary(n, precision: 2)
+				return "#{pad_left(n, precision)} B" if n < 1024
 
 				@@sb_units ||= %W(#{''} K M G T P E Z)
 					.map.with_index { |x, i| [x, 1024.**(i + 1)] }
 				unit = @@sb_units.find { |x| n < x[1] } || [?Y.freeze, 1024 ** 9]
 
 				converted = n.fdiv(unit[1] / 1024).round(2)
-				"#{pad_left(converted)} #{unit[0]}iB"
+				"#{pad_left(converted, precision)} #{unit[0]}iB"
 			end
 
 			private

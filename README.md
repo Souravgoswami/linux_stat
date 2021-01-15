@@ -12,7 +12,7 @@ It only works for Linux, and detecting the OS is upto the user of this gem.
 
 Languages Used:
 
-<img src="https://linuxstatloc.herokuapp.com/badge.svg" width="260px">
+<img src="https://linuxstatloc.herokuapp.com/svg" width="260px">
 
 ---
 

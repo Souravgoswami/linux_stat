@@ -69,6 +69,8 @@ module LinuxStat
 
 			##
 			# = command_name(pid = $$)
+			# Not to be confused with process_name
+			# It just splits the cmdline to show the command name
 			#
 			# Where pid is the process ID.
 			#
@@ -84,12 +86,39 @@ module LinuxStat
 			# If the info isn't available it will return an empty frozen String.
 			def command_name(pid = $$)
 				# Do note that the /proc/ppid/comm may not contain the full name
-				file = "/proc/#{pid}/cmdline".freeze
+				# It's limited by TASK_COMM_LEN (16) characters
+				File.split(cmdline(pid).split[0])[-1]
+			end
+
+
+			##
+			# = process_name(pid = $$)
+			# It shows the filename of the command
+			# Sometimes the filename is stripped
+			#
+			# Where pid is the process ID.
+			#
+			# By default it is the id of the current process ($$)
+			#
+			# It retuns the total command name of the process.
+			#
+			# The output is String. For example:
+			#    LinuxStat::ProcessInfo.process_name
+			#
+			#    "ruby"
+			#
+			# If the info isn't available it will return an empty frozen String.
+			def process_name(pid = $$)
+				file = "/proc/#{pid}/stat".freeze
 				return ''.freeze unless File.readable?(file)
 
-				_cmdline = IO.read(file)
-				_cmdline.gsub!(?\u0000, ?\s)
-				File.split(_cmdline.tap(&:strip!).split[0])[-1]
+				name = IO.read(file).split(/(\(.*\))/) &.[](1) &.[](1..-2)
+
+				if name && name.length < 15
+					name
+				else
+					File.split(cmdline(pid).split[0])[-1]
+				end
 			end
 
 			##

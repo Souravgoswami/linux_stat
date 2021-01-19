@@ -87,9 +87,10 @@ module LinuxStat
 			def command_name(pid = $$)
 				# Do note that the /proc/ppid/comm may not contain the full name
 				# It's limited by TASK_COMM_LEN (16) characters
-				File.split(cmdline(pid).split[0])[-1]
+				c = cmdline(pid).split[0]
+				return ''.freeze unless c
+				File.split(c)[-1]
 			end
-
 
 			##
 			# = process_name(pid = $$)
@@ -114,7 +115,7 @@ module LinuxStat
 
 				name = IO.read(file).split(/(\(.*\))/) &.[](1) &.[](1..-2)
 
-				if name && name.length < 15
+				if name && name.length > 0 && name.length < 15
 					name
 				else
 					File.split(cmdline(pid).split[0])[-1]

@@ -133,10 +133,14 @@ module LinuxStat
 				}
 			end
 
+			##
+			# Returns all the id of processes that are stopped.
+			# The return type is an Array of Integers.
 			def stopped
 				list.select { |x|
 					begin
-						IO.read("/proc/#{x}/stat").split(/(\(.*\))/)[-1][/\s.+?/].strip == ?T.freeze
+						v = IO.read("/proc/#{x}/stat").split(/(\(.*\))/)[-1][/\s.+?/].strip
+						v == ?T.freeze || v == ?t.freeze
 					rescue StandardError
 						false
 					end

@@ -31,7 +31,8 @@ module LinuxStat
 			end
 
 			##
-			# Returns all the id of processes mapped with their names as a Hash.
+			# Returns all the id of processes mapped with their executable names (comm) as a Hash.
+			# The names can be truncated to TASK_COMM_LEN or (16 - 1 = 15) places.
 			def names
 				h, i = {}, -1
 
@@ -42,7 +43,30 @@ module LinuxStat
 					x = l[i]
 
 					begin
-						h.merge!( x => IO.foreach("/proc/#{x}/status").first.split[1..-1].join(?\s.freeze))
+						h.merge!( x => IO.read("/proc/#{x}/comm").strip)
+					rescue StandardError
+					end
+				end
+				h
+			end
+
+			##
+			# Returns all the id of processes mapped with their cmdline info as a Hash.
+			# The cmdlines aren't usually truncated like names, but they can contain
+			# arguments with the command.
+			def cmdlines
+				h, i = {}, -1
+
+				l = list
+				count = l.length
+
+				while(i += 1) < count
+					x = l[i]
+
+					begin
+						cmdlines = IO.read("/proc/#{x}/cmdline").strip
+						cmdlines.gsub!(?\u0000.freeze, ?\s.freeze)
+						h.merge!( x => cmdlines)
 					rescue StandardError
 					end
 				end

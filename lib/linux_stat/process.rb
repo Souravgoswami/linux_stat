@@ -132,6 +132,16 @@ module LinuxStat
 					end
 				}
 			end
+
+			def stopped
+				list.select { |x|
+					begin
+						IO.read("/proc/#{x}/stat").split(/(\(.*\))/)[-1][/\s.+?/].strip == ?T.freeze
+					rescue StandardError
+						false
+					end
+				}
+			end
 		end
 	end
 end

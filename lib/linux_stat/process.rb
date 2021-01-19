@@ -42,7 +42,7 @@ module LinuxStat
 					x = l[i]
 
 					begin
-						h.merge!( x => IO.foreach("/proc/#{x}/status").first.split[1])
+						h.merge!( x => IO.foreach("/proc/#{x}/status").first.split[1..-1].join(?\s.freeze))
 					rescue StandardError
 					end
 				end
@@ -62,11 +62,15 @@ module LinuxStat
 
 					begin
 						h.merge!(x =>
-							case IO.foreach("/proc/#{x}/stat", ' '.freeze).first(3)[-1][0]
+							case IO.read("/proc/#{x}/stat").split(/(\(.*\))/)[-1][/\s.+?/].strip
 								when ?S.freeze then :sleeping
 								when ?I.freeze then :idle
 								when ?Z.freeze then :zombie
 								when ?R.freeze then :running
+								when ?T.freeze then :stopped
+								when ?X.freeze then :dead
+								when ?D.freeze then :sleeping
+								when ?t.freeze then :stopped
 								else :unknown
 							end
 						)
@@ -83,9 +87,9 @@ module LinuxStat
 			def sleeping
 				list.select { |x|
 					begin
-						IO.foreach("/proc/#{x}/stat", ' '.freeze).first(3)[-1][0] == ?S.freeze
+						IO.read("/proc/#{x}/stat").split(/(\(.*\))/)[-1][/\s.+?/].strip == ?S.freeze
 					rescue StandardError
-						nil
+						false
 					end
 				}
 			end
@@ -96,9 +100,9 @@ module LinuxStat
 			def idle
 				list.select { |x|
 					begin
-						IO.foreach("/proc/#{x}/stat", ' '.freeze).first(3)[-1][0] == ?I.freeze
+						IO.read("/proc/#{x}/stat").split(/(\(.*\))/)[-1][/\s.+?/].strip == ?I.freeze
 					rescue StandardError
-						nil
+						false
 					end
 				}
 			end
@@ -109,9 +113,9 @@ module LinuxStat
 			def zombie
 				list.select { |x|
 					begin
-						IO.foreach("/proc/#{x}/stat", ' '.freeze).first(3)[-1][0] == ?Z.freeze
+						IO.read("/proc/#{x}/stat").split(/(\(.*\))/)[-1][/\s.+?/].strip == ?Z.freeze
 					rescue StandardError
-						nil
+						false
 					end
 				}
 			end
@@ -122,9 +126,9 @@ module LinuxStat
 			def running
 				list.select { |x|
 					begin
-						IO.foreach("/proc/#{x}/stat", ' '.freeze).first(3)[-1][0] == ?R.freeze
+						IO.read("/proc/#{x}/stat").split(/(\(.*\))/)[-1][/\s.+?/].strip == ?R.freeze
 					rescue StandardError
-						nil
+						false
 					end
 				}
 			end

@@ -256,8 +256,11 @@ module LinuxStat
 				ticks = get_ticks
 
 				return {} unless File.readable?(file)
-				utime, stime, starttime = IO.read(file)
-					.split.values_at(13, 14, 21).map(&:to_f)
+
+				stat = IO.read(file).split(/(\(.*\))/)[-1] &.split
+				return {} unless stat
+
+				utime, stime, starttime = *stat.values_at(11, 12, 19).map(&:to_f)
 
 				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
 
@@ -267,9 +270,12 @@ module LinuxStat
 				sleep(sleep)
 
 				return {} unless File.readable?(file)
-				stat = IO.read(file).split
 
-				utime2, stime2, starttime2 = stat.values_at(13, 14, 21).map(&:to_f)
+				stat = IO.read(file).split(/(\(.*\))/)[-1] &.split
+				return {} unless stat
+
+				utime2, stime2, starttime2 = *stat.values_at(11, 12, 19).map(&:to_f)
+
 				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
 
 				total_time2 = utime2 + stime2
@@ -280,8 +286,8 @@ module LinuxStat
 
 				{
 					cpu_usage: cpu_u > 100 ? 100.0 : cpu_u.round(2),
-					threads: stat[19].to_i,
-					last_executed_cpu: stat[38].to_i
+					threads: stat[17].to_i,
+					last_executed_cpu: stat[36].to_i
 				}
 			end
 
@@ -316,8 +322,11 @@ module LinuxStat
 				ticks = get_ticks
 
 				return nil unless File.readable?(file)
-				utime, stime, starttime = IO.read(file)
-					.split.values_at(13, 14, 21).map(&:to_f)
+
+				stat = IO.read(file).split(/(\(.*\))/)[-1] &.split
+				return nil unless stat
+
+				utime, stime, starttime = *stat.values_at(11, 12, 19).map(&:to_f)
 
 				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
 
@@ -327,9 +336,11 @@ module LinuxStat
 				sleep(sleep)
 
 				return nil unless File.readable?(file)
-				utime2, stime2, starttime2 = IO.read(file)
-					.split.values_at(13, 14, 21).map(&:to_f)
 
+				stat = IO.read(file).split(/(\(.*\))/)[-1] &.split
+				return nil unless stat
+
+				utime2, stime2, starttime2 = *stat.values_at(11, 12, 19).map(&:to_f)
 				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
 
 				total_time2 = utime2 + stime2
@@ -368,8 +379,11 @@ module LinuxStat
 				ticks = get_ticks
 
 				return nil unless File.readable?(file)
-				utime, stime, starttime = IO.read(file)
-					.split.values_at(13, 14, 21).map(&:to_f)
+
+				stat = IO.read(file).split(/(\(.*\))/)[-1] &.split
+				return nil unless stat
+
+				utime, stime, starttime = *stat.values_at(11, 12, 19).map(&:to_f)
 
 				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
 
@@ -379,8 +393,11 @@ module LinuxStat
 				sleep(sleep)
 
 				return nil unless File.readable?(file)
-				utime2, stime2, starttime2 = IO.read(file)
-					.split.values_at(13, 14, 21).map(&:to_f)
+
+				stat = IO.read(file).split(/(\(.*\))/)[-1] &.split
+				return nil unless stat
+
+				utime2, stime2, starttime2 = *stat.values_at(11, 12, 19).map(&:to_f)
 
 				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
 
@@ -416,7 +433,7 @@ module LinuxStat
 				file = "/proc/#{pid}/stat".freeze
 				return nil unless File.readable?(file)
 
-				data = IO.foreach(file, ' '.freeze).first(20)[-1]
+				data = IO.read(file).split(/(\(.*\))/)[-1] &.split &.at(17)
 				data ? data.to_i : nil
 			end
 
@@ -441,7 +458,8 @@ module LinuxStat
 				file = "/proc/#{pid}/stat".freeze
 				return nil unless File.readable?(file)
 
-				IO.read(file).split[38].to_i
+				data = IO.read(file).split(/(\(.*\))/)[-1] &.split &.at(36)
+				data ? data.to_i : nil
 			end
 
 			##
@@ -524,8 +542,11 @@ module LinuxStat
 				@@u_readable ||= File.readable?(uptime)
 				return nil unless @@u_readable && File.readable?(stat_file)
 
+				stat = IO.read(stat_file).split(/(\(.*\))/)[-1] &.split
+				return nil unless stat
+
 				u = IO.foreach(uptime, ' '.freeze).next.to_f
-				st = (IO.foreach(stat_file, ' '.freeze).first(22)[-1].to_f / get_ticks)
+				st = stat[19].to_f / get_ticks
 
 				# Getting two Time objects and dealing with floating point numbers
 				# Just to make sure the time goes monotonically
@@ -574,8 +595,11 @@ module LinuxStat
 				@@u_readable ||= File.readable?(uptime)
 				return nil unless @@u_readable && File.readable?(stat_file)
 
+				stat = IO.read(stat_file).split(/(\(.*\))/)[-1] &.split
+				return nil unless stat
+
 				IO.foreach(uptime, ' '.freeze).next.to_f
-					.-(IO.read(stat_file).split[21].to_f / get_ticks).round(2)
+					.-(stat[19].to_f / get_ticks).round(2)
 			end
 
 			##
@@ -599,7 +623,11 @@ module LinuxStat
 			def state(pid = $$)
 				file = "/proc/#{pid}/stat".freeze
 				return ''.freeze unless File.readable?(file)
-				IO.foreach(file, ' '.freeze).first(3)[-1].tap(&:rstrip!).freeze
+
+				stat = IO.read(file).split(/(\(.*\))/)[-1]
+				return '' unless stat
+
+				stat[/\s.+?/].strip
 			end
 
 			##
@@ -615,7 +643,10 @@ module LinuxStat
 				file = "/proc/#{pid}/stat"
 				return nil unless File.readable?(file)
 
-				IO.foreach(file, ' ').first(19)[-1].to_i
+				stat = IO.read(file).split(/(\(.*\))/)[-1] &.split
+				return nil unless stat
+
+				stat[16].to_i
 			end
 
 			##

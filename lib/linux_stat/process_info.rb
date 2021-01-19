@@ -111,14 +111,14 @@ module LinuxStat
 			# If the info isn't available it will return an empty frozen String.
 			def process_name(pid = $$)
 				file = "/proc/#{pid}/stat".freeze
-				return ''.freeze unless File.readable?(file)
+				return command_name unless File.readable?(file)
 
 				name = IO.read(file).split(/(\(.*\))/) &.[](1) &.[](1..-2)
 
 				if name && name.length > 0 && name.length < 15
 					name
 				else
-					File.split(cmdline(pid).split[0])[-1]
+					command_name
 				end
 			end
 

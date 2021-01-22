@@ -158,6 +158,17 @@ module LinuxStat
 				}.freeze
 			end
 
+			##
+			# Returns uptime of the system reported by LinuxStat::Sysinfo.uptime()
+			#    LinuxStat::OS.uptime_i
+			#
+			#    28956
+			#
+			# If the stat isn't available, an empty hash is returned.
+			def uptime_i
+				LinuxStat::Sysinfo.uptime
+			end
+
 			alias distrib_version version
 
 			private

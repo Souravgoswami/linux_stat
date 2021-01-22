@@ -23,20 +23,23 @@ require "linux_stat/version"
 # But might be required by other module functions in "Dependent Modules" section
 require "linux_stat/battery"
 require "linux_stat/bios"
-require "linux_stat/memory"
 require "linux_stat/net"
 require "linux_stat/pci"
 require "linux_stat/process"
-require "linux_stat/swap"
 require "linux_stat/thermal"
 require "linux_stat/usb"
 
 # Dependent Modules
 # Modules that can have reverse dependency
 
+# LinuxStat::CPU.sysinfo dependent modules
+require "linux_stat/sysinfo"
+require "linux_stat/swap"
+require "linux_stat/memory"
+
 # LinuxStat::CPU.nproc dependent modules
-require "linux_stat/cpu"
 require "linux_stat/nproc"
+require "linux_stat/cpu"
 
 # LinuxStat::Uname dependent modules
 require 'linux_stat/utsname'

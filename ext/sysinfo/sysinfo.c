@@ -88,8 +88,7 @@ VALUE uptime(VALUE obj) {
 
 VALUE loads(VALUE obj) {
 	int8_t status = sysinfo(&info) ;
-	VALUE hash = rb_hash_new() ;
-	if(status < 0) return hash ;
+	if(status < 0) return rb_ary_new() ;
 
 	long double load = 1.f / (1 << SI_LOAD_SHIFT) ;
 
@@ -97,11 +96,11 @@ VALUE loads(VALUE obj) {
 	float l_5 = info.loads[1] * load ;
 	float l_15 = info.loads[2] * load ;
 
-	rb_hash_aset(hash, INT2FIX(1), rb_float_new(l_1)) ;
-	rb_hash_aset(hash, INT2FIX(5), rb_float_new(l_5)) ;
-	rb_hash_aset(hash, INT2FIX(15), rb_float_new(l_15)) ;
-
-	return hash ;
+	return rb_ary_new_from_args(3,
+		rb_float_new(l_1),
+		rb_float_new(l_5),
+		rb_float_new(l_15)
+	) ;
 }
 
 void Init_sysinfo() {

@@ -169,6 +169,29 @@ module LinuxStat
 				LinuxStat::Sysinfo.uptime
 			end
 
+			##
+			# The first three fields in this file are load average
+              		# figures giving the number of jobs in the run queue (state R)
+			# or waiting for disk I/O (state D) averaged over 1, 5,
+			# and 15 minutes.  They are the same as the load average
+			# numbers given by uptime(1) and other programs.
+			# https://man7.org/linux/man-pages/man5/procfs.5.html
+			#
+			# The return type is an Hash containing the values
+			# that maps to 1, 5, and 15.
+			# This method calls LinuxStat::Sysinfo.loads() directly.
+			#
+			# However, if the info isn't available, it will return nil as values.
+			def loadavg
+				loads = LinuxStat::Sysinfo.loads
+
+				{
+					1 => loads[0],
+					5 => loads[1],
+					15 => loads[2]
+				}
+			end
+
 			alias distrib_version version
 
 			private

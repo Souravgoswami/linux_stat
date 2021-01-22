@@ -35,13 +35,23 @@ module LinuxStat
 			end
 
 			##
-			# Returns the total memory details reported by /proc/meminfo.
+			# Returns the total memory reported by LS::Sysinfo.totalram()
 			# The value is in Kilobyte.
 			#
 			# It retuns an Integer but if the info is not available, it will return nil.
 			def total
-				return nil unless meminfo?
-				IO.foreach('/proc/meminfo'.freeze).first.split[1].to_i
+				v = LinuxStat::Sysinfo.totalram
+				v ? v.fdiv(1024).to_i : nil
+			end
+
+			##
+			# Returns the free memory reported by LS::Sysinfo.freeram()
+			# The value is in Kilobyte.
+			#
+			# It retuns an Integer but if the info is not available, it will return nil.
+			def free
+				v = LinuxStat::Sysinfo.freeram
+				v ? v.fdiv(1024).to_i : nil
 			end
 
 			##

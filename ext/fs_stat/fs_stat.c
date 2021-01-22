@@ -19,15 +19,15 @@ static VALUE statfs(VALUE obj, VALUE dir) {
 	if(statvfs(d, &buf) < 0) return hash ;
 
 	rb_hash_aset(hash, ID2SYM(rb_intern("block_size")), INT2FIX(buf.f_bsize)) ;
-	rb_hash_aset(hash, ID2SYM(rb_intern("fragment_size")), INT2FIX(buf.f_frsize)) ;
-	rb_hash_aset(hash, ID2SYM(rb_intern("blocks")), INT2FIX(buf.f_blocks)) ;
-	rb_hash_aset(hash, ID2SYM(rb_intern("block_free")), INT2FIX(buf.f_bfree)) ;
-	rb_hash_aset(hash, ID2SYM(rb_intern("block_avail_unpriv")), INT2FIX(buf.f_bavail)) ;
-	rb_hash_aset(hash, ID2SYM(rb_intern("inodes")), INT2FIX(buf.f_files)) ;
-	rb_hash_aset(hash, ID2SYM(rb_intern("free_inodes")), INT2FIX(buf.f_ffree)) ;
-	rb_hash_aset(hash, ID2SYM(rb_intern("filesystem_id")), INT2FIX(buf.f_fsid)) ;
-	rb_hash_aset(hash, ID2SYM(rb_intern("mount_flags")), INT2FIX(buf.f_flag)) ;
-	rb_hash_aset(hash, ID2SYM(rb_intern("max_filename_length")), INT2FIX(buf.f_namemax)) ;
+	rb_hash_aset(hash, ID2SYM(rb_intern("fragment_size")), INT2NUM(buf.f_frsize)) ;
+	rb_hash_aset(hash, ID2SYM(rb_intern("blocks")), INT2NUM(buf.f_blocks)) ;
+	rb_hash_aset(hash, ID2SYM(rb_intern("block_free")), INT2NUM(buf.f_bfree)) ;
+	rb_hash_aset(hash, ID2SYM(rb_intern("block_avail_unpriv")), INT2NUM(buf.f_bavail)) ;
+	rb_hash_aset(hash, ID2SYM(rb_intern("inodes")), INT2NUM(buf.f_files)) ;
+	rb_hash_aset(hash, ID2SYM(rb_intern("free_inodes")), INT2NUM(buf.f_ffree)) ;
+	rb_hash_aset(hash, ID2SYM(rb_intern("filesystem_id")), INT2NUM(buf.f_fsid)) ;
+	rb_hash_aset(hash, ID2SYM(rb_intern("mount_flags")), INT2NUM(buf.f_flag)) ;
+	rb_hash_aset(hash, ID2SYM(rb_intern("max_filename_length")), INT2NUM(buf.f_namemax)) ;
 
 	return hash ;
 }

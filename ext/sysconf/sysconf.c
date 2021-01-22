@@ -23,84 +23,84 @@ static VALUE getChildMax(VALUE obj) {
 	int64_t val = sysconf(_SC_CHILD_MAX) ;
 	if (val < 0) return Qnil ;
 
-	return INT2FIX(val) ;
+	return INT2NUM(val) ;
 }
 
 static VALUE getHostnameMax(VALUE obj) {
 	int32_t val = sysconf(_SC_HOST_NAME_MAX) ;
 	if (val < 0) return Qnil ;
 
-	return INT2FIX(val) ;
+	return INT2NUM(val) ;
 }
 
 static VALUE getLoginNameMax(VALUE obj) {
 	int32_t val = sysconf(_SC_LOGIN_NAME_MAX) ;
 	if (val < 0) return Qnil ;
 
-	return INT2FIX(val) ;
+	return INT2NUM(val) ;
 }
 
 static VALUE getOpenMax(VALUE obj) {
 	int64_t val = sysconf(_SC_OPEN_MAX) ;
 	if (val < 0) return Qnil ;
 
-	return INT2FIX(val) ;
+	return INT2NUM(val) ;
 }
 
 static VALUE getPageSize(VALUE obj) {
 	int32_t val = sysconf(_SC_PAGESIZE) ;
 	if (val < 0) return Qnil ;
 
-	return INT2FIX(val) ;
+	return INT2NUM(val) ;
 }
 
 static VALUE getStreamMax(VALUE obj) {
 	int64_t val = sysconf(_SC_STREAM_MAX) ;
 	if (val < 0) return Qnil ;
 
-	return INT2FIX(val) ;
+	return INT2NUM(val) ;
 }
 
 static VALUE getTTYNameMax(VALUE obj) {
 	int32_t val = sysconf(_SC_TTY_NAME_MAX) ;
 	if (val < 0) return Qnil ;
 
-	return INT2FIX(val) ;
+	return INT2NUM(val) ;
 }
 
 static VALUE getPosixVersion(VALUE obj) {
 	int32_t val = sysconf(_SC_VERSION) ;
 	if (val < 0) return Qnil ;
 
-	return INT2FIX(val) ;
+	return INT2NUM(val) ;
 }
 
 static VALUE getLineMax(VALUE obj) {
 	int32_t val = sysconf(_SC_LINE_MAX) ;
 	if (val < 0) return Qnil ;
 
-	return INT2FIX(val) ;
+	return INT2NUM(val) ;
 }
 
 static VALUE getExprNestMax(VALUE obj) {
 	int32_t val = sysconf(_SC_EXPR_NEST_MAX) ;
 	if (val < 0) return Qnil ;
 
-	return INT2FIX(val) ;
+	return INT2NUM(val) ;
 }
 
 static VALUE getProcessorConfigured(VALUE obj) {
 	int32_t val = sysconf(_SC_NPROCESSORS_CONF) ;
 	if (val < 0) return Qnil ;
 
-	return INT2FIX(val) ;
+	return INT2NUM(val) ;
 }
 
 static VALUE getProcessorOnline(VALUE obj) {
 	int32_t val = sysconf(_SC_NPROCESSORS_ONLN) ;
 	if (val < 0) return Qnil ;
 
-	return INT2FIX(val) ;
+	return INT2NUM(val) ;
 }
 
 static VALUE getUser(VALUE obj) {
@@ -109,15 +109,15 @@ static VALUE getUser(VALUE obj) {
 }
 
 static VALUE getUID(VALUE obj) {
-	return INT2FIX(getuid()) ;
+	return INT2NUM(getuid()) ;
 }
 
 static VALUE getGID(VALUE obj) {
-	return INT2FIX(getgid()) ;
+	return INT2NUM(getgid()) ;
 }
 
 static VALUE getEUID(VALUE obj) {
-	return INT2FIX(geteuid()) ;
+	return INT2NUM(geteuid()) ;
 }
 
 static VALUE getHostname(VALUE obj) {

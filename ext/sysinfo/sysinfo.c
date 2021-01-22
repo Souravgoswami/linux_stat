@@ -19,7 +19,7 @@ VALUE totalram(VALUE obj) {
 	if (status < 0) return Qnil ;
 
 	uint64_t v = info.totalram * info.mem_unit ;
-	return INT2FIX(v) ;
+	return INT2NUM(v) ;
 }
 
 VALUE freeram(VALUE obj) {
@@ -27,7 +27,7 @@ VALUE freeram(VALUE obj) {
 	if (status < 0) return Qnil ;
 
 	uint64_t v = info.freeram * info.mem_unit ;
-	return INT2FIX(v) ;
+	return INT2NUM(v) ;
 }
 
 VALUE sharedram(VALUE obj) {
@@ -35,7 +35,7 @@ VALUE sharedram(VALUE obj) {
 	if (status < 0) return Qnil ;
 
 	uint64_t v = info.sharedram * info.mem_unit ;
-	return INT2FIX(v) ;
+	return INT2NUM(v) ;
 }
 
 VALUE bufferram(VALUE obj) {
@@ -43,7 +43,7 @@ VALUE bufferram(VALUE obj) {
 	if (status < 0) return Qnil ;
 
 	uint64_t v = info.bufferram * info.mem_unit ;
-	return INT2FIX(v) ;
+	return INT2NUM(v) ;
 }
 
 VALUE totalswap(VALUE obj) {
@@ -51,7 +51,7 @@ VALUE totalswap(VALUE obj) {
 	if (status < 0) return Qnil ;
 
 	uint64_t v = info.totalswap * info.mem_unit ;
-	return INT2FIX(v) ;
+	return INT2NUM(v) ;
 }
 
 VALUE freeswap(VALUE obj) {
@@ -59,7 +59,7 @@ VALUE freeswap(VALUE obj) {
 	if (status < 0) return Qnil ;
 
 	uint64_t v = info.freeswap * info.mem_unit ;
-	return INT2FIX(v) ;
+	return INT2NUM(v) ;
 }
 
 VALUE totalhigh(VALUE obj) {
@@ -67,7 +67,7 @@ VALUE totalhigh(VALUE obj) {
 	if (status < 0) return Qnil ;
 
 	uint64_t v = info.totalhigh * info.mem_unit ;
-	return INT2FIX(v) ;
+	return INT2NUM(v) ;
 }
 
 VALUE freehigh(VALUE obj) {
@@ -75,7 +75,7 @@ VALUE freehigh(VALUE obj) {
 	if (status < 0) return Qnil ;
 
 	uint64_t v = info.freehigh * info.mem_unit ;
-	return INT2FIX(v) ;
+	return INT2NUM(v) ;
 }
 
 VALUE uptime(VALUE obj) {
@@ -83,7 +83,7 @@ VALUE uptime(VALUE obj) {
 	if (status < 0) return Qnil ;
 
 	uint64_t v = info.uptime ;
-	return INT2FIX(v) ;
+	return INT2NUM(v) ;
 }
 
 VALUE loads(VALUE obj) {

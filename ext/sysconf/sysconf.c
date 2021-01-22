@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <inttypes.h>
 #include "ruby.h"
 
 #if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER)
@@ -12,91 +13,91 @@
 #endif
 
 static VALUE getTick(VALUE obj) {
-	short int val = sysconf(_SC_CLK_TCK) ;
+	int16_t val = sysconf(_SC_CLK_TCK) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getChildMax(VALUE obj) {
-	long long int val = sysconf(_SC_CHILD_MAX) ;
+	int64_t val = sysconf(_SC_CHILD_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getHostnameMax(VALUE obj) {
-	int val = sysconf(_SC_HOST_NAME_MAX) ;
+	int32_t val = sysconf(_SC_HOST_NAME_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getLoginNameMax(VALUE obj) {
-	int val = sysconf(_SC_LOGIN_NAME_MAX) ;
+	int32_t val = sysconf(_SC_LOGIN_NAME_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getOpenMax(VALUE obj) {
-	int val = sysconf(_SC_OPEN_MAX) ;
+	int64_t val = sysconf(_SC_OPEN_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getPageSize(VALUE obj) {
-	short int val = sysconf(_SC_PAGESIZE) ;
+	int32_t val = sysconf(_SC_PAGESIZE) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getStreamMax(VALUE obj) {
-	int val = sysconf(_SC_STREAM_MAX) ;
+	int64_t val = sysconf(_SC_STREAM_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getTTYNameMax(VALUE obj) {
-	int val = sysconf(_SC_TTY_NAME_MAX) ;
+	int32_t val = sysconf(_SC_TTY_NAME_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getPosixVersion(VALUE obj) {
-	int val = sysconf(_SC_VERSION) ;
+	int32_t val = sysconf(_SC_VERSION) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getLineMax(VALUE obj) {
-	int val = sysconf(_SC_LINE_MAX) ;
+	int32_t val = sysconf(_SC_LINE_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getExprNestMax(VALUE obj) {
-	int val = sysconf(_SC_EXPR_NEST_MAX) ;
+	int32_t val = sysconf(_SC_EXPR_NEST_MAX) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getProcessorConfigured(VALUE obj) {
-	short int val = sysconf(_SC_NPROCESSORS_CONF) ;
+	int32_t val = sysconf(_SC_NPROCESSORS_CONF) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;
 }
 
 static VALUE getProcessorOnline(VALUE obj) {
-	short int val = sysconf(_SC_NPROCESSORS_ONLN) ;
+	int32_t val = sysconf(_SC_NPROCESSORS_ONLN) ;
 	if (val < 0) return Qnil ;
 
 	return INT2FIX(val) ;

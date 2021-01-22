@@ -18,64 +18,72 @@ VALUE totalram(VALUE obj) {
 	int8_t status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	uint64_t v = info.totalram * info.mem_unit ;
-	return INT2NUM(v) ;
+	VALUE _rb_v = INT2NUM(info.totalram) ;
+	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE freeram(VALUE obj) {
 	int8_t status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	uint64_t v = info.freeram * info.mem_unit ;
-	return INT2NUM(v) ;
+	VALUE _rb_v = INT2NUM(info.freeram) ;
+	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE sharedram(VALUE obj) {
 	int8_t status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	uint64_t v = info.sharedram * info.mem_unit ;
-	return INT2NUM(v) ;
+	VALUE _rb_v = INT2NUM(info.sharedram) ;
+	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE bufferram(VALUE obj) {
 	int8_t status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	uint64_t v = info.bufferram * info.mem_unit ;
-	return INT2NUM(v) ;
+	VALUE _rb_v = INT2NUM(info.bufferram) ;
+	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE totalswap(VALUE obj) {
 	int8_t status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	uint64_t v = info.totalswap * info.mem_unit ;
-	return INT2NUM(v) ;
+	VALUE _rb_v = INT2NUM(info.totalswap) ;
+	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE freeswap(VALUE obj) {
 	int8_t status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	uint64_t v = info.freeswap * info.mem_unit ;
-	return INT2NUM(v) ;
+	VALUE _rb_v = INT2NUM(info.freeswap) ;
+	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE totalhigh(VALUE obj) {
 	int8_t status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	uint64_t v = info.totalhigh * info.mem_unit ;
-	return INT2NUM(v) ;
+	VALUE _rb_v = INT2NUM(info.totalhigh) ;
+	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE freehigh(VALUE obj) {
 	int8_t status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	uint64_t v = info.freehigh * info.mem_unit ;
-	return INT2NUM(v) ;
+	VALUE _rb_v = INT2NUM(info.freehigh) ;
+	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE uptime(VALUE obj) {

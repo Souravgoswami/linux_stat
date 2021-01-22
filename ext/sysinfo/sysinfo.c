@@ -91,12 +91,11 @@ VALUE loads(VALUE obj) {
 	VALUE hash = rb_hash_new() ;
 	if(status < 0) return hash ;
 
-	uint64_t *v = info.loads ;
 	long double load = 1.f / (1 << SI_LOAD_SHIFT) ;
 
-	float l_1 = v[0] * load ;
-	float l_5 = v[1] * load ;
-	float l_15 = v[2] * load ;
+	float l_1 = info.loads[0] * load ;
+	float l_5 = info.loads[1] * load ;
+	float l_15 = info.loads[2] * load ;
 
 	rb_hash_aset(hash, INT2FIX(1), rb_float_new(l_1)) ;
 	rb_hash_aset(hash, INT2FIX(5), rb_float_new(l_5)) ;

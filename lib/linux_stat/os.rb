@@ -164,7 +164,7 @@ module LinuxStat
 			#
 			#    28956
 			#
-			# If the stat isn't available, an empty hash is returned.
+			# If the stat isn't available, nil is returned.
 			def uptime_i
 				LinuxStat::Sysinfo.uptime
 			end

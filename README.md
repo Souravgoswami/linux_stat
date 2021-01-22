@@ -16,6 +16,10 @@ Languages Used:
 
 ---
 
+## Requirements:
+
+Any Linux distribution with Kernel 3.14+.
+
 ## Dependencies:
 + You need to have the C compiler installed to be able to compile the C extensions.
 On Arch Linux:

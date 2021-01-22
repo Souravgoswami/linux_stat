@@ -57,8 +57,19 @@ module LinuxStat
 			#
 			# The return type is a Integer but if the info isn't available, it will return nil.
 			def total
-				return nil unless swaps_readable?
-				read_usage[0].sum
+				v = LinuxStat::Sysinfo.totalswap
+				v ? v.fdiv(1024).to_i : nil
+			end
+
+			##
+			# Shows free swap.
+			#
+			# The value is in kilobytes.
+			#
+			# The return type is a Integer but if the info isn't available, it will return nil.
+			def free
+				v = LinuxStat::Sysinfo.freeswap
+				v ? v.fdiv(1024).to_i : nil
 			end
 
 			##

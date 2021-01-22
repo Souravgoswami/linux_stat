@@ -15,87 +15,89 @@
 static struct sysinfo info ;
 
 VALUE totalram(VALUE obj) {
-	int8_t status = sysinfo(&info) ;
+	static struct sysinfo info ;
+	short status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	VALUE _rb_v = INT2NUM(info.totalram) ;
-	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	VALUE _rb_v = ULL2NUM((unsigned long long) info.totalram) ;
+	VALUE _rb_mem_unit = ULL2NUM((unsigned long long) info.mem_unit) ;
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE freeram(VALUE obj) {
-	int8_t status = sysinfo(&info) ;
+	short status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	VALUE _rb_v = INT2NUM(info.freeram) ;
-	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	VALUE _rb_v = ULL2NUM((unsigned long long) info.freeram) ;
+	VALUE _rb_mem_unit = ULL2NUM((unsigned long long) info.mem_unit) ;
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE sharedram(VALUE obj) {
-	int8_t status = sysinfo(&info) ;
+	short status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	VALUE _rb_v = INT2NUM(info.sharedram) ;
-	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	VALUE _rb_v = ULL2NUM((unsigned long long) info.sharedram) ;
+	VALUE _rb_mem_unit = ULL2NUM((unsigned long long) info.mem_unit) ;
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE bufferram(VALUE obj) {
-	int8_t status = sysinfo(&info) ;
+	short status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	VALUE _rb_v = INT2NUM(info.bufferram) ;
-	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	VALUE _rb_v = ULL2NUM((unsigned long long) info.bufferram) ;
+	VALUE _rb_mem_unit = ULL2NUM((unsigned long long) info.mem_unit) ;
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE totalswap(VALUE obj) {
-	int8_t status = sysinfo(&info) ;
+	static struct sysinfo info ;
+	short status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	VALUE _rb_v = INT2NUM(info.totalswap) ;
-	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	VALUE _rb_v = ULL2NUM((unsigned long long) info.totalswap) ;
+	VALUE _rb_mem_unit = ULL2NUM((unsigned long long) info.mem_unit) ;
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE freeswap(VALUE obj) {
-	int8_t status = sysinfo(&info) ;
+	short status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	VALUE _rb_v = INT2NUM(info.freeswap) ;
-	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	VALUE _rb_v = ULL2NUM((unsigned long long) info.freeswap) ;
+	VALUE _rb_mem_unit = ULL2NUM((unsigned long long) info.mem_unit) ;
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE totalhigh(VALUE obj) {
-	int8_t status = sysinfo(&info) ;
+	short status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	VALUE _rb_v = INT2NUM(info.totalhigh) ;
-	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	VALUE _rb_v = ULL2NUM((unsigned long long) info.totalhigh) ;
+	VALUE _rb_mem_unit = ULL2NUM((unsigned long long) info.mem_unit) ;
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE freehigh(VALUE obj) {
-	int8_t status = sysinfo(&info) ;
+	short status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	VALUE _rb_v = INT2NUM(info.freehigh) ;
-	VALUE _rb_mem_unit = INT2NUM(info.mem_unit) ;
+	VALUE _rb_v = ULL2NUM((unsigned long long) info.freehigh) ;
+	VALUE _rb_mem_unit = ULL2NUM((unsigned long long) info.mem_unit) ;
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
 VALUE uptime(VALUE obj) {
-	int8_t status = sysinfo(&info) ;
+	short status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
 	uint64_t v = info.uptime ;
-	return INT2NUM(v) ;
+	return ULL2NUM((unsigned long long) v) ;
 }
 
 VALUE loads(VALUE obj) {
-	int8_t status = sysinfo(&info) ;
+	short status = sysinfo(&info) ;
 	if(status < 0) return rb_ary_new() ;
 
 	long double load = 1.f / (1 << SI_LOAD_SHIFT) ;

@@ -1,5 +1,4 @@
 #include <sys/sysinfo.h>
-#include <inttypes.h>
 #include "ruby.h"
 
 #if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER)
@@ -92,7 +91,7 @@ VALUE uptime(VALUE obj) {
 	short status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
-	uint64_t v = info.uptime ;
+	unsigned long long v = info.uptime ;
 	return ULL2NUM((unsigned long long) v) ;
 }
 

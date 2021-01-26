@@ -14,7 +14,6 @@
 static struct sysinfo info ;
 
 VALUE totalram(VALUE obj) {
-	static struct sysinfo info ;
 	short status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 

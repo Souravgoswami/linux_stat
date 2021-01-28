@@ -138,7 +138,8 @@ execute.sort.each do |c|
 					param << "#{p[1] || 'arg'}#{_arg}, "
 			end
 		end
-		param.delete_suffix!(", ")
+
+		param.chomp!(", ")
 
 		disp_meth = "#{meth}"
 		disp_meth.concat(arg ? "(#{param})" : "(#{param})")

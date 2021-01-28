@@ -140,6 +140,8 @@ module LinuxStat
 			#
 			#    => {:hour=>10, :minute=>34, :second=>12.59}
 			#
+			# Using uptime is 10x slower than using uptime_i
+			#
 			# If the stat isn't available, an empty hash is returned.
 			def uptime
 				return {} unless uptime_readable?
@@ -159,10 +161,26 @@ module LinuxStat
 			end
 
 			##
+			# Returns Float uptime of the system reported by /proc/uptime
+			#    LinuxStat::OS.uptime_f
+			#
+			#    => 28956.34
+			#
+			# The value is generally rounded to 2 decimal places.
+			#
+			# Using uptime_f is 10x slower than using uptime_i
+			#
+			# If the stat isn't available, nil is returned.
+			def uptime_f
+				return nil unless uptime_readable?
+				IO.foreach('/proc/uptime'.freeze, ' ').next.to_f
+			end
+
+			##
 			# Returns uptime of the system reported by LinuxStat::Sysinfo.uptime()
 			#    LinuxStat::OS.uptime_i
 			#
-			#    28956
+			#    => 28956
 			#
 			# If the stat isn't available, nil is returned.
 			def uptime_i

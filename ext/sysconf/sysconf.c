@@ -123,7 +123,7 @@ static VALUE getHostname(VALUE obj) {
 	int h_max = sysconf(_SC_HOST_NAME_MAX) + 1 ;
 	char hostname[h_max] ;
 
-	short int status = gethostname(hostname, h_max) ;
+	char status = gethostname(hostname, h_max) ;
 
 	return (status < 0) ? rb_str_new_cstr("") : rb_str_new_cstr(hostname) ;
 }

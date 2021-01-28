@@ -14,7 +14,7 @@
 static struct sysinfo info ;
 
 VALUE totalram(VALUE obj) {
-	short status = sysinfo(&info) ;
+	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
 	VALUE _rb_v = ULL2NUM((unsigned long long) info.totalram) ;
@@ -23,7 +23,7 @@ VALUE totalram(VALUE obj) {
 }
 
 VALUE freeram(VALUE obj) {
-	short status = sysinfo(&info) ;
+	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
 	VALUE _rb_v = ULL2NUM((unsigned long long) info.freeram) ;
@@ -32,7 +32,7 @@ VALUE freeram(VALUE obj) {
 }
 
 VALUE sharedram(VALUE obj) {
-	short status = sysinfo(&info) ;
+	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
 	VALUE _rb_v = ULL2NUM((unsigned long long) info.sharedram) ;
@@ -41,7 +41,7 @@ VALUE sharedram(VALUE obj) {
 }
 
 VALUE bufferram(VALUE obj) {
-	short status = sysinfo(&info) ;
+	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
 	VALUE _rb_v = ULL2NUM((unsigned long long) info.bufferram) ;
@@ -51,7 +51,7 @@ VALUE bufferram(VALUE obj) {
 
 VALUE totalswap(VALUE obj) {
 	static struct sysinfo info ;
-	short status = sysinfo(&info) ;
+	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
 	VALUE _rb_v = ULL2NUM((unsigned long long) info.totalswap) ;
@@ -60,7 +60,7 @@ VALUE totalswap(VALUE obj) {
 }
 
 VALUE freeswap(VALUE obj) {
-	short status = sysinfo(&info) ;
+	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
 	VALUE _rb_v = ULL2NUM((unsigned long long) info.freeswap) ;
@@ -69,7 +69,7 @@ VALUE freeswap(VALUE obj) {
 }
 
 VALUE totalhigh(VALUE obj) {
-	short status = sysinfo(&info) ;
+	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
 	VALUE _rb_v = ULL2NUM((unsigned long long) info.totalhigh) ;
@@ -78,7 +78,7 @@ VALUE totalhigh(VALUE obj) {
 }
 
 VALUE freehigh(VALUE obj) {
-	short status = sysinfo(&info) ;
+	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
 	VALUE _rb_v = ULL2NUM((unsigned long long) info.freehigh) ;
@@ -87,7 +87,7 @@ VALUE freehigh(VALUE obj) {
 }
 
 VALUE uptime(VALUE obj) {
-	short status = sysinfo(&info) ;
+	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
 	unsigned long long v = info.uptime ;
@@ -95,7 +95,7 @@ VALUE uptime(VALUE obj) {
 }
 
 VALUE loads(VALUE obj) {
-	short status = sysinfo(&info) ;
+	char status = sysinfo(&info) ;
 	if(status < 0) return rb_ary_new() ;
 
 	long double load = 1.f / (1 << SI_LOAD_SHIFT) ;
@@ -113,7 +113,7 @@ VALUE loads(VALUE obj) {
 
 // Some people may need this function, just keep it to not make unnecessary calls
 VALUE sysinfoStat(VALUE obj) {
-	short status = sysinfo(&info) ;
+	char status = sysinfo(&info) ;
 	VALUE hash = rb_hash_new() ;
 	if (status < 0) return hash ;
 

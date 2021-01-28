@@ -18,9 +18,9 @@
 static VALUE count_cpu_for_pid(VALUE obj, VALUE pid) {
 	cpu_set_t set ;
 	CPU_ZERO(&set) ;
-	short int stat = sched_getaffinity(FIX2INT(pid), sizeof(set), &set) ;
+	char status = sched_getaffinity(FIX2INT(pid), sizeof(set), &set) ;
 
-	if (stat < 0) return Qnil ;
+	if (status < 0) return Qnil ;
 	return INT2FIX(CPU_COUNT(&set)) ;
 }
 

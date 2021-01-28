@@ -17,7 +17,7 @@ static char *sysname = "", *nodename = "" ;
 static char *release = "", *version = "", *machine = "" ;
 
 void init_buf() {
-	short status = uname(&buf) ;
+	char status = uname(&buf) ;
 
 	if (status > -1) {
 		sysname = buf.sysname ;

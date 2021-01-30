@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
 	s.homepage = "https://github.com/Souravgoswami/linux_stat/"
 	s.license = "MIT"
 	s.required_ruby_version = Gem::Requirement.new(">= 2.4.0")
-	s.files = Dir.glob(%w(exe/** lib/**/*.rb ext/**/*.{c,rb} bin/** README.md LICENSE.txt))
+	s.files = Dir.glob(%w(exe/** lib/**/*.rb ext/**/*.{c,rb,h} bin/** README.md LICENSE.txt))
 	s.executables = s.files.grep(%r{^exe/}) { |f| File.basename(f) }
 	s.extensions = Dir.glob("ext/**/extconf.rb")
 	s.require_paths = ["lib"]

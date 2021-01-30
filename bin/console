@@ -1,4 +1,10 @@
 #!/usr/bin/env ruby
 $-v = true
-%w(linux_stat irb).each(&method(:require))
+
+begin
+	%w(linux_stat irb).each(&method(:require))
+rescue LoadError
+	abort "LinuxStat and IRB shoud be installed before you can run LinuxStat console"
+end
+
 IRB.start(__FILE__)

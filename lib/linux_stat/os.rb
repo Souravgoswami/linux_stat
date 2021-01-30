@@ -144,20 +144,20 @@ module LinuxStat
 			#
 			# If the stat isn't available, an empty hash is returned.
 			def uptime
-				return {} unless uptime_readable?
+				_uptime = LinuxStat::ProcFS.uptime_f
+				return {} unless _uptime
 
-				uptime = IO.read('/proc/uptime'.freeze).to_f
-				uptime_i = uptime.to_i
+				uptime_i = _uptime.to_i
 
 				h = uptime_i / 3600
 				m = uptime_i % 3600 / 60
-				s = uptime.%(3600).%(60).round(2)
+				s = _uptime.%(3600).%(60).round(2)
 
 				{
 					hour: h,
 					minute: m,
 					second: s
-				}.freeze
+				}
 			end
 
 			##
@@ -172,8 +172,7 @@ module LinuxStat
 			#
 			# If the stat isn't available, nil is returned.
 			def uptime_f
-				return nil unless uptime_readable?
-				IO.foreach('/proc/uptime'.freeze, ' ').next.to_f
+				LinuxStat::ProcFS.uptime_f
 			end
 
 			##
@@ -231,10 +230,6 @@ module LinuxStat
 
 					h.merge!( key.to_sym => value )
 				}
-			end
-
-			def uptime_readable?
-				@@uptime_readable ||= File.readable?('/proc/uptime')
 			end
 		end
 	end

@@ -182,11 +182,7 @@ module LinuxStat
 			#
 			# If the info isn't available it will return nil.
 			def memory(pid = $$)
-				file = "/proc/#{pid}/statm".freeze
-				return nil unless File.readable?(file)
-
-				data = IO.read(file).split
-				(data[1] && data[2]) ? data[1].to_i.-(data[2].to_i).*(pagesize).fdiv(1000) : nil
+				LinuxStat::ProcFS.statm_memory(pid) &.fdiv(1000)
 			end
 
 			##
@@ -207,11 +203,7 @@ module LinuxStat
 			#
 			# If the info isn't available it will return nil.
 			def virtual_memory(pid = $$)
-				file = "/proc/#{pid}/statm".freeze
-				return nil unless File.readable?(file)
-
-				_virtual_memory = IO.read(file).split[0]
-				_virtual_memory ? _virtual_memory.to_i.*(pagesize).fdiv(1000) : nil
+				LinuxStat::ProcFS.statm_virtual(pid) &.fdiv(1000)
 			end
 
 			##
@@ -232,11 +224,7 @@ module LinuxStat
 			#
 			# If the info isn't available it will return nil.
 			def resident_memory(pid = $$)
-				file = "/proc/#{pid}/statm".freeze
-				return nil unless File.readable?(file)
-
-				_vm_rss = IO.read(file).split[1]
-				_vm_rss ? _vm_rss.to_i.*(pagesize).fdiv(1000) : nil
+				LinuxStat::ProcFS.statm_resident(pid) &.fdiv(1000)
 			end
 
 			##

@@ -170,6 +170,16 @@ module LinuxStat
 					end
 				}
 			end
+
+			##
+			# Returns the last_pid of the system.
+			# It directly calls LS::ProcFS.last_pid
+			#
+			# The return value is Integer, but if the status
+			# isn't available, it will return nil
+			def last_pid
+				LinuxStat::ProcFS.last_pid
+			end
 		end
 	end
 end

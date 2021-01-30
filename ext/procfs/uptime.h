@@ -4,5 +4,7 @@ VALUE uptime_f(VALUE obj) {
 
 	double up_f ;
 	if (fscanf(f, "%lf", &up_f) != 1) return Qnil ;
+	fclose(f) ;
+
 	return rb_float_new(up_f) ;
 }

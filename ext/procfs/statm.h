@@ -12,6 +12,8 @@ VALUE statm(VALUE obj, VALUE pid) {
 
 	unsigned int _virtual, resident, shared ;
 	if (fscanf(f, "%u %u %u", &_virtual, &resident, &shared) != 3) return hash ;
+	fclose(f) ;
+
 	int pagesize = PAGESIZE ;
 
 	_virtual *= pagesize ;
@@ -38,6 +40,7 @@ VALUE statm_virtual(VALUE obj, VALUE pid) {
 	if (!f) return hash ;
 	unsigned int _virtual ;
 	if (fscanf(f, "%u", &_virtual) != 1) return Qnil ;
+	fclose(f) ;
 
 	int pagesize = PAGESIZE ;
 	return UINT2NUM(_virtual * pagesize) ;
@@ -53,6 +56,7 @@ VALUE statm_resident(VALUE obj, VALUE pid) {
 	if (!f) return hash ;
 	unsigned int resident ;
 	if (fscanf(f, "%*u %u", &resident) != 1) return Qnil ;
+	fclose(f) ;
 
 	int pagesize = PAGESIZE ;
 	return UINT2NUM(resident * pagesize) ;
@@ -68,6 +72,7 @@ VALUE statm_shared(VALUE obj, VALUE pid) {
 	if (!f) return hash ;
 	unsigned int shared ;
 	if (fscanf(f, "%*u %*u %u", &shared) != 1) return Qnil ;
+	fclose(f) ;
 
 	int pagesize = PAGESIZE ;
 	return UINT2NUM(shared * pagesize) ;
@@ -83,6 +88,7 @@ VALUE statm_memory(VALUE obj, VALUE pid) {
 
 	unsigned int resident, shared ;
 	if (fscanf(f, "%*u %u %u", &resident, &shared) != 2) return Qnil ;
+	fclose(f) ;
 
 	unsigned int v = (resident - shared) * PAGESIZE ;
 	return UINT2NUM(v) ;

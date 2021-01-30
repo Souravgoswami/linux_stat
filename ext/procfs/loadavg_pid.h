@@ -4,5 +4,7 @@ VALUE last_pid(VALUE obj) {
 
 	unsigned long long _last_pid ;
 	if (fscanf(f, "%*f %*f %*f %*d/%*d %llu", &_last_pid) != 1) return Qnil ;
+	fclose(f) ;
+
 	return ULL2NUM(_last_pid) ;
 }

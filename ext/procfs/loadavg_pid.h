@@ -3,8 +3,9 @@ VALUE last_pid(VALUE obj) {
 	if (!f) return Qnil ;
 
 	unsigned long long _last_pid ;
-	if (fscanf(f, "%*f %*f %*f %*d/%*d %llu", &_last_pid) != 1) return Qnil ;
+	char status = fscanf(f, "%*f %*f %*f %*s %llu", &_last_pid) ;
 	fclose(f) ;
+	if (status != 1) return Qnil ;
 
 	return ULL2NUM(_last_pid) ;
 }

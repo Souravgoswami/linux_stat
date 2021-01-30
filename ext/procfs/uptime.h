@@ -3,8 +3,10 @@ VALUE uptime_f(VALUE obj) {
 	if (!f) return Qnil ;
 
 	double up_f ;
-	if (fscanf(f, "%lf", &up_f) != 1) return Qnil ;
+	char status = fscanf(f, "%lf", &up_f) ;
 	fclose(f) ;
+
+	if (status != 1) return Qnil ;
 
 	return DBL2NUM(up_f) ;
 }

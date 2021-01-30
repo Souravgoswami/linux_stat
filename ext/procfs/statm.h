@@ -11,8 +11,10 @@ VALUE statm(VALUE obj, VALUE pid) {
 	if (!f) return hash ;
 
 	unsigned int _virtual, resident, shared ;
-	if (fscanf(f, "%u %u %u", &_virtual, &resident, &shared) != 3) return hash ;
+	char status = fscanf(f, "%u %u %u", &_virtual, &resident, &shared) ;
 	fclose(f) ;
+
+	if (status != 3) return hash ;
 
 	int pagesize = PAGESIZE ;
 
@@ -39,8 +41,10 @@ VALUE statm_virtual(VALUE obj, VALUE pid) {
 
 	if (!f) return hash ;
 	unsigned int _virtual ;
-	if (fscanf(f, "%u", &_virtual) != 1) return Qnil ;
+	char status = fscanf(f, "%u", &_virtual) ;
 	fclose(f) ;
+
+	if (status != 1) return Qnil ;
 
 	int pagesize = PAGESIZE ;
 	return UINT2NUM(_virtual * pagesize) ;
@@ -55,8 +59,10 @@ VALUE statm_resident(VALUE obj, VALUE pid) {
 
 	if (!f) return hash ;
 	unsigned int resident ;
-	if (fscanf(f, "%*u %u", &resident) != 1) return Qnil ;
+	char status = fscanf(f, "%*u %u", &resident) ;
 	fclose(f) ;
+
+	if (status != 1) return Qnil ;
 
 	int pagesize = PAGESIZE ;
 	return UINT2NUM(resident * pagesize) ;
@@ -71,8 +77,10 @@ VALUE statm_shared(VALUE obj, VALUE pid) {
 
 	if (!f) return hash ;
 	unsigned int shared ;
-	if (fscanf(f, "%*u %*u %u", &shared) != 1) return Qnil ;
+	char status = fscanf(f, "%*u %*u %u", &shared) ;
 	fclose(f) ;
+
+	if (status != 1) return Qnil ;
 
 	int pagesize = PAGESIZE ;
 	return UINT2NUM(shared * pagesize) ;
@@ -87,8 +95,10 @@ VALUE statm_memory(VALUE obj, VALUE pid) {
 	if (!f) return Qnil ;
 
 	unsigned int resident, shared ;
-	if (fscanf(f, "%*u %u %u", &resident, &shared) != 2) return Qnil ;
+	char status = fscanf(f, "%*u %u %u", &resident, &shared) ;
 	fclose(f) ;
+
+	if (status != 2) return Qnil ;
 
 	unsigned int v = (resident - shared) * PAGESIZE ;
 	return UINT2NUM(v) ;

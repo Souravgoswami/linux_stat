@@ -149,20 +149,7 @@ module LinuxStat
 			#
 			# If the info isn't available it will return an empty Hash.
 			def mem_stat(pid = $$)
-				statm = "/proc/#{pid}/statm".freeze
-				return {} unless File.readable?(statm)
-
-				data = IO.read(statm).split
-
-				_rss_anon = (data[1] && data[2]) ? data[1].to_i.-(data[2].to_i).*(pagesize).fdiv(1000) : nil
-				_virtual_memory = data[0] ? data[0].to_i*(pagesize).fdiv(1000) : nil
-				_resident_memory = data[1] ? data[1].to_i.*(pagesize).fdiv(1000) : nil
-
-				{
-					memory: _rss_anon,
-					virtual_memory: _virtual_memory,
-					resident_memory: _resident_memory
-				}
+				LinuxStat::ProcFS.statm(pid)
 			end
 
 			##
@@ -218,13 +205,34 @@ module LinuxStat
 			# The value is in kilobytes.
 			#
 			# The output is an Integer. For example:
-			#    LinuxStat::ProcessInfo.cpu_stat
+			#    LinuxStat::ProcessInfo.resident_memory
 			#
 			#    => 13996.032
 			#
 			# If the info isn't available it will return nil.
 			def resident_memory(pid = $$)
 				LinuxStat::ProcFS.statm_resident(pid) &.fdiv(1000)
+			end
+
+			##
+			# = shared_memory(pid = $$)
+			#
+			# Where pid is the process ID.
+			#
+			# By default it is the id of the current process ($$)
+			#
+			# It retuns the shared memory for the process.
+			#
+			# The value is in kilobytes.
+			#
+			# The output is an Integer. For example:
+			#    LinuxStat::ProcessInfo.shared_memory
+			#
+			#    => 13996.032
+			#
+			# If the info isn't available it will return nil.
+			def shared_memory(pid = $$)
+				LinuxStat::ProcFS.statm_shared(pid) &.fdiv(1000)
 			end
 
 			##

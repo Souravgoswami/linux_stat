@@ -288,7 +288,9 @@ module LinuxStat
 
 				utime, stime, starttime = *stat.values_at(11, 12, 19).map(&:to_f)
 
-				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
+				uptime = LS::ProcFS.uptime_f
+				return {} unless uptime
+				uptime *= ticks
 
 				total_time = utime + stime
 				idle1 = uptime - starttime - total_time
@@ -302,7 +304,9 @@ module LinuxStat
 
 				utime2, stime2, starttime2 = *stat.values_at(11, 12, 19).map(&:to_f)
 
-				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
+				uptime = LS::ProcFS.uptime_f
+				return {} unless uptime
+				uptime *= ticks
 
 				total_time2 = utime2 + stime2
 				idle2 = uptime - starttime2 - total_time2
@@ -354,7 +358,9 @@ module LinuxStat
 
 				utime, stime, starttime = *stat.values_at(11, 12, 19).map(&:to_f)
 
-				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
+				uptime = LS::ProcFS.uptime_f
+				return nil unless uptime
+				uptime *= ticks
 
 				total_time = utime + stime
 				idle1 = uptime - starttime - total_time
@@ -367,7 +373,10 @@ module LinuxStat
 				return nil unless stat
 
 				utime2, stime2, starttime2 = *stat.values_at(11, 12, 19).map(&:to_f)
-				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
+
+				uptime = LS::ProcFS.uptime_f
+				return nil unless uptime
+				uptime *= ticks
 
 				total_time2 = utime2 + stime2
 				idle2 = uptime - starttime2 - total_time2
@@ -411,7 +420,9 @@ module LinuxStat
 
 				utime, stime, starttime = *stat.values_at(11, 12, 19).map(&:to_f)
 
-				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
+				uptime = LS::ProcFS.uptime_f
+				return nil unless uptime
+				uptime *= ticks
 
 				total_time = utime + stime
 				idle1 = uptime - starttime - total_time
@@ -425,7 +436,9 @@ module LinuxStat
 
 				utime2, stime2, starttime2 = *stat.values_at(11, 12, 19).map(&:to_f)
 
-				uptime = IO.read('/proc/uptime'.freeze).to_f * ticks
+				uptime = LS::ProcFS.uptime_f
+				return nil unless uptime
+				uptime *= ticks
 
 				total_time2 = utime2 + stime2
 				idle2 = uptime - starttime2 - total_time2
@@ -563,20 +576,22 @@ module LinuxStat
 			# If the info isn't available or the argument passed doesn't exist as a process ID, it will return nil.
 			def start_time_epoch(pid = $$)
 				stat_file = "/proc/#{pid}/stat".freeze
-				uptime = "/proc/uptime".freeze
 
-				@@u_readable ||= File.readable?(uptime)
-				return nil unless @@u_readable && File.readable?(stat_file)
+				uptime = LS::ProcFS.uptime_f
+				return nil unless uptime
+				return nil unless File.readable?(stat_file)
 
 				stat = IO.read(stat_file).split(/(\(.*\))/)[-1] &.split
 				return nil unless stat
 
-				u = IO.foreach(uptime, ' '.freeze).next.to_f
+				uptime = LS::ProcFS.uptime_f
+				return nil unless uptime
+
 				st = stat[19].to_f / get_ticks
 
 				# Getting two Time objects and dealing with floating point numbers
-				# Just to make sure the time goes monotonically
-				Time.now.-(u - st).to_i
+				# Just to make sure the time goes monotonically unless the clock changes
+				Time.now.-(uptime - st).to_i
 			end
 
 			##
@@ -616,16 +631,15 @@ module LinuxStat
 			# If the info isn't available or the argument passed doesn't exist as a process ID, it will return nil.
 			def running_time(pid = $$)
 				stat_file = "/proc/#{pid}/stat".freeze
-				uptime = "/proc/uptime".freeze
-
-				@@u_readable ||= File.readable?(uptime)
-				return nil unless @@u_readable && File.readable?(stat_file)
+				return nil unless File.readable?(stat_file)
 
 				stat = IO.read(stat_file).split(/(\(.*\))/)[-1] &.split
 				return nil unless stat
 
-				IO.foreach(uptime, ' '.freeze).next.to_f
-					.-(stat[19].to_f / get_ticks).round(2)
+				uptime = LS::ProcFS.uptime_f
+				return nil unless uptime
+
+				uptime.-(stat[19].to_f / get_ticks).round(2)
 			end
 
 			##

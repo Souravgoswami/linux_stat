@@ -45,9 +45,7 @@ VALUE statm_virtual(VALUE obj, VALUE pid) {
 	fclose(f) ;
 
 	if (status != 1) return Qnil ;
-
-	int pagesize = PAGESIZE ;
-	return UINT2NUM(_virtual * pagesize) ;
+	return UINT2NUM(_virtual * PAGESIZE) ;
 }
 
 VALUE statm_resident(VALUE obj, VALUE pid) {
@@ -63,9 +61,7 @@ VALUE statm_resident(VALUE obj, VALUE pid) {
 	fclose(f) ;
 
 	if (status != 1) return Qnil ;
-
-	int pagesize = PAGESIZE ;
-	return UINT2NUM(resident * pagesize) ;
+	return UINT2NUM(resident * PAGESIZE) ;
 }
 
 VALUE statm_shared(VALUE obj, VALUE pid) {
@@ -81,9 +77,7 @@ VALUE statm_shared(VALUE obj, VALUE pid) {
 	fclose(f) ;
 
 	if (status != 1) return Qnil ;
-
-	int pagesize = PAGESIZE ;
-	return UINT2NUM(shared * pagesize) ;
+	return UINT2NUM(shared * PAGESIZE) ;
 }
 
 VALUE statm_memory(VALUE obj, VALUE pid) {

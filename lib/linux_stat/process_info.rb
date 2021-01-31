@@ -278,18 +278,12 @@ module LinuxStat
 			#
 			# The :last_executed_cpu also returns an Integer indicating the last executed cpu of the process.
 			def cpu_stat(pid: $$, sleep: ticks_to_ms_t5)
-				file = "/proc/#{pid}/stat"
 				ticks = get_ticks
-
-				return {} unless File.readable?(file)
-
-				stat = IO.read(file).split(/(\(.*\))/)[-1] &.split
-				return {} unless stat
+				stat = LinuxStat::ProcFS.ps_stat(pid)
+				uptime = LS::ProcFS.uptime_f
+				return {} unless uptime && !stat.empty?
 
 				utime, stime, starttime = *stat.values_at(11, 12, 19).map(&:to_f)
-
-				uptime = LS::ProcFS.uptime_f
-				return {} unless uptime
 				uptime *= ticks
 
 				total_time = utime + stime
@@ -297,15 +291,11 @@ module LinuxStat
 
 				sleep(sleep)
 
-				return {} unless File.readable?(file)
-
-				stat = IO.read(file).split(/(\(.*\))/)[-1] &.split
-				return {} unless stat
+				stat = LinuxStat::ProcFS.ps_stat(pid)
+				uptime = LS::ProcFS.uptime_f
+				return {} unless uptime && !stat.empty?
 
 				utime2, stime2, starttime2 = *stat.values_at(11, 12, 19).map(&:to_f)
-
-				uptime = LS::ProcFS.uptime_f
-				return {} unless uptime
 				uptime *= ticks
 
 				total_time2 = utime2 + stime2
@@ -348,18 +338,12 @@ module LinuxStat
 			#
 			# This method is more efficient than running LinuxStat::ProcessInfo.cpu_stat()
 			def cpu_usage(pid: $$, sleep: ticks_to_ms_t5)
-				file = "/proc/#{pid}/stat"
 				ticks = get_ticks
-
-				return nil unless File.readable?(file)
-
-				stat = IO.read(file).split(/(\(.*\))/)[-1] &.split
-				return nil unless stat
-
-				utime, stime, starttime = *stat.values_at(11, 12, 19).map(&:to_f)
-
+				stat = LinuxStat::ProcFS.ps_stat(pid)
 				uptime = LS::ProcFS.uptime_f
-				return nil unless uptime
+				return nil unless uptime && !stat.empty?
+
+				utime, stime, starttime = *stat.values_at(10, 11, 18).map(&:to_f)
 				uptime *= ticks
 
 				total_time = utime + stime
@@ -367,15 +351,11 @@ module LinuxStat
 
 				sleep(sleep)
 
-				return nil unless File.readable?(file)
-
-				stat = IO.read(file).split(/(\(.*\))/)[-1] &.split
-				return nil unless stat
-
-				utime2, stime2, starttime2 = *stat.values_at(11, 12, 19).map(&:to_f)
-
+				stat = LinuxStat::ProcFS.ps_stat(pid)
 				uptime = LS::ProcFS.uptime_f
-				return nil unless uptime
+				return nil unless uptime && !stat.empty?
+
+				utime2, stime2, starttime2 = *stat.values_at(10, 11, 18).map(&:to_f)
 				uptime *= ticks
 
 				total_time2 = utime2 + stime2
@@ -410,18 +390,12 @@ module LinuxStat
 			#
 			# But if the info isn't available, it will return nil.
 			def thread_usage(pid: $$, sleep: ticks_to_ms_t5)
-				file = "/proc/#{pid}/stat"
 				ticks = get_ticks
-
-				return nil unless File.readable?(file)
-
-				stat = IO.read(file).split(/(\(.*\))/)[-1] &.split
-				return nil unless stat
-
-				utime, stime, starttime = *stat.values_at(11, 12, 19).map(&:to_f)
-
+				stat = LinuxStat::ProcFS.ps_stat(pid)
 				uptime = LS::ProcFS.uptime_f
-				return nil unless uptime
+				return nil unless uptime && !stat.empty?
+
+				utime, stime, starttime = *stat.values_at(10, 11, 18).map(&:to_f)
 				uptime *= ticks
 
 				total_time = utime + stime
@@ -429,15 +403,11 @@ module LinuxStat
 
 				sleep(sleep)
 
-				return nil unless File.readable?(file)
-
-				stat = IO.read(file).split(/(\(.*\))/)[-1] &.split
-				return nil unless stat
-
-				utime2, stime2, starttime2 = *stat.values_at(11, 12, 19).map(&:to_f)
-
+				stat = LinuxStat::ProcFS.ps_stat(pid)
 				uptime = LS::ProcFS.uptime_f
-				return nil unless uptime
+				return nil unless uptime && !stat.empty?
+
+				utime2, stime2, starttime2 = *stat.values_at(10, 11, 18).map(&:to_f)
 				uptime *= ticks
 
 				total_time2 = utime2 + stime2
@@ -469,11 +439,7 @@ module LinuxStat
 			#
 			# This method is way more efficient than running LinuxStat::ProcessInfo.cpu_stat()
 			def threads(pid = $$)
-				file = "/proc/#{pid}/stat".freeze
-				return nil unless File.readable?(file)
-
-				data = IO.read(file).split(/(\(.*\))/)[-1] &.split &.at(17)
-				data ? data.to_i : nil
+				LinuxStat::ProcFS.ps_stat(pid)[16]
 			end
 
 			##
@@ -494,11 +460,7 @@ module LinuxStat
 			#
 			# This method is way more efficient than running LinuxStat::ProcessInfo.cpu_stat()
 			def last_executed_cpu(pid = $$)
-				file = "/proc/#{pid}/stat".freeze
-				return nil unless File.readable?(file)
-
-				data = IO.read(file).split(/(\(.*\))/)[-1] &.split &.at(36)
-				data ? data.to_i : nil
+				LinuxStat::ProcFS.ps_stat(pid)[35]
 			end
 
 			##
@@ -575,19 +537,11 @@ module LinuxStat
 			#
 			# If the info isn't available or the argument passed doesn't exist as a process ID, it will return nil.
 			def start_time_epoch(pid = $$)
-				stat_file = "/proc/#{pid}/stat".freeze
-
 				uptime = LS::ProcFS.uptime_f
-				return nil unless uptime
-				return nil unless File.readable?(stat_file)
+				stat = LinuxStat::ProcFS.ps_stat(pid)[18]
 
-				stat = IO.read(stat_file).split(/(\(.*\))/)[-1] &.split
-				return nil unless stat
-
-				uptime = LS::ProcFS.uptime_f
-				return nil unless uptime
-
-				st = stat[19].to_f / get_ticks
+				return nil unless uptime && stat
+				st = stat.to_f / get_ticks
 
 				# Getting two Time objects and dealing with floating point numbers
 				# Just to make sure the time goes monotonically unless the clock changes
@@ -630,16 +584,10 @@ module LinuxStat
 			#
 			# If the info isn't available or the argument passed doesn't exist as a process ID, it will return nil.
 			def running_time(pid = $$)
-				stat_file = "/proc/#{pid}/stat".freeze
-				return nil unless File.readable?(stat_file)
-
-				stat = IO.read(stat_file).split(/(\(.*\))/)[-1] &.split
-				return nil unless stat
-
 				uptime = LS::ProcFS.uptime_f
-				return nil unless uptime
-
-				uptime.-(stat[19].to_f / get_ticks).round(2)
+				stat = LinuxStat::ProcFS.ps_stat(pid)[18]
+				return nil unless uptime && stat
+				uptime.-(stat.to_f / get_ticks).round(2)
 			end
 
 			##
@@ -661,13 +609,7 @@ module LinuxStat
 			# If the info isn't available or the argument passed doesn't exist as a process ID,
 			# it will return an empty String.
 			def state(pid = $$)
-				file = "/proc/#{pid}/stat".freeze
-				return ''.freeze unless File.readable?(file)
-
-				stat = IO.read(file).split(/(\(.*\))/)[-1]
-				return '' unless stat
-
-				stat[/\s.+?/].strip
+				stat = LinuxStat::ProcFS.ps_state(pid)
 			end
 
 			##
@@ -680,13 +622,7 @@ module LinuxStat
 			#
 			# If the info isn't available or the argument passed doesn't exist as a process ID, it will return nil.
 			def nice(pid = $$)
-				file = "/proc/#{pid}/stat"
-				return nil unless File.readable?(file)
-
-				stat = IO.read(file).split(/(\(.*\))/)[-1] &.split
-				return nil unless stat
-
-				stat[16].to_i
+				LinuxStat::ProcFS.ps_stat(pid)[15]
 			end
 
 			##

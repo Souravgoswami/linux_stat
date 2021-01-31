@@ -86,7 +86,7 @@ module LinuxStat
 
 					begin
 						h.merge!(x =>
-							case IO.read("/proc/#{x}/stat").split(/(\(.*\))/)[-1][/\s.+?/].strip
+							case LinuxStat::ProcFS.ps_state(x)
 								when ?S.freeze then :sleeping
 								when ?I.freeze then :idle
 								when ?Z.freeze then :zombie
@@ -110,11 +110,7 @@ module LinuxStat
 			# The return type is an Array of Integers.
 			def sleeping
 				list.select { |x|
-					begin
-						IO.read("/proc/#{x}/stat").split(/(\(.*\))/)[-1][/\s.+?/].strip == ?S.freeze
-					rescue StandardError
-						false
-					end
+					LinuxStat::ProcFS.ps_state(x) == ?S.freeze
 				}
 			end
 
@@ -123,11 +119,7 @@ module LinuxStat
 			# The return type is an Array of Integers.
 			def idle
 				list.select { |x|
-					begin
-						IO.read("/proc/#{x}/stat").split(/(\(.*\))/)[-1][/\s.+?/].strip == ?I.freeze
-					rescue StandardError
-						false
-					end
+					LinuxStat::ProcFS.ps_state(x) == ?I.freeze
 				}
 			end
 
@@ -136,11 +128,7 @@ module LinuxStat
 			# The return type is an Array of Integers.
 			def zombie
 				list.select { |x|
-					begin
-						IO.read("/proc/#{x}/stat").split(/(\(.*\))/)[-1][/\s.+?/].strip == ?Z.freeze
-					rescue StandardError
-						false
-					end
+					LinuxStat::ProcFS.ps_state(x) == ?Z.freeze
 				}
 			end
 
@@ -149,11 +137,7 @@ module LinuxStat
 			# The return type is an Array of Integers.
 			def running
 				list.select { |x|
-					begin
-						IO.read("/proc/#{x}/stat").split(/(\(.*\))/)[-1][/\s.+?/].strip == ?R.freeze
-					rescue StandardError
-						false
-					end
+					LinuxStat::ProcFS.ps_state(x) == ?R.freeze
 				}
 			end
 
@@ -162,12 +146,8 @@ module LinuxStat
 			# The return type is an Array of Integers.
 			def stopped
 				list.select { |x|
-					begin
-						v = IO.read("/proc/#{x}/stat").split(/(\(.*\))/)[-1][/\s.+?/].strip
-						v == ?T.freeze || v == ?t.freeze
-					rescue StandardError
-						false
-					end
+					v = LinuxStat::ProcFS.ps_state(x)
+					v == ?T.freeze || v == ?t.freeze
 				}
 			end
 

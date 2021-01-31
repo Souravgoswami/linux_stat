@@ -25,13 +25,15 @@ require "linux_stat/battery"
 require "linux_stat/bios"
 require "linux_stat/net"
 require "linux_stat/pci"
-require "linux_stat/procfs"
-require "linux_stat/process"
 require "linux_stat/thermal"
 require "linux_stat/usb"
 
 # Dependent Modules
 # Modules that can have reverse dependency
+
+# LinuxStat::ProcFS dependent modules
+require "linux_stat/procfs"
+require "linux_stat/process"
 
 # LinuxStat::CPU.sysinfo dependent modules
 require "linux_stat/sysinfo"

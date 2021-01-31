@@ -609,7 +609,7 @@ module LinuxStat
 			# If the info isn't available or the argument passed doesn't exist as a process ID,
 			# it will return an empty String.
 			def state(pid = $$)
-				stat = LinuxStat::ProcFS.ps_state(pid)
+				LinuxStat::ProcFS.ps_state(pid)
 			end
 
 			##

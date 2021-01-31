@@ -7,7 +7,7 @@ VALUE ps_state(VALUE obj, VALUE pid) {
 
 	char _s[1] ;
 
-	char status = fscanf(f, "%*s (%*16[^)]) %s", _s) ;
+	char status = fscanf(f, "%*llu (%*[^)]%*[)] %s", _s) ;
 	fclose(f) ;
 
 	if (status != 1) return rb_str_new_cstr("") ;
@@ -49,7 +49,7 @@ VALUE ps_stat(VALUE obj, VALUE pid) {
 	int exit_code ;
 
 	char status = fscanf(
-		f, "%*d (%*16[^)]) %*c "
+		f, "%*llu (%*[^)]%*[)] %*c "
 		"%d %d %d %d %d %u "
 		"%lu %lu %lu %lu %lu %lu "
 		"%ld %ld %ld %ld %ld %ld "

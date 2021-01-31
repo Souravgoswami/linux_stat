@@ -17,38 +17,33 @@ VALUE ps_state(VALUE obj, VALUE pid) {
 VALUE ps_stat(VALUE obj, VALUE pid) {
 	char _path[22] ;
 	sprintf(_path, "/proc/%lu/stat", FIX2UINT(pid)) ;
+	VALUE ary = rb_ary_new() ;
+
 	FILE *f = fopen(_path, "r") ;
 
-	if (!f) return rb_str_new_cstr("") ;
+	if (!f)
+		return ary ;
 
-	unsigned int chunk = 64 ;
+	unsigned int buf_size = 1000 ;
 
-	char status = fscanf(f, "%*s (%*16[^)]) ") ;
-	if (status != 0) return rb_str_new_cstr("") ;
+	char s[buf_size] ;
+	char status = fscanf(f, "%*s (%*16[^)]) %*s ") ;
 
-	unsigned int n = 0, cur = chunk ;
-	char *s = malloc(chunk) ;
-	char c ;
+	if (status != 0)
+		return ary ;
 
-	while((c = fgetc(f)) != EOF) {
-		if (n > cur) {
-			cur += chunk ;
-			s = realloc(s, cur) ;
-			if (cur > 2048) break ;
-		}
+	if(fgets(s, buf_size, f) == NULL)
+		return ary ;
 
-		s[n++] = c ;
-	}
-	fclose(f) ;
+	char *token = strtok(s, " ") ;
+	unsigned long long converted_int ;
 
-	if (n > 0) {
-		s[n - 1] = '\0' ;
-	} else {
-		s[0] = '\0' ;
+	while (token != NULL) {
+		converted_int = strtoull(token, NULL, 10) ;
+		rb_ary_push(ary, ULL2NUM(converted_int)) ;
+
+		token = strtok(NULL, " ") ;
 	}
 
-	VALUE ret = rb_str_new_cstr(s) ;
-	free(s) ;
-
-	return ret ;
+	return ary ;
 }

@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 #include "ruby.h"
 #include "uptime.h"
 #include "statm.h"

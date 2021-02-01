@@ -35,7 +35,7 @@ module LinuxStat
 				return {} unless swaps_readable?
 				values_t = read_usage
 
-				total, used = values_t[0].sum, values_t[-1].sum
+				total, used = values_t[0].reduce(:+), values_t[-1].reduce(:+)
 				available = total - used
 				percent_used = total == 0 ? 0.0 : used.*(100).fdiv(total).round(2)
 				percent_available = total == 0.0 ? 0 : available.*(100).fdiv(total).round(2)
@@ -81,7 +81,7 @@ module LinuxStat
 			def available
 				return nil unless swaps_readable?
 				values_t = read_usage
-				values_t[0].sum - values_t[1].sum
+				values_t[0].reduce(:+) - values_t[1].reduce(:+)
 			end
 
 			##
@@ -92,7 +92,7 @@ module LinuxStat
 			# The return type is a Integer but if the info isn't available, it will return nil.
 			def used
 				return nil unless swaps_readable?
-				read_usage[-1].sum
+				read_usage[-1].reduce(:+)
 			end
 
 			##
@@ -103,10 +103,10 @@ module LinuxStat
 				return nil unless swaps_readable?
 				values_t = read_usage
 
-				total = values_t[0].sum
+				total = values_t[0].reduce(:+)
 				return 0.0 if total == 0
 
-				values_t[-1].sum.*(100).fdiv(total).round(2)
+				values_t[-1].reduce(:+).*(100).fdiv(total).round(2)
 			end
 
 			##
@@ -117,10 +117,10 @@ module LinuxStat
 				return nil unless swaps_readable?
 				values_t = read_usage
 
-				total = values_t[0].sum
+				total = values_t[0].reduce(:+)
 				return 0.0 if total == 0
 
-				total.-(values_t[-1].sum).*(100).fdiv(total).round(2)
+				total.-(values_t[-1].reduce(:+)).*(100).fdiv(total).round(2)
 			end
 
 			private

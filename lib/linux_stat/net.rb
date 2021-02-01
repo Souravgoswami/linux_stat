@@ -30,7 +30,7 @@ module LinuxStat
 				data = IO.readlines(DEV).drop(2)
 				indices = find_index_of_bytes
 				data.reject! { |x| x.strip.start_with?('lo:') }
-				r, t = data.map { |x| x.split.values_at(*indices).map(&:to_i) }.transpose.map(&:sum)
+				r, t = data.map { |x| x.split.values_at(*indices).map(&:to_i) }.transpose.map { |x| x.reduce(:+) }
 
 				{
 					received: r,
@@ -48,7 +48,7 @@ module LinuxStat
 				data = IO.readlines(DEV).drop(2)
 				index = find_index_of_bytes[0]
 				data.reject! { |x| x.strip.start_with?('lo:') }
-				data.map { |x| x.split[index].to_i }.sum
+				data.map { |x| x.split[index].to_i }.reduce(:+)
 			end
 
 			##
@@ -61,7 +61,7 @@ module LinuxStat
 				data = IO.readlines(DEV).drop(2)
 				index = find_index_of_bytes[-1]
 				data.reject! { |x| x.strip.start_with?('lo:') }
-				data.map { |x| x.split[index].to_i }.sum
+				data.map { |x| x.split[index].to_i }.reduce(:+)
 			end
 
 			##
@@ -89,13 +89,13 @@ module LinuxStat
 				data = IO.readlines(DEV).drop(2)
 				indices = find_index_of_bytes
 				data.reject! { |x| x.strip.start_with?('lo:'.freeze) }
-				r, t = data.map { |x| x.split.values_at(*indices).map(&:to_i) }.transpose.map(&:sum)
+				r, t = data.map { |x| x.split.values_at(*indices).map(&:to_i) }.transpose.map { |x| x.reduce(:+) }
 
 				sleep(interval)
 
 				data2 = IO.readlines(DEV).drop(2)
 				data2.reject! { |x| x.strip.start_with?('lo:'.freeze) }
-				r2, t2 = data2.map { |x| x.split.values_at(*indices).map(&:to_i) }.transpose.map(&:sum)
+				r2, t2 = data2.map { |x| x.split.values_at(*indices).map(&:to_i) }.transpose.map { |x| x.reduce(:+) }
 
 				# Measure the difference
 				dr, dt = r2.-(r).fdiv(interval), t2.-(t).fdiv(interval)

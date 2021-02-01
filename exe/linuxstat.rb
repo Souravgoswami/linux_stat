@@ -7,6 +7,12 @@ rescue LoadError
 	abort "The Gem needs to be installed before this test can be run!"
 end
 
+Integer.class_exec do
+	define_method(:clamp) { |min, max|
+		self < min ? min : self > max ? max : self
+	}
+end unless 1.respond_to?(:clamp)
+
 # Gradient colour to strings
 class String
 	def colourize(colour = 1, flip: false)

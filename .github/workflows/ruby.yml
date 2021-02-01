@@ -12,8 +12,22 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Test LinuxStat with Ruby 2.3
+      uses: ruby/setup-ruby@v1.59.1
+      with:
+        ruby-version: 2.3
+    - name: Install bundler
+      run: gem install bundler -v 2.2.6
+    - name: Install dependencies
+      run: bundle install
+    - name: Run rake install
+      run: rake install
+    - name: Run tests
+      run: linuxstat.rb
+
+    - uses: actions/checkout@v2
     - name: Test LinuxStat with Ruby 2.5
-      uses: ruby/setup-ruby@21351ecc0a7c196081abca5dc55b08f085efe09a
+      uses: ruby/setup-ruby@v1.59.1
       with:
         ruby-version: 2.5
     - name: Install dependencies

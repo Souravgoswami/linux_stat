@@ -13,7 +13,7 @@ PLATFORMS
 
 DEPENDENCIES
   linux_stat!
-  rake (>= 12.0)
+  rake
 
 BUNDLED WITH
    2.1.4

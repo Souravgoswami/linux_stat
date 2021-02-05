@@ -655,6 +655,39 @@ module LinuxStat
 				LinuxStat::Nproc.count_cpu_for_pid(pid)
 			end
 
+			##
+			# = def cpu_times_i(pid = $$)
+			#
+			# Shows the CPU time used by the process.
+			#
+			# The return value is an Integer.
+			def cpu_times_i(pid = $$)
+				times = LinuxStat::ProcFS.ps_stat(pid)
+				utime, stime, cutime, cstime = times[10], times[11], times[12], times[13]
+
+				utime.+(stime).+(cutime).+(cstime) / get_ticks
+			end
+
+			##
+			# = def cpu_times(pid = $$)
+			#
+			# Shows the CPU time used by the process.
+			#
+			# The return value is a Hash.
+			def cpu_times(pid = $$)
+				v = cpu_times_i(pid)
+
+				hour = v / 3600
+				min = v % 3600 / 60
+				sec = v % 60
+
+				{
+					hour: hour,
+					minute: min,
+					second: sec
+				}
+			end
+
 			alias count_cpu nproc
 
 			private

@@ -178,7 +178,14 @@ module LinuxStat
 			# For example, a sample output can be like this (taken on a test system):
 			#
 			#    LinuxStat::Battery.devices_stat
-			#    => {:AC=>{:type=>"Mains", :online=>1}, :BAT0=>{:model=>"DELL CYMGM77", :manufacturer=>"Samsung SDI", :type=>"Battery", :status=>"Full", :capacity=>100, :voltage_min_design=>11.4, :charge_full_design=>3.684, :charge_full_design_wh=>42.0, :voltage_now=>12.558, :charge_now=>2.087, :charge_now_wh=>26.21, :charge_full_wh=>23.79, :charge_percentage=>100.0}, :hidpp_battery_0=>{:model=>"Wireless Keyboard", :manufacturer=>"Logitech", :type=>"Battery", :status=>"Discharging", :online=>1}}
+			#    => {:AC=>{:type=>"Mains", :online=>1},
+			# :BAT0=>{:model=>"DELL CYMGM77", :manufacturer=>"Samsung SDI",
+			# :type=>"Battery", :status=>"Full", :capacity=>100, :voltage_min_design=>11.4,
+			# :charge_full_design=>3.684, :charge_full_design_wh=>42.0,
+			# :voltage_now=>12.558, :charge_now=>2.087, :charge_now_wh=>26.21,
+			# :charge_full_wh=>23.79, :charge_percentage=>100.0},
+			# :hidpp_battery_0=>{:model=>"Wireless Keyboard", :manufacturer=>"Logitech",
+			# :type=>"Battery", :status=>"Discharging", :online=>1}}
 			#
 			# If you need info about lots of batteries, use this method.
 			# If the informations are not available, it will return empty Hash for each devices.

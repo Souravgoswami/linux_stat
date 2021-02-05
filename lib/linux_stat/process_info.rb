@@ -664,6 +664,7 @@ module LinuxStat
 			def cpu_time(pid = $$)
 				times = LinuxStat::ProcFS.ps_stat(pid)
 				utime, stime, cutime, cstime = times[10], times[11], times[12], times[13]
+				return nil unless utime && stime && cutime && cstime
 
 				utime.+(stime).+(cutime).+(cstime) / get_ticks
 			end
@@ -676,6 +677,7 @@ module LinuxStat
 			# The return value is a Hash.
 			def cpu_times(pid = $$)
 				v = cpu_time(pid)
+				return {} unless v
 
 				hour = v / 3600
 				min = v % 3600 / 60

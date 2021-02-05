@@ -151,7 +151,7 @@ module LinuxStat
 
 				h = uptime_i / 3600
 				m = uptime_i % 3600 / 60
-				s = _uptime.%(3600).%(60).round(2)
+				s = _uptime.%(60).round(2)
 
 				{
 					hour: h,

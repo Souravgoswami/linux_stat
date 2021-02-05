@@ -1,13 +1,15 @@
 #define PAGESIZE sysconf(_SC_PAGESIZE)
 
 VALUE statm(VALUE obj, VALUE pid) {
-	char _path[22] ;
-	sprintf(_path, "/proc/%lu/statm", FIX2UINT(pid)) ;
-
-	FILE *f = fopen(_path, "r") ;
-
 	VALUE hash = rb_hash_new() ;
 
+	int _pid = FIX2INT(pid) ;
+	if (_pid < 0) return hash ;
+
+	char _path[22] ;
+	sprintf(_path, "/proc/%d/statm", _pid) ;
+
+	FILE *f = fopen(_path, "r") ;
 	if (!f) return hash ;
 
 	unsigned int _virtual, resident, shared ;
@@ -33,13 +35,15 @@ VALUE statm(VALUE obj, VALUE pid) {
 }
 
 VALUE statm_virtual(VALUE obj, VALUE pid) {
+	int _pid = FIX2INT(pid) ;
+	if (_pid < 0) return Qnil ;
+
 	char _path[22] ;
-	sprintf(_path, "/proc/%lu/statm", FIX2UINT(pid)) ;
+	sprintf(_path, "/proc/%d/statm", _pid) ;
 
 	FILE *f = fopen(_path, "r") ;
-	VALUE hash = rb_hash_new() ;
+	if (!f) return Qnil ;
 
-	if (!f) return hash ;
 	unsigned int _virtual ;
 	char status = fscanf(f, "%u", &_virtual) ;
 	fclose(f) ;
@@ -49,13 +53,15 @@ VALUE statm_virtual(VALUE obj, VALUE pid) {
 }
 
 VALUE statm_resident(VALUE obj, VALUE pid) {
+	int _pid = FIX2INT(pid) ;
+	if (_pid < 0) return Qnil ;
+
 	char _path[22] ;
-	sprintf(_path, "/proc/%lu/statm", FIX2UINT(pid)) ;
+	sprintf(_path, "/proc/%d/statm", _pid) ;
 
 	FILE *f = fopen(_path, "r") ;
-	VALUE hash = rb_hash_new() ;
+	if (!f) return Qnil ;
 
-	if (!f) return hash ;
 	unsigned int resident ;
 	char status = fscanf(f, "%*u %u", &resident) ;
 	fclose(f) ;
@@ -65,13 +71,15 @@ VALUE statm_resident(VALUE obj, VALUE pid) {
 }
 
 VALUE statm_shared(VALUE obj, VALUE pid) {
+	int _pid = FIX2INT(pid) ;
+	if (_pid < 0) return Qnil ;
+
 	char _path[22] ;
-	sprintf(_path, "/proc/%lu/statm", FIX2UINT(pid)) ;
+	sprintf(_path, "/proc/%d/statm", _pid) ;
 
 	FILE *f = fopen(_path, "r") ;
-	VALUE hash = rb_hash_new() ;
+	if (!f) return Qnil ;
 
-	if (!f) return hash ;
 	unsigned int shared ;
 	char status = fscanf(f, "%*u %*u %u", &shared) ;
 	fclose(f) ;
@@ -81,11 +89,13 @@ VALUE statm_shared(VALUE obj, VALUE pid) {
 }
 
 VALUE statm_memory(VALUE obj, VALUE pid) {
+	int _pid = FIX2INT(pid) ;
+	if (_pid < 0) return Qnil ;
+
 	char _path[22] ;
-	sprintf(_path, "/proc/%lu/statm", FIX2UINT(pid)) ;
+	sprintf(_path, "/proc/%d/statm", _pid) ;
 
 	FILE *f = fopen(_path, "r") ;
-
 	if (!f) return Qnil ;
 
 	unsigned int resident, shared ;

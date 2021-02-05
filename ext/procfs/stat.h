@@ -1,6 +1,9 @@
 VALUE ps_state(VALUE obj, VALUE pid) {
+	int _pid = FIX2INT(pid) ;
+	if (_pid < 0) return rb_str_new_cstr("") ;
+
 	char _path[22] ;
-	sprintf(_path, "/proc/%lu/stat", FIX2UINT(pid)) ;
+	sprintf(_path, "/proc/%d/stat", _pid) ;
 
 	FILE *f = fopen(_path, "r") ;
 	if (!f) return rb_str_new_cstr("") ;
@@ -15,8 +18,11 @@ VALUE ps_state(VALUE obj, VALUE pid) {
 }
 
 VALUE ps_stat(VALUE obj, VALUE pid) {
+	int _pid = FIX2INT(pid) ;
+	if (_pid < 0) return rb_str_new_cstr("") ;
+
 	char _path[22] ;
-	sprintf(_path, "/proc/%lu/stat", FIX2UINT(pid)) ;
+	sprintf(_path, "/proc/%d/stat", _pid) ;
 
 	FILE *f = fopen(_path, "r") ;
 

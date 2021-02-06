@@ -618,10 +618,10 @@ module LinuxStat
 			# But if the info isn't available, it will return nil.
 			def cpu_time(pid = $$)
 				times = LinuxStat::ProcFS.ps_stat(pid)
-				utime, stime, cutime, cstime = times[10], times[11], times[12], times[13]
-				return nil unless utime && stime && cutime && cstime
+				utime, stime = times[10], times[11]
+				return nil unless utime && stime
 
-				utime.+(stime).+(cutime).+(cstime).fdiv(get_ticks)
+				utime.+(stime).fdiv(get_ticks)
 			end
 
 			##
@@ -639,13 +639,15 @@ module LinuxStat
 				v = cpu_time(pid)
 				return {} unless v
 
-				hour = v / 3600
-				min = v % 3600 / 60
+				v_i = v.to_i
+
+				hour = v_i / 3600
+				min = v_i % 3600 / 60
 				sec = v % 60
 
 				{
-					hour: hour.round(2),
-					minute: min.round(2),
+					hour: hour,
+					minute: min,
 					second: sec.round(2)
 				}
 			end

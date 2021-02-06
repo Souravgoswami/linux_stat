@@ -302,7 +302,7 @@ module LinuxStat
 				idle2 = uptime - starttime2 - total_time2
 
 				totald = idle2.+(total_time2).-(idle1 + total_time)
-				cpu_u = totald.-(idle2 - idle1).fdiv(totald).abs.*(100)./(cpu_count)
+				cpu_u = totald.-(idle2 - idle1).fdiv(totald).abs.*(100)./(LinuxStat::CPU.count)
 
 				{
 					cpu_usage: cpu_u > 100 ? 100.0 : cpu_u.round(2),
@@ -338,32 +338,10 @@ module LinuxStat
 			#
 			# This method is more efficient than running LinuxStat::ProcessInfo.cpu_stat()
 			def cpu_usage(pid: $$, sleep: ticks_to_ms_t5)
-				ticks = get_ticks
-				stat = LinuxStat::ProcFS.ps_stat(pid)
-				uptime = LS::ProcFS.uptime_f
-				return nil unless uptime && !stat.empty?
+				u = cpu_usage_thread(pid, sleep)
+				return nil unless u
 
-				utime, stime, starttime = *stat.values_at(10, 11, 18).map(&:to_f)
-				uptime *= ticks
-
-				total_time = utime + stime
-				idle1 = uptime - starttime - total_time
-
-				sleep(sleep)
-
-				stat = LinuxStat::ProcFS.ps_stat(pid)
-				uptime = LS::ProcFS.uptime_f
-				return nil unless uptime && !stat.empty?
-
-				utime2, stime2, starttime2 = *stat.values_at(10, 11, 18).map(&:to_f)
-				uptime *= ticks
-
-				total_time2 = utime2 + stime2
-				idle2 = uptime - starttime2 - total_time2
-
-				totald = idle2.+(total_time2).-(idle1 + total_time)
-
-				u = totald.-(idle2 - idle1).fdiv(totald).abs.*(100)./(cpu_count)
+				u /= LinuxStat::CPU.count
 				u > 100 ? 100.0 : u.round(2)
 			end
 
@@ -390,34 +368,10 @@ module LinuxStat
 			#
 			# But if the info isn't available, it will return nil.
 			def thread_usage(pid: $$, sleep: ticks_to_ms_t5)
-				ticks = get_ticks
-				stat = LinuxStat::ProcFS.ps_stat(pid)
-				uptime = LS::ProcFS.uptime_f
-				return nil unless uptime && !stat.empty?
+				u = cpu_usage_thread(pid, sleep)
+				return nil unless u
 
-				utime, stime, starttime = *stat.values_at(10, 11, 18).map(&:to_f)
-				uptime *= ticks
-
-				total_time = utime + stime
-				idle1 = uptime - starttime - total_time
-
-				sleep(sleep)
-
-				stat = LinuxStat::ProcFS.ps_stat(pid)
-				uptime = LS::ProcFS.uptime_f
-				return nil unless uptime && !stat.empty?
-
-				utime2, stime2, starttime2 = *stat.values_at(10, 11, 18).map(&:to_f)
-				uptime *= ticks
-
-				total_time2 = utime2 + stime2
-				idle2 = uptime - starttime2 - total_time2
-
-				totald = idle2.+(total_time2).-(idle1 + total_time)
-
-				u = totald.-(idle2 - idle1).fdiv(totald).abs.*(100)
-
-				cpu_count_t100 = cpu_count * 100
+				cpu_count_t100 = LinuxStat::CPU.count * 100
 				u > cpu_count_t100 ? cpu_count_t100 : u.round(2)
 			end
 
@@ -709,8 +663,33 @@ module LinuxStat
 				@@pagesize ||= LinuxStat::Sysconf.pagesize.to_i
 			end
 
-			def cpu_count
-				@@nprocessors_conf ||= LinuxStat::CPU.count
+			def cpu_usage_thread(pid, delay)
+				ticks = get_ticks
+				stat = LinuxStat::ProcFS.ps_stat(pid)
+				uptime = LS::ProcFS.uptime_f
+				return nil unless uptime && !stat.empty?
+
+				utime, stime, starttime = *stat.values_at(10, 11, 18).map(&:to_f)
+				uptime *= ticks
+
+				total_time = utime + stime
+				idle1 = uptime - starttime - total_time
+
+				sleep(delay)
+
+				stat = LinuxStat::ProcFS.ps_stat(pid)
+				uptime = LS::ProcFS.uptime_f
+				return nil unless uptime && !stat.empty?
+
+				utime2, stime2, starttime2 = *stat.values_at(10, 11, 18).map(&:to_f)
+				uptime *= ticks
+
+				total_time2 = utime2 + stime2
+				idle2 = uptime - starttime2 - total_time2
+
+				totald = idle2.+(total_time2).-(idle1 + total_time)
+
+				totald.-(idle2 - idle1).fdiv(totald).abs.*(100)
 			end
 		end
 	end

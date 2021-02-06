@@ -38,5 +38,6 @@ int Init_procfs() {
 
 	// stat
 	rb_define_module_function(_procfs, "ps_state", ps_state, 1) ;
+	rb_define_module_function(_procfs, "ps_times", ps_times, 1) ;
 	rb_define_module_function(_procfs, "ps_stat", ps_stat, 1) ;
 }

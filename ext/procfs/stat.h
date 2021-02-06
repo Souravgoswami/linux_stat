@@ -17,6 +17,27 @@ VALUE ps_state(VALUE obj, VALUE pid) {
 	return rb_str_new_cstr(_s) ;
 }
 
+VALUE ps_times(VALUE obj, VALUE pid) {
+	int _pid = FIX2INT(pid) ;
+	if (_pid < 0) return Qnil ;
+
+	char _path[22] ;
+	sprintf(_path, "/proc/%d/stat", _pid) ;
+
+	FILE *f = fopen(_path, "r") ;
+	if (!f) return Qnil ;
+
+	unsigned long utime, stime ;
+
+	char status = fscanf(f, "%*llu (%*[^)]%*[)] %*c %*d %*d %*d %*d %*d %*u %*lu %*lu %*lu %*lu %lu %lu", &utime, &stime) ;
+	fclose(f) ;
+
+	if (status != 2) return Qnil ;
+	double total_time = (utime + stime) / (float)sysconf(_SC_CLK_TCK);
+
+	return DBL2NUM(total_time) ;
+}
+
 VALUE ps_stat(VALUE obj, VALUE pid) {
 	int _pid = FIX2INT(pid) ;
 	if (_pid < 0) return rb_str_new_cstr("") ;

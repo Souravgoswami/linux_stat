@@ -617,11 +617,7 @@ module LinuxStat
 			# The return value is a Float.
 			# But if the info isn't available, it will return nil.
 			def cpu_time(pid = $$)
-				times = LinuxStat::ProcFS.ps_stat(pid)
-				utime, stime = times[10], times[11]
-				return nil unless utime && stime
-
-				utime.+(stime).fdiv(get_ticks)
+				LinuxStat::ProcFS.ps_times(pid)
 			end
 
 			##
@@ -636,7 +632,7 @@ module LinuxStat
 			#
 			# But if the info isn't available, it will return an empty Hash..
 			def cpu_times(pid = $$)
-				v = cpu_time(pid)
+				v = LinuxStat::ProcFS.ps_times(pid)
 				return {} unless v
 
 				v_i = v.to_i

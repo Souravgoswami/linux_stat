@@ -283,7 +283,7 @@ module LinuxStat
 				uptime = LS::ProcFS.uptime_f
 				return {} unless uptime && !stat.empty?
 
-				utime, stime, starttime = *stat.values_at(11, 12, 19).map(&:to_f)
+				utime, stime, starttime = *stat.values_at(10, 11, 18).map(&:to_f)
 				uptime *= ticks
 
 				total_time = utime + stime
@@ -295,7 +295,7 @@ module LinuxStat
 				uptime = LS::ProcFS.uptime_f
 				return {} unless uptime && !stat.empty?
 
-				utime2, stime2, starttime2 = *stat.values_at(11, 12, 19).map(&:to_f)
+				utime2, stime2, starttime2 = *stat.values_at(10, 11, 18).map(&:to_f)
 				uptime *= ticks
 
 				total_time2 = utime2 + stime2

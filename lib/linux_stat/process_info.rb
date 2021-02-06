@@ -614,13 +614,14 @@ module LinuxStat
 			#
 			# Shows the CPU time used by the process.
 			#
-			# The return value is an Integer.
+			# The return value is a Float.
+			# But if the info isn't available, it will return nil.
 			def cpu_time(pid = $$)
 				times = LinuxStat::ProcFS.ps_stat(pid)
 				utime, stime, cutime, cstime = times[10], times[11], times[12], times[13]
 				return nil unless utime && stime && cutime && cstime
 
-				utime.+(stime).+(cutime).+(cstime) / get_ticks
+				utime.+(stime).+(cutime).+(cstime).fdiv(get_ticks)
 			end
 
 			##
@@ -628,7 +629,12 @@ module LinuxStat
 			#
 			# Shows the CPU time used by the process.
 			#
-			# The return value is a Hash.
+			# The return value is a Hash formatted like this:
+			#    LS::ProcessInfo.cpu_times($$)
+			#
+			#    => {:hour=>0.0, :minute=>0.0, :second=>0.29}
+			#
+			# But if the info isn't available, it will return an empty Hash..
 			def cpu_times(pid = $$)
 				v = cpu_time(pid)
 				return {} unless v
@@ -638,9 +644,9 @@ module LinuxStat
 				sec = v % 60
 
 				{
-					hour: hour,
-					minute: min,
-					second: sec
+					hour: hour.round(2),
+					minute: min.round(2),
+					second: sec.round(2)
 				}
 			end
 

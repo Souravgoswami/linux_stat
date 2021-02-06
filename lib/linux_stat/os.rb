@@ -142,7 +142,7 @@ module LinuxStat
 			# Reads /proc/uptime and returns the system uptime:
 			#    LinuxStat::OS.uptime
 			#
-			#    => {:hour=>10, :minute=>34, :second=>12.59}
+			#    => {:hour=>16, :minute=>10, :second=>11, :jiffy=>20}
 			#
 			# Using uptime is 10x slower than using uptime_i
 			#
@@ -155,12 +155,14 @@ module LinuxStat
 
 				h = uptime_i / 3600
 				m = uptime_i % 3600 / 60
-				s = _uptime.%(60).round(2)
+				s = uptime_i.%(60)
+				j = _uptime.-(uptime_i) * 100
 
 				{
 					hour: h,
 					minute: m,
-					second: s
+					second: s,
+					jiffy: j.to_i
 				}
 			end
 

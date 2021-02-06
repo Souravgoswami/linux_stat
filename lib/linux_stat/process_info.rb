@@ -628,7 +628,7 @@ module LinuxStat
 			# The return value is a Hash formatted like this:
 			#    LS::ProcessInfo.cpu_times($$)
 			#
-			#    => {:hour=>0.0, :minute=>0.0, :second=>0.29}
+			#    => {:hour=>0, :minute=>39, :second=>12, :jiffy=>0.42}
 			#
 			# But if the info isn't available, it will return an empty Hash..
 			def cpu_times(pid = $$)
@@ -639,12 +639,14 @@ module LinuxStat
 
 				hour = v_i / 3600
 				min = v_i % 3600 / 60
-				sec = v % 60
+				sec = v_i % 60
+				jiffy = v.-(v_i) * 100
 
 				{
 					hour: hour,
 					minute: min,
-					second: sec.round(2)
+					second: sec,
+					jiffy: jiffy.to_i
 				}
 			end
 

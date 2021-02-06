@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    linux_stat (2.1.2)
+    linux_stat (2.2.0)
 
 GEM
   remote: https://rubygems.org/

@@ -533,7 +533,7 @@ LinuxStat::OS.os_release()
 # File:		os.rb | Line: 150
 # Definition:	def uptime
 LinuxStat::OS.uptime()
-=> {:hour=>16, :minute=>16, :second=>1, :jiffy=>430}
+=> {:hour=>16, :minute=>16, :second=>1, :jiffy=>43}
 
 # File:		os.rb | Line: 180
 # Definition:	def uptime_f
@@ -714,7 +714,7 @@ LinuxStat::ProcessInfo.cpu_time(pid)
 # File:		process_info.rb | Line: 634
 # Definition:	def cpu_times(pid = $$)
 LinuxStat::ProcessInfo.cpu_times(pid)
-=> {:hour=>0, :minute=>0, :second=>0, :jiffy=>439}
+=> {:hour=>0, :minute=>0, :second=>0, :jiffy=>43}
 
 # File:		process_info.rb | Line: 340
 # Definition:	def cpu_usage(pid: $$, sleep: ticks_to_ms_t5)

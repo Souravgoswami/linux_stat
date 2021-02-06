@@ -7,7 +7,11 @@ module LinuxStat
 			# Reads /etc/os-release and returns a Hash. For example:
 			#    LinuxStat::OS.os_release
 			#
-			#    => {:NAME=>"Arch Linux", :PRETTY_NAME=>"Arch Linux", :ID=>"arch", :BUILD_ID=>"rolling", :ANSI_COLOR=>"38;2;23;147;209", :HOME_URL=>"https://www.archlinux.org/", :DOCUMENTATION_URL=>"https://wiki.archlinux.org/", :SUPPORT_URL=>"https://bbs.archlinux.org/", :BUG_REPORT_URL=>"https://bugs.archlinux.org/", :LOGO=>"archlinux"}
+			#    => {:NAME=>"Arch Linux", :PRETTY_NAME=>"Arch Linux", :ID=>"arch", :BUILD_ID=>"rolling",
+			# :ANSI_COLOR=>"38;2;23;147;209", :HOME_URL=>"https://www.archlinux.org/",
+			# :DOCUMENTATION_URL=>"https://wiki.archlinux.org/",
+			# :SUPPORT_URL=>"https://bbs.archlinux.org/", :BUG_REPORT_URL=>"https://bugs.archlinux.org/",
+			# :LOGO=>"archlinux"}
 			#
 			# If the info isn't available, it will return an empty Hash.
 			#
@@ -127,7 +131,7 @@ module LinuxStat
 			#
 			# The return type is strictly Integer and doesn't fail.
 			def bits
-				@@bits ||= if RbConfig::CONFIG['host_cpu'].end_with?('64') || RUBY_PLATFORM.end_with?('64') || machine.end_with?('64')
+				@@bits ||= if machine.end_with?('64') || RbConfig::CONFIG['host_cpu'].end_with?('64') || RUBY_PLATFORM.end_with?('64')
 					64
 				else
 					32

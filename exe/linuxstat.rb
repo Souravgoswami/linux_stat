@@ -150,9 +150,9 @@ execute.sort.each do |c|
 		disp_meth = "#{meth}"
 		disp_meth.concat(arg ? "(#{param})" : "(#{param})")
 
-		time = Time.now
+		time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 		ret = arg ? e.send(meth, arg) : e.send(meth)
-		time2 = Time.now
+		time2 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 		time = time2.-(time).*(1_000_000).round(3)
 
 		v = ret.inspect

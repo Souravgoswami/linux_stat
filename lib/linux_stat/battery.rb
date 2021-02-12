@@ -105,11 +105,19 @@ module LinuxStat
 			#
 			# If the battery is not present or the information is not available, it will return nil.
 			def charge
-				@@charge_now_file ||= File.join(PATH, 'charge_now')
-				@@charge_full_file ||= File.join(PATH, 'charge_full')
+				@@charge_now_file ||= if File.readable?(File.join(PATH, 'charge_now'))
+					File.join(PATH, 'charge_now').freeze
+				elsif File.readable?(File.join(PATH, 'energy_now'))
+					File.join(PATH, 'energy_now').freeze
+				end
 
-				@@charge_now_readable ||= File.readable?(@@charge_now_file) && File.readable?(@@charge_full_file)
-				return nil unless @@charge_now_readable
+				@@charge_full_file ||= if File.readable?(File.join(PATH, 'charge_full'))
+					File.join(PATH, 'charge_full').freeze
+				elsif File.readable?(File.join(PATH, 'energy_full'))
+					File.join(PATH, 'energy_full').freeze
+				end
+
+				return nil unless @@charge_now_file && @@charge_full_file
 
 				charge_now = IO.read(@@charge_now_file).to_i
 				charge_full = IO.read(@@charge_full_file).to_i
@@ -215,7 +223,16 @@ module LinuxStat
 
 					# charge now
 					cn_f = File.join(x, 'charge_now'.freeze).freeze
-					charge_now = File.readable?(cn_f) ? IO.read(cn_f).to_i.fdiv(1_000_000) : nil
+					charge_now = if File.readable?(cn_f)
+						IO.read(cn_f).to_i.fdiv(1_000_000)
+					else
+						en_f = File.join(x, 'energy_now'.freeze)
+						if File.readable?(en_f)
+							IO.read(en_f) .to_i.fdiv(1_000_000)
+						else
+							nil
+						end
+					end
 
 					# voltage min design
 					vmd_f = File.join(x, 'voltage_min_design'.freeze).freeze
@@ -227,7 +244,16 @@ module LinuxStat
 
 					# charge full
 					cf_f = File.join(x, 'charge_full'.freeze).freeze
-					charge_full = File.readable?(cf_f) ? IO.read(cf_f).to_i.fdiv(1_000_000) : nil
+					charge_full = if File.readable?(cf_f)
+						IO.read(cf_f).to_i.fdiv(1_000_000)
+					else
+						ef_f = File.join(x, 'energy_full'.freeze)
+						if File.readable?(ef_f)
+							IO.read(ef_f).to_i.fdiv(1_000_000)
+						else
+							nil
+						end
+					end
 
 					# status
 					s_f = File.join(x, 'status'.freeze).freeze

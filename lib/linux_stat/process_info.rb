@@ -521,7 +521,9 @@ module LinuxStat
 			def start_time(pid = $$)
 				# Getting two Time objects and dealing with floating point numbers
 				# Just to make sure the time goes monotonically
-				Time.at(start_time_epoch(pid))
+				_ste = start_time_epoch(pid)
+				return nil unless _ste
+				Time.at(_ste)
 			end
 
 			##

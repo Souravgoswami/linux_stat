@@ -22,6 +22,7 @@ module LinuxStat
 			#
 			# If the info isn't available, it will return an empty Hash.
 			def any?
+				return nil unless File.readable?('/proc/swaps'.freeze)
 				!!IO.foreach('/proc/swaps'.freeze).first(2)[1]
 			end
 

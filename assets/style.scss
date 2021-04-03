@@ -338,7 +338,7 @@ body {
 		transition: all 0.5s ease ;
 		margin: 16px 0 4px 0 ;
 
-		&:after {
+		&::after {
 			content: attr(content) ;
 			font-size: 34px;
 			display: inline-block ;

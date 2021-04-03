@@ -57,29 +57,27 @@ layout: linuxstat
 	</ol>
 
 	<a class="head" id="dependencies" href="#dependencies" content="Dependencies"></a>
-	<ul>
-		<li>
-			You need to have the C compile to be able to compile the C extension.
+	<break></break>
+	<details>
+		<summary>On Arch Linux</summary>
+		You need to have the C compile to be able to compile the C extension.
+		<pre>
+			<hash>pacman -S gcc</hash>
+		</pre>
+	</details>
 
-			<break></break>
-			> On Arch Linux:
-			<pre>
-				<hash>pacman -S gcc</hash>
-			</pre>
+	<details>
+		<summary>On Debian based systems</summary>
+		You need to have the C compile to be able to compile the C extension.
+		<pre>
+			<hash>apt install gcc</hash>
+		</pre>
 
-			> On Debian based systems:
-			<pre>
-				<hash>apt install gcc</hash>
-			</pre>
-		</li>
-
-		<li>
-			You might also require ruby-dev in Debian based systems which provides support for ruby.h header file:
-			<pre>
-				<hash>apt install ruby-dev</hash>
-			</pre>
-		</li>
-	</ul>
+		You might also require ruby-dev in Debian based systems which provides support for ruby.h header file:
+		<pre>
+			<hash>apt install ruby-dev</hash>
+		</pre>
+	</details>
 
 	<break></break>
 	Once your are done, and you can compile the C file, you can follow the installation!
@@ -91,22 +89,25 @@ layout: linuxstat
 	You can install hwdata simply.
 	<break></break>
 
-	&#x2022; Arch:
 
-	<pre>
-		<hash>pacman -S hwids</hash>
-	</pre>
+	<details>
+		<summary>Arch</summary>
 
-	&#x2022; Debian based systems:
+		<pre>
+			<hash>pacman -S hwids</hash>
+		</pre>
+	</details>
 
-	<pre>
-		<hash>apt install hwdata</hash>
-	</pre>
+	<details>
+		<summary>Debian based systems</summary>
 
-	But without hwdata, it won't show such information.
+		<pre>
+			<hash>apt install hwdata</hash>
+		</pre>
+	</details>
+
 	<break></break>
-
-	You can also point to a downloaded copy of hwdata (pci.ids / usb.ids) file.
+	But without hwdata, it won't show such information. You can also point to a downloaded copy of hwdata (pci.ids / usb.ids) file.
 	<break></break>
 
 	Follow <a href="https://github.com/Souravgoswami/linux_stat#note-7-hwdata">Note 7</a> below for more information on that.

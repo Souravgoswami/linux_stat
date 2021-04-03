@@ -462,6 +462,26 @@ body {
 	margin-right: 0.5rem ;
 }
 
+.hr {
+	display: block ;
+	width: 80% ;
+	height: 2px ;
+	background: linear-gradient(45deg, #3eb, #55f) ;
+	margin: 8px auto ;
+}
+
+table {
+	background-image: linear-gradient(to right bottom, #55f 0%, #3eb 100%) ;
+	background-origin: border-box ;
+	border-spacing: 2px ;
+	border: none ;
+}
+
+th, td {
+	padding: 4px 12px;
+	background-color: #fff ;
+}
+
 @media(max-width: $max-width) {
 	#header {
 		width: 100% ;

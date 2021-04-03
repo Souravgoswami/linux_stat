@@ -1,0 +1,604 @@
+<a class="head" id="note-1" href="#note-1" content="Note 1: CPU usage, and Net usage"></a>
+To calculate the current usage, we need to get two usages at a given interval, and subtract the 2nd from the first.
+For example, if the current download (<code>LinuxStat::Net.total_bytes_received</code>) is 1000 bytes, and if 0.1 seconds ago, it was 100 bytes, that means 900 bytes was received in 0.1 seconds.
+That means the current speed is 9000 bytes or 9 kB/s.
+
+<break></break>
+Without the polling, it's not really possible to calculate the current usage. Although the total usage can be calculated.
+A system monitor does that, too...
+
+<break></break>
+Thus these methods require a polling interval:
+<ol>
+  <li>LinuxStat::CPU.stat, usage, total_usage, usage.</li>
+  <li>LinuxStat::ProcessInfo.cpu_usage, cpu_stat.</li>
+  <li>LinuxStat::Net.usage, current_usage.</li>
+</ol>
+
+<break></break>
+They sleep for a given interval and then differentiate between the data.
+
+<break></break>
+For more info look at the ri documentation for the above methods.
+
+<break></break>
+These methods can slow down your application a bit unless you implement them in a thread.
+
+<break></break>
+Other methods doesn't have the sleep implemented, and they just works under a millisecond.
+
+<break></break>
+For example:
+
+<pre>
+  LinuxStat::CPU.stat(0.1)
+  => {0=>7.69, 1=>0.0, 2=>0.0, 3=>18.18, 4=>10.0}
+</pre>
+This will sleep for 0.1 seconds. To be reliable, use a time like 0.05 seconds or so.
+
+<break></break>
+If you want to build a system monitor and don't want to wait, you have to do something like this:
+
+<pre class="nowrap">
+  #!/usr/bin/ruby
+  require 'linux_stat'
+
+  usages = []
+  thread = Thread.new { }
+  counter = 0
+
+  while true
+    thread = Thread.new { usages = LinuxStat::CPU.usages(0.5).values } unless thread.alive?
+
+    # clears the screen and prints the info
+    puts "\e[2J\e[H\e[3J"\
+    "#{counter += 1}\n"\
+    "\e[1;33mTotal CPU Usage:\e[0m #{usages[0]}%\n"\
+    "#{usages[1..-1].to_a.map.with_index { |x, i| "\e[1;33mCore #{i}\e[0m => #{x}%\n" }.join}"\
+    "Total Download: #{LinuxStat::PrettifyBytes.convert_decimal LinuxStat::Net.total_bytes_received}\n"\
+    "Total Upload: #{LinuxStat::PrettifyBytes.convert_decimal LinuxStat::Net.total_bytes_transmitted}"
+  end
+</pre>
+
+This will not wait in every loop for 0.5 seconds, but it will not update the cpu usage in every loop either.
+<break></break>
+So what you will be seeing in the CPU usage in every 0.5 seconds interval.
+
+<break></break>
+You will also see the counter increases like crazy. Which means it's not getting waited for 0.5 seconds.
+
+<break></break>
+But the other methods doesn't have this delay, thus in this example,
+you will be able see the "Total Download" and "Total Upload" in real time,
+well as soon as the Linux kernel updates the data and ruby executes the loop.
+
+<break></break>
+Just run the <code>linuxstat.rb</code> command to test what method takes what time measured in microseconds.
+
+<a class="head" id="note-2" href="#note-2" content="Note 2: Count CPU"></a>
+There are confusingly 6 different methods to count the number of CPU. But they are here for a reason!
+<break></break>
+
+Well this section actually demystifies the methods.
+
+<break></break>
+1. The good old <code>LinuxStat::CPU.count()</code>:
+
+<break></break>
+It gets the configured CPU for the system. It doesn't count for hotplugged CPU.
+If 3 out of 4 CPU are hotplugged out, it will still show 4. It calls <code>sysconf(_SC_NPROCESSORS_CONF)</code>
+
+<break></break>
+2. The mysterious <code>LinuxStat::ProcessInfo.nproc(pid = $$)</code>:
+
+<break></break>
+[ Also aliased to <code>LinuxStat::ProcessInfo.count_cpu()</code> ]
+
+<break></break>
+It returns the number of processors, like the other 3 methods.
+Without any arguments, it's like running `require 'etc' ; puts Etc.nprocessors`
+
+<break></break>
+So there the caveat of checking what the number of processors are actually allocated to the pid.
+
+<break></break>
+For example:
+
+<pre>
+  <dollar>ruby -r linux_stat -e "puts LS::ProcessInfo.nproc"</dollar>
+  4
+
+  <dollar>taskset -c 0 ruby -r linux_stat -e "puts LS::ProcessInfo.nproc"</dollar>
+  1
+
+  <dollar>taskset -c 0-1 ruby -r linux_stat -e "puts LS::ProcessInfo.nproc"</dollar>
+  2
+
+  <dollar>taskset -c 0-1,3 ruby -r linux_stat -e "puts LS::ProcessInfo.nproc"</dollar>
+  3
+
+  <dollar>taskset -c 0-1,3 ruby -r linux_stat -e "puts LS::ProcessInfo.nproc "</dollar>
+  3
+</pre>
+
+Or with argument:
+
+<pre>
+  irb(main):001:0> require 'linux_stat'
+  => true
+
+  irb(main):002:0> LinuxStat::ProcessInfo.command_name 4775
+  => "electron"
+
+  irb(main):003:0> LinuxStat::ProcessInfo.nproc 4775
+  => 4
+</pre>
+
+3. The <code>LinuxStat::CPU.online()</code>:
+<break></break>
+
+This returns the number of online CPU as an Array. It doesn't get affected by taskset or anything.
+
+For example:
+
+<pre>
+  irb(main):001:0> require 'linux_stat'
+  => true
+
+  irb(main):002:0> LinuxStat::CPU.online
+  => [0, 1, 3]
+</pre>
+
+By using <code>LinuxStat::CPU.online.count</code> you count the actual online CPU on your system.
+
+<break></break>
+Any n number of CPU can get hotplugged in and out, and this will report that correctly.
+
+<break></break>
+It just gets the info from /proc/stat; but if it fails it will read /sys/devices/system/cpu/online
+and parse the output to get an array.
+
+<break></break>
+4. The <code>LinuxStat::CPU.count_online</code>
+<break></break>
+It's a more robust method that counts the online CPU. It shouldn't fail in most if not all cases!
+But if it fails for some really spooky reasons, it will return nil.
+
+<break></break>
+5. The <code>LinuxStat::CPU.offline()</code>:
+
+<break></break>
+This returns the number of offline CPU as an Array. It doesn't get affected by taskset or anything.
+
+<break></break>
+For example:
+
+<pre>
+  irb(main):001:0> require 'linux_stat'
+  => true
+
+  irb(main):002:0> LinuxStat::CPU.offline
+  => [2]
+</pre>
+
+<break></break>
+Any n number of CPU can get hotplugged in and out, and this will report that correctly.
+
+<break></break>
+It just gets the info from /sys/devices/system/cpu/offline, and parses the output.
+
+<break></break>
+6. The <code>LinuxStat::Sysconf.processor_configured()</code>:
+
+<break></break>
+Sounds repetitive! Actually yes, this is written in C, and it is called by `LinuxStat::CPU.count`.
+
+<break></break>
+The difference is that `LinuxStat::CPU.count` caches the return value, and this method doesn't.
+
+<break></break>
+7. The <code>LinuxStat::Sysconf.processor_online()</code>:
+
+<break></break>
+This may again sound repititive to LinuxStat::CPU.online, but it's actually not!
+
+<break></break>
+If you are using while loops, it might not report the correct number of CPU everytime.
+
+<break></break>
+Worst, it can take a long time to update the total number of CPU.
+
+<break></break>
+The benefit is, it's quite fast!
+
+<break></break>
+It's mostly here just for the sake of completeness to sysconf.
+
+<a class="head" id="note-3" href="#note-3" content="Note 3: Filesystem"></a>
+
+Filesystem can take arguments. By default it's '/' or the root of the system...
+
+<break></break>
+But for the sake of example, to get the free disk space of /, you do:
+
+<pre>
+  <dollar>irb</dollar>
+  irb(main):001:0> require 'linux_stat'
+  => true
+
+  irb(main):002:0> LinuxStat::Filesystem.free('/').fdiv(1024 ** 3).to_s << " GiB"
+  => "35.666873931884766 GiB"
+</pre>
+
+To see the free and total space of a thumbdrive:
+
+<pre>
+  <dollar>irb</dollar>
+  irb(main):001:0> require 'linux_stat'
+  => true
+
+  irb(main):002:0> LinuxStat::Mounts.list.find { |x| x.include?('/run/media/sourav') }.split[1]
+  => "/run/media/sourav/5c2b7af7-d4c3-4ab4-a035-06d18ffc8e6f"
+
+  irb(main):003:0> thumbdrive = _
+  => "/run/media/sourav/5c2b7af7-d4c3-4ab4-a035-06d18ffc8e6f"
+
+  irb(main):004:0> LinuxStat::Filesystem.free(thumbdrive).fdiv(1024 ** 3).to_s << " GiB"
+  => "2.504791259765625 GiB"
+
+  irb(main):005:0> LinuxStat::Filesystem.total(thumbdrive).fdiv(1024 ** 3).to_s << " GiB"
+  => "29.305004119873047 GiB"
+</pre>
+
+<a class="head" id="note-4" href="#note-4" content="Note 4: ProcessInfo"></a>
+
+All the methods LinuxStat::ProcessInfo can take an argument containing the Process ID of a process.
+<break></break>
+By default it's $$ or the PID of the current process, ruby, itself.
+
+<break></break>
+Example:
+<break></break>
+Say you want to see how much CPU Firefox is consuming, for that you have to do the following (firefox can create a lot of child process though):
+
+<break></break>
+1. Get the PID of Firefox:
+<pre>
+  LinuxStat::Process.names.find { |x| x[1].include? 'firefox' }[0]
+  => 770 # but this differs all the time
+</pre>
+
+2. Get the CPU usage:
+<pre>
+  $ irb
+  irb(main):001:0> require 'linux_stat'
+  => true
+
+  irb(main):002:0> pid = LinuxStat::Process.names.find { |x| x[1].include? 'firefox' }[0]
+  => 770
+
+  irb(main):003:0> LinuxStat::ProcessInfo.cpu_usage(pid: pid)
+  => 0.0
+
+  irb(main):004:0> LinuxStat::ProcessInfo.cpu_usage(pid: pid)
+  => 15.0
+</pre>
+
+To get the memory usage of Firefox (for example):
+
+<pre>
+  $ irb
+  irb(main):001:0> require 'linux_stat'
+  => true
+
+  irb(main):002:0> LinuxStat::ProcessInfo.mem_stat(LinuxStat::Process.names.find { |x| x[1].include? 'firefox'.freeze }[0])
+  => {:memory=>468472, :virtual_memory=>4754080, :resident_memory=>814388}
+</pre>
+
+To get ONLY the memory usage in MiB:
+
+<pre>
+  $ irb
+  irb(main):001:0> require 'linux_stat'
+  => true
+
+  irb(main):002:0> LinuxStat::ProcessInfo.memory(LinuxStat::Process.names.find { |x| x[1].include? 'firefox'.freeze }[0]).fdiv(1024).round(2).to_s << " MiB"
+  => "467.51 MiB"
+</pre>
+
+<a class="head" id="note-5" href="#note-5" content="Note 5: FS"></a>
+LinuxStat::FS module gives you the raw info in Hash collected from statvfs.
+
+<break></break>
+It's not documented above because it's not suggested to run this directly. But it shouldn't cause any issue. <code>LinuxStat::Filesystem.stat_raw(fs = '/')</code> does that automatically.
+
+<break></break>
+It always requires an argument, and it's very fast. It directly calls the C API without any intermediate Ruby code.
+
+<break></break>
+For example, to get the info about '/' or root:
+
+<pre>
+  $ irb
+  irb(main):001:0> require 'linux_stat'
+  => true
+
+  irb(main):002:0> LinuxStat::FS.stat('/')
+  => {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>9349843, :block_avail_unpriv=>9349843, :inodes=>58612160, :free_inodes=>56708247, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
+
+  irb(main):003:0> t = Time.now ; puts LinuxStat::FS.stat('/') ; Time.now - t
+  {:block_size=>4096, :fragment_size=>4096, :blocks=>29292283, :block_free=>9349843, :block_avail_unpriv=>9349843, :inodes=>58612160, :free_inodes=>56708247, :filesystem_id=>2050, :mount_flags=>1024, :max_filename_length=>255}
+  => 5.0468e-05
+</pre>
+
+To learn more about them, just run ri and the method name. To see all available methods.
+<break></break>
+
+To learn more about them, just run ri and the method name. To see all available methods.
+
+<a class="head" id="note-6" href="#note-6" content="Note 6: User"></a>
+Most of the LinuxStat::User supports arguments.
+
+For example, to get a user's home by the username:
+
+<pre>
+<dollar>irb</dollar>
+irb(main):001:0> require 'linux_stat'
+=> true
+
+irb(main):002:0> LinuxStat::User.home_by_username('root')
+=> "/root"
+
+irb(main):003:0> LinuxStat::User.home_by_username('ftp')
+=> "/srv/ftp"
+
+irb(main):004:0> LinuxStat::User.home_by_username('mail')
+=> "/var/spool/mail"
+</pre>
+
+<break></break>
+Or to get the user's home by the GID/UID:
+
+<pre>
+  <dollar>irb</dollar>
+  irb(main):001:0> require 'linux_stat'
+  => true
+
+  irb(main):002:0> LinuxStat::User.homes_by_uid(1001)
+  => ["/home/userx", "/home/userz"]
+
+  irb(main):003:0> LinuxStat::User.homes_by_uid(1000)
+  => ["/home/sourav"]
+
+  irb(main):004:0> LinuxStat::User.home_by_gid(1001)
+  => "/home/userx"
+
+  irb(main):005:0> LinuxStat::User.home_by_gid(1000)
+  => "/home/sourav"
+
+  irb(main):006:0> LinuxStat::User.home_by_gid(0)
+  => "/root"
+</pre>
+
+Or to get the UID/GID by username:
+
+<pre>
+  <dollar>irb</dollar>
+  irb(main):001:0> require 'linux_stat'
+  => true
+
+  irb(main):002:0> LinuxStat::User.uid_by_username('root')
+  => 0
+
+  irb(main):003:0> LinuxStat::User.uid_by_username('ftp')
+  => 14
+
+  irb(main):004:0> LinuxStat::User.gid_by_username('ftp')
+  => 11
+
+  irb(main):005:0> LinuxStat::User.gid_by_username('InvalidUser')
+  => nil
+</pre>
+
+Or to get the current user (in docker for example):
+
+<pre>
+  <dollar>irb</dollar>
+  irb(main):001:0> require 'linux_stat'
+  => true
+
+  irb(main):002:0> LinuxStat::User.get_current_user
+  => "x"
+
+  irb(main):003:0> LinuxStat::User.get_user
+  => "x"
+
+  irb(main):004:0> LinuxStat::User.get_login
+  => ""
+</pre>
+
+<break></break>
+Right, the get_login() can return an empty string. But LinuxStat::User.get_user also aliased as LinuxStat::User.get_current_user shouldn't return an empty string under most circumstances.
+
+<a class="head" id="note-7" href="#note-7" content="Note 7: Hwdata"></a>
+The PCI and USB modules actually rely on hwdata found in <code>/usr/share/hwdata/</code>.
+<break></break>
+
+The <code>LS::USB.devices_stat</code> and <code>LS::PCI.devices_stat</code> returns the information in a Hash:
+<break></break>
+
+<pre class="nowrap">
+  <dollar>ruby -r linux_stat -e "puts LS::USB.devices_stat.to_s[0..200]"</dollar>
+  [{:path=>"/sys/bus/usb/devices/1-1.2/", :id=>"04d9:1203", :vendor_id=>"04d9", :product_id=>"1203", :bus_num=>1, :dev_num=>7, :hwdata=>{:vendor=>"Holtek Semiconductor, Inc.", :product=>"Keyboard"}, :aut
+</pre>
+
+But if the files are not available, it won't return hwdata related information.
+<break></break>
+
+So it's suggested to install hwdata. But you might face issues with heroku and
+other online PaaS where you can't install it. So Version 1.1.1+ comes with a module function called <code>hwdata_file = file</code>.
+<break></break>
+
+&#x2022; You can use any usb.ids or pci.ids files:
+
+<pre class="nowrap">
+  LS::PCI.hwdata_file = File.join(__dir__, 'hwdata', 'pci.ids')
+  LS::USB.hwdata_file = File.join(__dir__, 'hwdata', 'usb.ids')
+</pre>
+
+Assuming that you have `pci.ids` and `usb.ids` under ./hwdata directory.
+<break></break>
+
+On rails, you can put this (replace `__dir__` with `Rails.root`) inside environment.rb.
+<break></break>
+
+But do note that the file can be set only once. It's suggested to do that in the beginning of your app.
+<break></break>
+
+&#x2022; There's one method to check if the hwdata file was already set:
+
+<pre>
+  irb(main):001:0' require 'linux_stat'
+  => true
+
+  irb(main):002:0> LS::USB.hwdata_file_set?
+  => false
+
+  irb(main):003:0> LS::USB.devices_stat ; ''
+  => ""
+
+  irb(main):004:0> LS::USB.hwdata_file_set?
+  => true
+</pre>
+
+It works on USB and PCI modules.
+<break></break>
+
+Once the file is set, calling `LS::PCI.hwdata_file = file` is futile.
+<break></break>
+
+&#x2022; Initializing hwdata can take 0.1 to 0.2 seconds at the first, so there's a method to initialize_hwdata at first:
+
+<pre>
+  irb(main):001:0> require 'linux_stat'
+  => true
+
+  irb(main):002:0> LS::PCI.initialize_hwdata
+  => true
+
+  irb(main):003:0> LS::PCI.initialize_hwdata
+  => false
+</pre>
+
+It will return true if it worked, else it will return false. It's intended to be done once.
+<break></break>
+
+If you don't initialize and call methods that utilizes hwdata, they will call it and the first
+call may take 0.1 to 0.2 seconds, the consecutive calls will then take under a millisecond.
+<break></break>
+
+<a class="head" id="note-8" href="#note-8" content="Note 8: PrettifyBytes"></a>
+Often times we need to work with KB, MB GB, TB, or KiB, MiB, GiB, TiB, etc.
+
+<break></break>
+And we need some work to convert bytes to those units.
+
+<break></break>
+Because LinuxStat provides a lot of data in bytes, and kilobytes, it's quite tedious to convert them all the time.
+
+<break></break>
+To avoid such duplication, it comes with a PrettifyBytes module.
+
+<break></break>
+For example, to convert bytes to decimal suffixes:
+
+<pre>
+  <dollar>irb</dollar>
+  irb(main):001:0> require 'linux_stat'
+  => true
+
+  irb(main):002:0> LinuxStat::PrettifyBytes.convert_decimal(1000)
+  => "1.00 kilobyte"
+
+  irb(main):003:0> LinuxStat::PrettifyBytes.convert_decimal(10000)
+  => "10.00 kilobytes"
+
+  irb(main):004:0> LinuxStat::PrettifyBytes.convert_decimal(100000)
+  => "100.00 kilobytes"
+
+  irb(main):005:0> LinuxStat::PrettifyBytes.convert_decimal(10 ** 13)
+  => "10.00 terabytes"
+</pre>
+
+To convert bytes to binary suffixes:
+
+<pre>
+  irb(main):006:0> LinuxStat::PrettifyBytes.convert_binary(1000)
+  => "1000.00 bytes"
+
+  irb(main):007:0> LinuxStat::PrettifyBytes.convert_binary(10000)
+  => "9.77 kibibytes"
+
+  irb(main):008:0> LinuxStat::PrettifyBytes.convert_binary(100000)
+  => "97.66 kibibytes"
+
+  irb(main):009:0> LinuxStat::PrettifyBytes.convert_binary(10 ** 13)
+  => "9.09 tebibytes"
+</pre>
+
+To convert them to short Metric decimal suffixes:
+
+<pre>
+  irb(main):010:0> LinuxStat::PrettifyBytes.convert_short_decimal(1000)
+  => "1.00 kB"
+
+  irb(main):011:0> LinuxStat::PrettifyBytes.convert_short_decimal(10000)
+  => "10.00 kB"
+
+  irb(main):012:0> LinuxStat::PrettifyBytes.convert_short_decimal(100000)
+  => "100.00 kB"
+
+  irb(main):013:0> LinuxStat::PrettifyBytes.convert_short_decimal(10 ** 13)
+  => "10.00 TB"
+</pre>
+
+To convert them to short IEC binary suffixes:
+
+<pre>
+  irb(main):014:0> LinuxStat::PrettifyBytes.convert_short_binary(1000)
+  => "1000 B"
+
+  irb(main):015:0> LinuxStat::PrettifyBytes.convert_short_binary(10000)
+  => "9.77 KiB"
+
+  irb(main):016:0> LinuxStat::PrettifyBytes.convert_short_binary(100000)
+  => "97.66 KiB"
+
+  irb(main):017:0> LinuxStat::PrettifyBytes.convert_short_binary(10 ** 13)
+  => "9.09 TiB"
+</pre>
+
+It can support values upto hundreds of yottabytes and yobibytes, or yb and yib.
+
+You can also do stuff like:
+
+<pre>
+  <dollar>irb</dollar>
+  irb(main):001:0> require 'linux_stat'
+  => true
+
+  irb(main):002:0> LinuxStat::PrettifyBytes.convert_short_decimal(LinuxStat::Mounts.device_stat('/dev/sdb1')[:total])
+  => "31.47 GB"
+
+  irb(main):003:0> LinuxStat::PrettifyBytes.convert_short_binary(LinuxStat::Mounts.device_stat('/dev/sdb1')[:total])
+  => "29.31 GiB"
+
+  irb(main):004:0> LinuxStat::PrettifyBytes.convert_short_binary(LinuxStat::Mounts.device_stat('/dev/sdb1')[:used])
+  => "26.80 GiB"
+
+  irb(main):005:0> LinuxStat::PrettifyBytes.convert_short_binary(LinuxStat::Mounts.device_stat('/dev/sdb1')[:available])
+  => "2.51 GiB"
+</pre>
+
+<break></break>
+Read the ri documentation for more info.

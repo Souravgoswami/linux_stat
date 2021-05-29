@@ -1,12 +1,11 @@
 #include <sys/statvfs.h>
-#include <stdio.h>
-#include <string.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <linux/fs.h>
 
 #include "ruby.h"
 #include "sector_size.h"
+#include "disk_stat.h"
 
 #if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER)
 	#pragma GCC optimize ("O3")
@@ -44,4 +43,5 @@ void Init_fs_stat() {
 	VALUE fs = rb_define_module_under(_linux_stat, "FS") ;
 	rb_define_module_function(fs, "stat", statfs, 1) ;
 	rb_define_module_function(fs, "sectors", getSectorSize, 1) ;
+	rb_define_module_function(fs, "total_io", getDiskStats, 1) ;
 }

@@ -204,7 +204,7 @@ module LinuxStat
 					n /= ZEBI
 					"#{"%.#{precision}f" % n} ZiB"
 				else
-					n = n./(YOBI + 1.0)
+					n /= YOBI
 					"#{"%.#{precision}f" % n} YiB"
 				end
 			end

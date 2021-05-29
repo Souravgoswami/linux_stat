@@ -68,7 +68,7 @@ module LinuxStat
 					"#{"%.#{precision}f" % n} exabyte#{?s.freeze if n != 1}"
 				elsif n < YOTTA
 					n /= ZETTA
-					"#{"%.#{precision}f" % n} zetabyte#{?s.freeze if n != 1}"
+					"#{"%.#{precision}f" % n} zettabyte#{?s.freeze if n != 1}"
 				else
 					n /= YOTTA
 					"#{"%.#{precision}f" % n} yottabyte#{?s.freeze if n != 1}"

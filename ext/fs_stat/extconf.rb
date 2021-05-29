@@ -4,7 +4,8 @@ unless have_const('linux') || RbConfig::CONFIG['arch'].to_s[/linux/]
 	abort('Platform is not linux')
 end
 
-unless have_header('sys/statvfs.h') && have_header('ruby.h')
+unless have_header('sys/statvfs.h') && have_header('sys/ioctl.h') &&
+	have_header('fcntl.h') && have_header('linux/fs.h') && have_header('unistd.h')
 	abort('Missing header')
 end
 

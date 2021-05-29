@@ -2,6 +2,7 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <linux/fs.h>
+#include <unistd.h>
 
 #include "ruby.h"
 #include "sector_size.h"

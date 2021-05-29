@@ -18,16 +18,16 @@ module LinuxStat
 		ZETTA = 1000000000000000000000.00
 		YOTTA = 1000000000000000000000000.00
 
-		# Binary prefixes
+		# Binary suffixes
 		# 8.times { |x| puts 1024.**(x.next).to_s << '.00' }
-		KILO_B = 1024.00
-		MEGA_B = 1048576.00
-		GIGA_B = 1073741824.00
-		TERA_B = 1099511627776.00
-		PETA_B = 1125899906842624.00
-		EXA_B = 1152921504606846976.00
-		ZETTA_B = 1180591620717411303424.00
-		YOTTA_B = 1208925819614629174706176.00
+		KIBI = 1024.00
+		MEBI = 1048576.00
+		GIBI = 1073741824.00
+		TEBI = 1099511627776.00
+		PEBI = 1125899906842624.00
+		EXBI = 1152921504606846976.00
+		ZEBI = 1180591620717411303424.00
+		YOBI = 1208925819614629174706176.00
 
 		class << self
 			##
@@ -90,31 +90,31 @@ module LinuxStat
 			#
 			# => "1.0 gibibyte"
 			def convert_binary(n, precision: 2)
-				if n < KILO_B
+				if n < KIBI
 					"#{"%.#{precision}f" % n} byte#{?s.freeze if n != 1}"
-				elsif n < MEGA_B
-					n /= KILO_B
+				elsif n < MEBI
+					n /= KIBI
 					"#{"%.#{precision}f" % n} kibibyte#{?s.freeze if n != 1}"
-				elsif n < GIGA_B
-					n /= MEGA_B
+				elsif n < GIBI
+					n /= MEBI
 					"#{"%.#{precision}f" % n} mebibyte#{?s.freeze if n != 1}"
-				elsif n < TERA_B
-					n /= GIGA_B
+				elsif n < TEBI
+					n /= GIBI
 					"#{"%.#{precision}f" % n} gibibyte#{?s.freeze if n != 1}"
-				elsif n < PETA_B
-					n /= TERA_B
+				elsif n < PEBI
+					n /= TEBI
 					"#{"%.#{precision}f" % n} tebibyte#{?s.freeze if n != 1}"
-				elsif n < EXA_B
-					n /= PETA_B
+				elsif n < EXBI
+					n /= PEBI
 					"#{"%.#{precision}f" % n} pebibyte#{?s.freeze if n != 1}"
-				elsif n < ZETTA_B
-					n /= EXA_B
+				elsif n < ZEBI
+					n /= EXBI
 					"#{"%.#{precision}f" % n} exbiyte#{?s.freeze if n != 1}"
-				elsif n < YOTTA_B
-					n /= ZETTA_B
+				elsif n < YOBI
+					n /= ZEBI
 					"#{"%.#{precision}f" % n} zebibyte#{?s.freeze if n != 1}"
 				else
-					n /= YOTTA_B
+					n /= YOBI
 					"#{"%.#{precision}f" % n} yobibyte#{?s.freeze if n != 1}"
 				end
 			end
@@ -180,31 +180,31 @@ module LinuxStat
 			#
 			# => "1.0 GiB"
 			def convert_short_binary(n, precision: 2)
-				if n < KILO_B
+				if n < KIBI
 					"#{"%.#{precision}f" % n} B"
-				elsif n < MEGA_B
-					n /= KILO_B
+				elsif n < MEBI
+					n /= KIBI
 					"#{"%.#{precision}f" % n} KiB"
-				elsif n < GIGA_B
-					n /= MEGA_B
+				elsif n < GIBI
+					n /= MEBI
 					"#{"%.#{precision}f" % n} MiB"
-				elsif n < TERA_B
-					n /= GIGA_B
+				elsif n < TEBI
+					n /= GIBI
 					"#{"%.#{precision}f" % n} GiB"
-				elsif n < PETA_B
-					n /= TERA_B
+				elsif n < PEBI
+					n /= TEBI
 					"#{"%.#{precision}f" % n} TiB"
-				elsif n < EXA_B
-					n /= PETA_B
+				elsif n < EXBI
+					n /= PEBI
 					"#{"%.#{precision}f" % n} PiB"
-				elsif n < ZETTA_B
-					n /= EXA_B
+				elsif n < ZEBI
+					n /= EXBI
 					"#{"%.#{precision}f" % n} EiB"
-				elsif n < YOTTA_B
-					n /= ZETTA_B
+				elsif n < YOBI
+					n /= ZEBI
 					"#{"%.#{precision}f" % n} ZiB"
 				else
-					n = n./(YOTTA_B + 1.0)
+					n = n./(YOBI + 1.0)
 					"#{"%.#{precision}f" % n} YiB"
 				end
 			end

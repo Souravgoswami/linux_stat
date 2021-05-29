@@ -110,6 +110,50 @@ module LinuxStat
 			def stat_raw(fs = ?..freeze)
 				LinuxStat::FS.stat(fs)
 			end
+
+			def sector_size(path = LinuxStat::Mounts.root)
+				LinuxStat::FS.sectors(path)
+			end
+
+			def io_total(path = LinuxStat::Mounts.root)
+				p = File.split(path)[-1]
+				_io_total = LinuxStat::FS.total_io(p)
+
+				return {} if _io_total.empty?
+
+				sector_size = LinuxStat::FS.sectors(path)
+
+				{
+					read: _io_total[0] * sector_size,
+					write: _io_total[1] * sector_size,
+				}
+			end
+
+			def io_usage(path = LinuxStat::Mounts.root, interval = 0.1)
+				p = File.split(path)[-1]
+
+				measure1 = LinuxStat::FS.total_io(p)
+				sleep(interval)
+				measure2 = LinuxStat::FS.total_io(p)
+
+				return {} if measure1.empty? || measure2.empty?
+
+				sector_size = LinuxStat::FS.sectors(path)
+				return {} unless sector_size
+
+				m1r = measure1[0]
+				m1w = measure1[1]
+
+				m2r = measure2[0]
+				m2w = measure2[1]
+
+				{
+					read: m2r.-(m1r).*(sector_size).fdiv(interval),
+					write: m2w.-(m1w).*(sector_size).fdiv(interval)
+				}
+			end
+
+			alias sectors sector_size
 		end
 	end
 end

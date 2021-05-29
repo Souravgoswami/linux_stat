@@ -122,10 +122,11 @@ module LinuxStat
 				return {} if _io_total.empty?
 
 				sector_size = LinuxStat::FS.sectors(path)
+				return {} unless sector_size
 
 				{
-					read: _io_total[0] * sector_size,
-					write: _io_total[1] * sector_size,
+					read: _io_total[0] &.*(sector_size),
+					write: _io_total[1] &.*(sector_size),
 				}
 			end
 

@@ -1,4 +1,4 @@
-VALUE last_pid(VALUE obj) {
+VALUE last_pid(volatile VALUE obj) {
 	FILE *f = fopen("/proc/loadavg", "r") ;
 	if (!f) return Qnil ;
 

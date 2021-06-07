@@ -15,7 +15,7 @@
 	#pragma intel optimization_level 3
 #endif
 
-static VALUE count_cpu_for_pid(VALUE obj, VALUE pid) {
+static VALUE count_cpu_for_pid(volatile VALUE obj, volatile VALUE pid) {
 	cpu_set_t set ;
 	CPU_ZERO(&set) ;
 	char status = sched_getaffinity(FIX2INT(pid), sizeof(set), &set) ;

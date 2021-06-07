@@ -1,6 +1,6 @@
 #define PAGESIZE sysconf(_SC_PAGESIZE)
 
-VALUE statm(VALUE obj, VALUE pid) {
+VALUE statm(volatile VALUE obj, volatile VALUE pid) {
 	VALUE hash = rb_hash_new() ;
 
 	int _pid = FIX2INT(pid) ;
@@ -34,7 +34,7 @@ VALUE statm(VALUE obj, VALUE pid) {
 	return hash ;
 }
 
-VALUE statm_virtual(VALUE obj, VALUE pid) {
+VALUE statm_virtual(volatile VALUE obj, volatile VALUE pid) {
 	int _pid = FIX2INT(pid) ;
 	if (_pid < 0) return Qnil ;
 
@@ -52,7 +52,7 @@ VALUE statm_virtual(VALUE obj, VALUE pid) {
 	return UINT2NUM(_virtual * PAGESIZE) ;
 }
 
-VALUE statm_resident(VALUE obj, VALUE pid) {
+VALUE statm_resident(volatile VALUE obj, volatile VALUE pid) {
 	int _pid = FIX2INT(pid) ;
 	if (_pid < 0) return Qnil ;
 
@@ -70,7 +70,7 @@ VALUE statm_resident(VALUE obj, VALUE pid) {
 	return UINT2NUM(resident * PAGESIZE) ;
 }
 
-VALUE statm_shared(VALUE obj, VALUE pid) {
+VALUE statm_shared(volatile VALUE obj, volatile VALUE pid) {
 	int _pid = FIX2INT(pid) ;
 	if (_pid < 0) return Qnil ;
 
@@ -88,7 +88,7 @@ VALUE statm_shared(VALUE obj, VALUE pid) {
 	return UINT2NUM(shared * PAGESIZE) ;
 }
 
-VALUE statm_memory(VALUE obj, VALUE pid) {
+VALUE statm_memory(volatile VALUE obj, volatile VALUE pid) {
 	int _pid = FIX2INT(pid) ;
 	if (_pid < 0) return Qnil ;
 

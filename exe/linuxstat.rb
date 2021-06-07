@@ -86,7 +86,6 @@ end
 
 MARKDOWN, HTML = hash[:markdown], hash[:html]
 
-
 # Print time each method takes unless --no-time or -nt option is passed
 PRINT_TIME = (MARKDOWN || HTML) ? false : !ARGV.any? { |x| x[/^\-\-no-time$/] || x[/^\-nt$/] }
 PRINT_TYPE = ARGV.any? { |x| x[/^\-(\-show\-type|t)$/] }
@@ -111,7 +110,8 @@ puts " #{HEXAGONS.rotate![0]} LinuxStat: #{LinuxStat::VERSION}"
 puts " #{HEXAGONS.rotate![0]} Test Modules: #{execute.size}"
 puts " #{HEXAGONS.rotate![0]} Iterations: #{iterations}"
 
-# sleep 2
+sleep 2
+puts
 
 def get_colour(n)
 	if n > 10_000
@@ -122,6 +122,9 @@ def get_colour(n)
 		"\e[1;38;2;0;170;0m"
 	end
 end
+
+total_real_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+total_cpu_time = Process.times
 
 iterations.times do
 	execute.sort.each do |c|
@@ -246,4 +249,18 @@ iterations.times do
 			end
 		end
 	end
+end
+
+if PRINT_TIME
+	total_real_time2 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+	total_cpu_time2 = Process.times
+
+	total_real_t = total_real_time2.-(total_real_time).*(1000)
+	total_cpu_t = total_cpu_time2.stime.+(total_cpu_time2.utime).-(
+		total_cpu_time.stime + total_cpu_time.utime
+	).*(1000)
+
+	puts "\e[38;2;255;255;0m:: Warning total time also depends on your terminal speed!\e[0m"
+	puts "Total Real Time: #{T_FMT % total_real_t}ms"
+	puts "Total CPU Time: #{T_FMT % total_cpu_t}ms"
 end

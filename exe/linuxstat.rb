@@ -103,6 +103,12 @@ execute = constants.map(&:downcase).map.with_index { |x, i|
 execute.replace(constants) if execute.empty?
 HEXAGONS = %W(\u2b22 \u2b23 \u2B53 \u2B1F)
 
+puts " #{HEXAGONS.rotate![0]} LinuxStat: #{LinuxStat::VERSION}"
+puts " #{HEXAGONS.rotate![0]} Test Modules: #{execute.size}"
+puts " #{HEXAGONS.rotate![0]} Iterations: #{iterations}"
+
+sleep 2
+
 iterations.times do
 	execute.sort.each do |c|
 		e = eval("LinuxStat::#{c}")

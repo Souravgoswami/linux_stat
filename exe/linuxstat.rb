@@ -8,7 +8,7 @@ rescue LoadError
 end
 
 # Time reporting format
-T_FMT = '%.3f'.freeze
+T_FMT = '%d'.freeze
 
 # Check the number of iterations
 iterations = (ARGV.find { |x| x.to_i.to_s == x } || 1).to_i
@@ -185,8 +185,8 @@ iterations.times do
 			time2 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 			cputime2 = Process.times
 
-			time = time2.-(time).*(1_000_000).round(3)
-			cputime = cputime2.stime.+(cputime2.utime).-(cputime.stime + cputime.utime).*(1_000_000).round(3)
+			time = time2.-(time).*(1_000_000)
+			cputime = cputime2.stime.+(cputime2.utime).-(cputime.stime + cputime.utime).*(1_000_000)
 
 			v = ret.inspect
 			dis = v.length > 253 ? v[0..250].strip + '...'.freeze : v
@@ -255,10 +255,11 @@ if PRINT_TIME
 	total_real_time2 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 	total_cpu_time2 = Process.times
 
-	total_real_t = total_real_time2.-(total_real_time).*(1000)
+	total_real_t = total_real_time2.-(total_real_time).*(1_000_000)
+
 	total_cpu_t = total_cpu_time2.stime.+(total_cpu_time2.utime).-(
 		total_cpu_time.stime + total_cpu_time.utime
-	).*(1000)
+	).*(1_000_000)
 
 	puts "\e[38;2;255;255;0m:: Warning total time also depends on your terminal speed!\e[0m"
 	puts "Total Real Time: #{T_FMT % total_real_t}ms"

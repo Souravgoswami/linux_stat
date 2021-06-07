@@ -1,4 +1,4 @@
-VALUE uptime_f(volatile VALUE obj) {
+static VALUE uptime_f(volatile VALUE obj) {
 	FILE *f = fopen("/proc/uptime", "r") ;
 	if (!f) return Qnil ;
 

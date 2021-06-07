@@ -13,7 +13,7 @@
 
 static struct sysinfo info ;
 
-VALUE totalram(volatile VALUE obj) {
+static VALUE totalram(volatile VALUE obj) {
 	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
@@ -22,7 +22,7 @@ VALUE totalram(volatile VALUE obj) {
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
-VALUE freeram(volatile VALUE obj) {
+static VALUE freeram(volatile VALUE obj) {
 	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
@@ -31,7 +31,7 @@ VALUE freeram(volatile VALUE obj) {
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
-VALUE sharedram(volatile VALUE obj) {
+static VALUE sharedram(volatile VALUE obj) {
 	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
@@ -40,7 +40,7 @@ VALUE sharedram(volatile VALUE obj) {
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
-VALUE bufferram(volatile VALUE obj) {
+static VALUE bufferram(volatile VALUE obj) {
 	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
@@ -49,7 +49,7 @@ VALUE bufferram(volatile VALUE obj) {
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
-VALUE totalswap(volatile VALUE obj) {
+static VALUE totalswap(volatile VALUE obj) {
 	static struct sysinfo info ;
 	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
@@ -59,7 +59,7 @@ VALUE totalswap(volatile VALUE obj) {
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
-VALUE freeswap(volatile VALUE obj) {
+static VALUE freeswap(volatile VALUE obj) {
 	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
@@ -68,7 +68,7 @@ VALUE freeswap(volatile VALUE obj) {
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
-VALUE totalhigh(volatile VALUE obj) {
+static VALUE totalhigh(volatile VALUE obj) {
 	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
@@ -77,7 +77,7 @@ VALUE totalhigh(volatile VALUE obj) {
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
-VALUE freehigh(volatile VALUE obj) {
+static VALUE freehigh(volatile VALUE obj) {
 	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
@@ -86,7 +86,7 @@ VALUE freehigh(volatile VALUE obj) {
 	return rb_funcallv_public(_rb_v, rb_intern("*"), 1, &_rb_mem_unit) ;
 }
 
-VALUE uptime(volatile VALUE obj) {
+static VALUE uptime(volatile VALUE obj) {
 	char status = sysinfo(&info) ;
 	if (status < 0) return Qnil ;
 
@@ -94,7 +94,7 @@ VALUE uptime(volatile VALUE obj) {
 	return ULL2NUM((unsigned long long) v) ;
 }
 
-VALUE loads(volatile VALUE obj) {
+static VALUE loads(volatile VALUE obj) {
 	char status = sysinfo(&info) ;
 	if(status < 0) return rb_ary_new() ;
 
@@ -112,7 +112,7 @@ VALUE loads(volatile VALUE obj) {
 }
 
 // Some people may need this function, just keep it to not make unnecessary calls
-VALUE sysinfoStat(volatile VALUE obj) {
+static VALUE sysinfoStat(volatile VALUE obj) {
 	char status = sysinfo(&info) ;
 	VALUE hash = rb_hash_new() ;
 	if (status < 0) return hash ;

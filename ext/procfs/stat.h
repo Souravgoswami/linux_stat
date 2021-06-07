@@ -1,4 +1,4 @@
-VALUE ps_state(volatile VALUE obj, volatile VALUE pid) {
+static VALUE ps_state(volatile VALUE obj, volatile VALUE pid) {
 	int _pid = FIX2INT(pid) ;
 	if (_pid < 0) return rb_str_new_cstr("") ;
 
@@ -17,7 +17,7 @@ VALUE ps_state(volatile VALUE obj, volatile VALUE pid) {
 	return rb_str_new_cstr(_s) ;
 }
 
-VALUE ps_times(volatile VALUE obj, volatile VALUE pid) {
+static VALUE ps_times(volatile VALUE obj, volatile VALUE pid) {
 	int _pid = FIX2INT(pid) ;
 	if (_pid < 0) return Qnil ;
 
@@ -38,7 +38,7 @@ VALUE ps_times(volatile VALUE obj, volatile VALUE pid) {
 	return DBL2NUM(total_time) ;
 }
 
-VALUE ps_stat(volatile VALUE obj, volatile VALUE pid) {
+static VALUE ps_stat(volatile VALUE obj, volatile VALUE pid) {
 	int _pid = FIX2INT(pid) ;
 	if (_pid < 0) return rb_str_new_cstr("") ;
 

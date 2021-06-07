@@ -1,4 +1,4 @@
-VALUE getDiskStats (volatile VALUE obj, volatile VALUE path) {
+static VALUE getDiskStats (volatile VALUE obj, volatile VALUE path) {
 	FILE *file = fopen("/proc/diskstats", "r") ;
 	if(!file) return rb_ary_new() ;
 

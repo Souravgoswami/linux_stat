@@ -110,6 +110,9 @@ puts " #{HEXAGONS.rotate![0]} LinuxStat: #{LinuxStat::VERSION}"
 puts " #{HEXAGONS.rotate![0]} Test Modules: #{execute.size}"
 puts " #{HEXAGONS.rotate![0]} Iterations: #{iterations}"
 
+puts " #{HEXAGONS.rotate![0]} Format: Markdown" if MARKDOWN
+puts " #{HEXAGONS.rotate![0]} Format: HTML" if HTML
+
 sleep 2
 puts
 
@@ -231,14 +234,15 @@ iterations.times do
 				puts "\e[1m#{src.colourize}\e[1m#{src_meth.colourize(6)}\e[1m#{src_ret.colourize(1)}\e[0m\e[1;38;2;80;80;255m#{e}.#{disp_meth}\e[0m\n=> #{dis}"
 			end
 
-
 			if PRINT_TIME
 				time_colour = get_colour(time)
 				cputime_colour = get_colour(cputime)
 
 				puts "[Real Time: #{time_colour}#{T_FMT % time}\u03BCs\e[0m, "\
-				"CPU Time: #{cputime_colour}#{T_FMT % cputime}\u03BCs\e[0m]\n\n"
+				"CPU Time: #{cputime_colour}#{T_FMT % cputime}\u03BCs\e[0m]"
 			end
+
+			puts
 		end
 
 		if meths.length > 0

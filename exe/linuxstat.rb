@@ -7,6 +7,9 @@ rescue LoadError
 	abort "The Gem needs to be installed before this test can be run!"
 end
 
+# Check the number of iterations
+iterations = (ARGV.find { |x| x.to_i.to_s == x } || 1).to_i
+
 Integer.class_exec do
 	define_method(:clamp) { |min, max|
 		self < min ? min : self > max ? max : self
@@ -100,122 +103,124 @@ execute = constants.map(&:downcase).map.with_index { |x, i|
 execute.replace(constants) if execute.empty?
 HEXAGONS = %W(\u2b22 \u2b23 \u2B53 \u2B1F)
 
-execute.sort.each do |c|
-	e = eval("LinuxStat::#{c}")
+iterations.times do
+	execute.sort.each do |c|
+		e = eval("LinuxStat::#{c}")
 
-	next if e.class != Module && e.class != Class
+		next if e.class != Module && e.class != Class
 
-	meths = e.methods(false).sort
+		meths = e.methods(false).sort
 
-	if meths.length > 0
-		if MARKDOWN
-			puts "### LinuxStat::#{c}\n```"
-		elsif HTML
-			puts "<h3>LinuxStat::#{c}</h3>\n<pre>"
-		else
-			puts "\e[1;4;38;2;255;240;0mLinuxStat::#{c}\e[0m"
-		end
-	end
-
-	meths.each do |meth|
-		arg = nil
-
-		arity = e.method(meth).arity
-		if arity > 0 || arity == -2
-			if c == :PrettifyBytes
-				arg = rand(10 ** 15)
-			elsif c == :FS
-				arg = '/'
+		if meths.length > 0
+			if MARKDOWN
+				puts "### LinuxStat::#{c}\n```"
+			elsif HTML
+				puts "<h3>LinuxStat::#{c}</h3>\n<pre>"
 			else
-				next
+				puts "\e[1;4;38;2;255;240;0mLinuxStat::#{c}\e[0m"
 			end
 		end
 
-		params = e.method(meth).parameters
-		param = ''
-		params.each do |p|
-			case p[0]
-				when :opt
-					param << "#{p[1]}, "
-				when :key
-					param << "#{p[1]}:, "
-				when :req
-					_arg = arg ? " = #{arg.inspect}" : ''.freeze
-					param << "#{p[1] || 'arg'}#{_arg}, "
+		meths.each do |meth|
+			arg = nil
+
+			arity = e.method(meth).arity
+			if arity > 0 || arity == -2
+				if c == :PrettifyBytes
+					arg = rand(10 ** 15)
+				elsif c == :FS
+					arg = '/'
+				else
+					next
+				end
 			end
-		end
 
-		param.chomp!(", ")
-
-		disp_meth = "#{meth}"
-		disp_meth.concat(arg ? "(#{param})" : "(#{param})")
-
-		time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-		ret = arg ? e.send(meth, arg) : e.send(meth)
-		time2 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-		time = time2.-(time).*(1_000_000).round(3)
-
-		v = ret.inspect
-		dis = v.length > 253 ? v[0..250].strip + '...'.freeze : v
-
-		source = e.singleton_method(meth).source_location.to_a
-		src, src_meth, src_ret = '', '', ''
-
-		unless source.empty?
-			src << " File:\t\t#{File.split(source[0])[-1]} | Line: #{source[1]}\n"
-			src_meth << " Definition:\t#{IO.foreach(source[0]).first(source[1])[-1].strip}\n"
-
-			src_ret << " Returns:\t" << case ret
-				when Array then 'Array | Empty Array'
-				when Complex then 'Complex | nil'
-				when Float then 'Float | nil'
-				when Hash then 'Hash | Empty Hash'
-				when Integer then 'Integer | nil'
-				when Rational then 'Rational | nil'
-				when String then "String | (Frozen) Empty String"
-				when Time then 'Time | nil'
-				when true, false then 'True or False | nil'
-				when nil then 'nil'
-				else ''
-			end << ?\n.freeze if PRINT_TYPE
-
-			if MARKDOWN || HTML
-				src.prepend('#'.freeze)
-				src_meth.prepend('#'.freeze)
-				src_ret.prepend(?#.freeze) if PRINT_TYPE
-			else
-				src.prepend(HEXAGONS.rotate![0].freeze)
-				src_meth.prepend(HEXAGONS.rotate![0].freeze)
-				src_ret.prepend(HEXAGONS.rotate![0].freeze) if PRINT_TYPE
+			params = e.method(meth).parameters
+			param = ''
+			params.each do |p|
+				case p[0]
+					when :opt
+						param << "#{p[1]}, "
+					when :key
+						param << "#{p[1]}:, "
+					when :req
+						_arg = arg ? " = #{arg.inspect}" : ''.freeze
+						param << "#{p[1] || 'arg'}#{_arg}, "
+				end
 			end
-		end
 
-		if MARKDOWN
-			puts "#{src}#{src_meth}#{src_ret}#{e}.#{disp_meth}\n=> #{dis}"
-		elsif HTML
-			puts "#{src}#{src_meth}#{src_ret}#{e}.#{disp_meth}\n=> #{dis}"
-		else
-			puts "\e[1m#{src.colourize}\e[1m#{src_meth.colourize(6)}\e[1m#{src_ret.colourize(1)}\e[0m\e[1;38;2;80;80;255m#{e}.#{disp_meth}\e[0m\n=> #{dis}"
-		end
+			param.chomp!(", ")
 
-		puts( "(" +
-			if time > 10_000
-				"\e[1;38;2;255;50;50m"
-			elsif time > 5_000
-				"\e[1;38;2;255;170;0m"
+			disp_meth = "#{meth}"
+			disp_meth.concat(arg ? "(#{param})" : "(#{param})")
+
+			time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+			ret = arg ? e.send(meth, arg) : e.send(meth)
+			time2 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+			time = time2.-(time).*(1_000_000).round(3)
+
+			v = ret.inspect
+			dis = v.length > 253 ? v[0..250].strip + '...'.freeze : v
+
+			source = e.singleton_method(meth).source_location.to_a
+			src, src_meth, src_ret = '', '', ''
+
+			unless source.empty?
+				src << " File:\t\t#{File.split(source[0])[-1]} | Line: #{source[1]}\n"
+				src_meth << " Definition:\t#{IO.foreach(source[0]).first(source[1])[-1].strip}\n"
+
+				src_ret << " Returns:\t" << case ret
+					when Array then 'Array | Empty Array'
+					when Complex then 'Complex | nil'
+					when Float then 'Float | nil'
+					when Hash then 'Hash | Empty Hash'
+					when Integer then 'Integer | nil'
+					when Rational then 'Rational | nil'
+					when String then "String | (Frozen) Empty String"
+					when Time then 'Time | nil'
+					when true, false then 'True or False | nil'
+					when nil then 'nil'
+					else ''
+				end << ?\n.freeze if PRINT_TYPE
+
+				if MARKDOWN || HTML
+					src.prepend('#'.freeze)
+					src_meth.prepend('#'.freeze)
+					src_ret.prepend(?#.freeze) if PRINT_TYPE
+				else
+					src.prepend(HEXAGONS.rotate![0].freeze)
+					src_meth.prepend(HEXAGONS.rotate![0].freeze)
+					src_ret.prepend(HEXAGONS.rotate![0].freeze) if PRINT_TYPE
+				end
+			end
+
+			if MARKDOWN
+				puts "#{src}#{src_meth}#{src_ret}#{e}.#{disp_meth}\n=> #{dis}"
+			elsif HTML
+				puts "#{src}#{src_meth}#{src_ret}#{e}.#{disp_meth}\n=> #{dis}"
 			else
-				"\e[1;38;2;0;170;0m"
-			end + "Time taken: #{time}\u03BCs\e[0m)"
-		) if PRINT_TIME
+				puts "\e[1m#{src.colourize}\e[1m#{src_meth.colourize(6)}\e[1m#{src_ret.colourize(1)}\e[0m\e[1;38;2;80;80;255m#{e}.#{disp_meth}\e[0m\n=> #{dis}"
+			end
 
-		puts
-	end
+			puts( "(" +
+				if time > 10_000
+					"\e[1;38;2;255;50;50m"
+				elsif time > 5_000
+					"\e[1;38;2;255;170;0m"
+				else
+					"\e[1;38;2;0;170;0m"
+				end + "Time taken: #{time}\u03BCs\e[0m)"
+			) if PRINT_TIME
 
-	if meths.length > 0
-		if MARKDOWN
-			puts "```\n\n"
-		elsif HTML
-			puts "</pre>"
+			puts
+		end
+
+		if meths.length > 0
+			if MARKDOWN
+				puts "```\n\n"
+			elsif HTML
+				puts "</pre>"
+			end
 		end
 	end
 end

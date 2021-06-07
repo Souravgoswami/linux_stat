@@ -7,6 +7,9 @@ rescue LoadError
 	abort "The Gem needs to be installed before this test can be run!"
 end
 
+# Time reporting format
+T_FMT = '%.3f'.freeze
+
 # Check the number of iterations
 iterations = (ARGV.find { |x| x.to_i.to_s == x } || 1).to_i
 
@@ -83,6 +86,7 @@ end
 
 MARKDOWN, HTML = hash[:markdown], hash[:html]
 
+
 # Print time each method takes unless --no-time or -nt option is passed
 PRINT_TIME = (MARKDOWN || HTML) ? false : !ARGV.any? { |x| x[/^\-\-no-time$/] || x[/^\-nt$/] }
 PRINT_TYPE = ARGV.any? { |x| x[/^\-(\-show\-type|t)$/] }
@@ -107,7 +111,17 @@ puts " #{HEXAGONS.rotate![0]} LinuxStat: #{LinuxStat::VERSION}"
 puts " #{HEXAGONS.rotate![0]} Test Modules: #{execute.size}"
 puts " #{HEXAGONS.rotate![0]} Iterations: #{iterations}"
 
-sleep 2
+# sleep 2
+
+def get_colour(n)
+	if n > 10_000
+		"\e[1;38;2;255;50;50m"
+	n > 5_000
+		"\e[1;38;2;255;170;0m"
+	else
+		"\e[1;38;2;0;170;0m"
+	end
+end
 
 iterations.times do
 	execute.sort.each do |c|
@@ -161,9 +175,15 @@ iterations.times do
 			disp_meth.concat(arg ? "(#{param})" : "(#{param})")
 
 			time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+			cputime = Process.times
+
 			ret = arg ? e.send(meth, arg) : e.send(meth)
+
 			time2 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+			cputime2 = Process.times
+
 			time = time2.-(time).*(1_000_000).round(3)
+			cputime = cputime2.stime.+(cputime2.utime).-(cputime.stime + cputime.utime).*(1_000_000).round(3)
 
 			v = ret.inspect
 			dis = v.length > 253 ? v[0..250].strip + '...'.freeze : v
@@ -208,17 +228,14 @@ iterations.times do
 				puts "\e[1m#{src.colourize}\e[1m#{src_meth.colourize(6)}\e[1m#{src_ret.colourize(1)}\e[0m\e[1;38;2;80;80;255m#{e}.#{disp_meth}\e[0m\n=> #{dis}"
 			end
 
-			puts( "(" +
-				if time > 10_000
-					"\e[1;38;2;255;50;50m"
-				elsif time > 5_000
-					"\e[1;38;2;255;170;0m"
-				else
-					"\e[1;38;2;0;170;0m"
-				end + "Time taken: #{time}\u03BCs\e[0m)"
-			) if PRINT_TIME
 
-			puts
+			if PRINT_TIME
+				time_colour = get_colour(time)
+				cputime_colour = get_colour(cputime)
+
+				puts "[Real Time: #{time_colour}#{T_FMT % time}\u03BCs\e[0m, "\
+				"CPU Time: #{cputime_colour}#{T_FMT % cputime}\u03BCs\e[0m]\n\n"
+			end
 		end
 
 		if meths.length > 0

@@ -209,6 +209,10 @@ module LinuxStat
 				h
 			end
 
+			def times
+				LinuxStat::ProcFS.cpu_times
+			end
+
 			##
 			# Returns a Hash with max core frequencies corresponding to the CPUs.
 			#

@@ -117,3 +117,46 @@ static VALUE ps_stat(volatile VALUE obj, volatile VALUE pid) {
 	INT2NUM(exit_code)
 	) ;
 }
+
+static VALUE cpuTimes(volatile VALUE obj) {
+	VALUE ary = rb_ary_new() ;
+	FILE *f = fopen("/proc/stat", "r") ;
+
+	if (!f) return ary ;
+
+	unsigned long user, nice, system, idle, iowait, irq, softirq, steal, guest, guest_nice ;
+	char line[1024] ;
+	char cpuCode[7] ;
+	float ticks = sysconf(_SC_CLK_TCK) ;
+	char scanStatus ;
+
+	while(fgets(line, 1023, f)) {
+		if (!(line[0] == 'c' && line[1] == 'p' && line[2] == 'u')) break ;
+
+		scanStatus = sscanf(line,
+			"%7[cpu0-9] %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu",
+			cpuCode, &user, &nice, &system, &idle, &iowait, &irq, &softirq, &steal, &guest, &guest_nice
+		) ;
+
+		if (scanStatus != 11) break ;
+
+		VALUE innerHash = rb_hash_new() ;
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("cpu")), rb_str_new_cstr(cpuCode)) ;
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("user")), rb_float_new(user / ticks)) ;
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("nice")), rb_float_new(nice / ticks)) ;
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("system")), rb_float_new(system / ticks)) ;
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("idle")), rb_float_new(idle / ticks)) ;
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("iowait")), rb_float_new(iowait / ticks)) ;
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("irq")), rb_float_new(irq / ticks)) ;
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("softirq")), rb_float_new(softirq / ticks)) ;
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("steal")), rb_float_new(steal / ticks)) ;
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("guest")), rb_float_new(guest / ticks)) ;
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("guest_nice")), rb_float_new(guest_nice / ticks)) ;
+
+		rb_ary_push(ary, innerHash) ;
+	}
+
+	fclose(f) ;
+
+	return ary ;
+}

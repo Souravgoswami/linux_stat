@@ -1,25 +1,15 @@
 module LinuxStat
 	# Shows various information about a process that is either
 	# running, sleeping, idle or a zombie.
-
 	module Process
 		class << self
 			##
 			# Returns the list of processes from /proc/.
+			# The output doesn't guarantee a sorted list, in fact it's shuffled most of the time.
 			#
 			# The return type is an Array of Integers.
 			def list
-				d = Dir['/proc/*'.freeze]
-				ret, i = [], -1
-				count = d.length
-
-				while(i += 1) < count
-					pid = File.split(d[i])[1]
-					pid_i = pid.to_i
-					ret << pid_i if pid_i.to_s == pid
-				end
-
-				ret
+				LinuxStat::ProcFS.list_process
 			end
 
 			##
@@ -27,7 +17,7 @@ module LinuxStat
 			#
 			# The return type is Integer.
 			def count
-				list.length
+				LinuxStat::ProcFS.list_process.length
 			end
 
 			##
@@ -36,7 +26,7 @@ module LinuxStat
 			def names
 				h, i = {}, -1
 
-				l = list
+				l = LinuxStat::ProcFS.list_process
 				count = l.length
 
 				while(i += 1) < count
@@ -57,7 +47,7 @@ module LinuxStat
 			def cmdlines
 				h, i = {}, -1
 
-				l = list
+				l = LinuxStat::ProcFS.list_process
 				count = l.length
 
 				while(i += 1) < count
@@ -66,7 +56,7 @@ module LinuxStat
 					begin
 						cmdlines = IO.read("/proc/#{x}/cmdline").strip
 						cmdlines.gsub!(?\u0000.freeze, ?\s.freeze)
-						h.merge!( x => cmdlines)
+						h.merge!(x => cmdlines)
 					rescue StandardError
 					end
 				end
@@ -78,7 +68,7 @@ module LinuxStat
 			def types
 				h, i = {}, -1
 
-				l = list
+				l = LinuxStat::ProcFS.list_process
 				count = l.length
 
 				while(i += 1) < count
@@ -109,7 +99,7 @@ module LinuxStat
 			# Returns all the id of processes that are sleeping.
 			# The return type is an Array of Integers.
 			def sleeping
-				list.select { |x|
+				LinuxStat::ProcFS.list_process.select { |x|
 					LinuxStat::ProcFS.ps_state(x) == ?S.freeze
 				}
 			end
@@ -118,7 +108,7 @@ module LinuxStat
 			# Returns all the id of processes that are idle.
 			# The return type is an Array of Integers.
 			def idle
-				list.select { |x|
+				LinuxStat::ProcFS.list_process.select { |x|
 					LinuxStat::ProcFS.ps_state(x) == ?I.freeze
 				}
 			end
@@ -127,7 +117,7 @@ module LinuxStat
 			# Returns all the id of processes that are zombies.
 			# The return type is an Array of Integers.
 			def zombie
-				list.select { |x|
+				LinuxStat::ProcFS.list_process.select { |x|
 					LinuxStat::ProcFS.ps_state(x) == ?Z.freeze
 				}
 			end
@@ -136,7 +126,7 @@ module LinuxStat
 			# Returns all the id of processes that are running.
 			# The return type is an Array of Integers.
 			def running
-				list.select { |x|
+				LinuxStat::ProcFS.list_process.select { |x|
 					LinuxStat::ProcFS.ps_state(x) == ?R.freeze
 				}
 			end
@@ -145,7 +135,7 @@ module LinuxStat
 			# Returns all the id of processes that are stopped.
 			# The return type is an Array of Integers.
 			def stopped
-				list.select { |x|
+				LinuxStat::ProcFS.list_process.select { |x|
 					v = LinuxStat::ProcFS.ps_state(x)
 					v == ?T.freeze || v == ?t.freeze
 				}

@@ -17,6 +17,29 @@ static VALUE ps_state(volatile VALUE obj, volatile VALUE pid) {
 	return rb_str_new_cstr(_s) ;
 }
 
+static VALUE listProcess(volatile VALUE obj) {
+	VALUE ary = rb_ary_new() ;
+
+	glob_t globlist ;
+	int status = glob("/proc/[0-9]*/", GLOB_NOSORT, NULL, &globlist) ;
+
+	if (status == GLOB_NOSPACE || status == GLOB_ABORTED || status == GLOB_NOMATCH) {
+		globfree(&globlist) ;
+		return ary ;
+	}
+
+	char *v, *token ;
+	unsigned int i = 0 ;
+	unsigned int num ;
+
+	while(v = globlist.gl_pathv[i++]) {
+		if (sscanf(v, "/proc/%u", &num) == 1) rb_ary_push(ary, UINT2NUM(num)) ;
+	}
+
+	globfree(&globlist) ;
+	return ary ;
+}
+
 static VALUE ps_times(volatile VALUE obj, volatile VALUE pid) {
 	int _pid = FIX2INT(pid) ;
 	if (_pid < 0) return Qnil ;

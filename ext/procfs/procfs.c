@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <glob.h>
 #include "ruby.h"
 #include "uptime.h"
 #include "statm.h"
@@ -22,6 +23,8 @@
 int Init_procfs() {
 	VALUE _linux_stat = rb_define_module("LinuxStat") ;
 	VALUE _procfs = rb_define_module_under(_linux_stat, "ProcFS") ;
+	VALUE _cpu = rb_define_module_under(_linux_stat, "CPU") ;
+	VALUE _process = rb_define_module_under(_linux_stat, "Process") ;
 
 	// uptime
 	rb_define_module_function(_procfs, "uptime_f", uptime_f, 0) ;
@@ -41,4 +44,6 @@ int Init_procfs() {
 	rb_define_module_function(_procfs, "ps_times", ps_times, 1) ;
 	rb_define_module_function(_procfs, "ps_stat", ps_stat, 1) ;
 	rb_define_module_function(_procfs, "cpu_times", cpuTimes, 0) ;
+	rb_define_module_function(_procfs, "list_process", listProcess, 0) ;
+
 }

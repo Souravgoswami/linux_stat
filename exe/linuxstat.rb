@@ -266,6 +266,6 @@ if PRINT_TIME
 	).*(1_000_000)
 
 	puts "\e[38;2;255;255;0m:: Warning total time also depends on your terminal speed!\e[0m"
-	puts "Total Real Time: #{T_FMT % total_real_t}ms"
-	puts "Total CPU Time: #{T_FMT % total_cpu_t}ms"
+	puts "Total Real Time: #{T_FMT % total_real_t}\u03BCs"
+	puts "Total CPU Time: #{T_FMT % total_cpu_t}\u03BCs"
 end

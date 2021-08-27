@@ -47,7 +47,7 @@ It only works on Linux, and detecting the OS is upto the user of this gem.
 
 + On Debian / Ubuntu / Linux Mint / Pop!_OS / Raspberry Pi OS / Other Debian Based Distributions
 ```
-# apt install gcc build-essential ruby ruby-dev
+# apt install gcc build-essential ruby ruby-dev build-essential
 ```
 
 + Gentoo / Gentoo Based Distributions

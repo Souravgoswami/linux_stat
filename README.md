@@ -38,18 +38,36 @@ It only works on Linux, and detecting the OS is upto the user of this gem.
 2. Ruby: Ruby 2.3.0 and above.
 
 ## Build Dependencies:
-+ You need to have the C compiler installed to be able to compile the C extensions.
-On Arch Linux:
+#### You need to have the C compiler installed to be able to compile the C extensions.
+
++ On Arch Linux / Manjaro / Archlabs / Other Arch Based Distributions
 ```
-# pacman -S gcc make
+# pacman -S gcc make ruby
 ```
 
-On Debian based systems:
++ On Debian / Ubuntu / Linux Mint / Pop!_OS / Raspberry Pi OS / Other Debian Based Distributions
 ```
-# apt install gcc build-essential ruby-dev
+# apt install gcc build-essential ruby ruby-dev
 ```
 
-+ You can remove the packages once the program is installed.
++ Gentoo / Gentoo Based Distributions
+```
+# emerge --ask dev-lang/ruby
+```
+
++ Fedora / AmazonLinux* / CentOS* / Other RedHat Based Distributions
+```
+# yum install gcc ruby-devel ruby make
+```
+
+You can run linux_stat on *AmazonLinux and *CentOS if you have Ruby 2.3.0+.
+
++ OpenSUSE
+```
+# zypper install gcc ruby ruby-devel make
+```
+
++ You can remove the above packages once the gem is installed.
 
 ---
 
@@ -62,13 +80,28 @@ You can install hwdata simply.
 + Arch:
 
 ```
-sudo pacman -S hwids
+# pacman -S hwids
 ```
 
 + Debian based systems:
 
 ```
-sudo apt install hwdata
+# apt install hwdata
+```
+
++ Gentoo / Gentoo Based Distributions
+```
+# emerge --ask sys-apps/hwids
+```
+
++ Fedora / Amazon Linux / CentOS
+```
+# yum install hwdata
+```
+
++ OpenSUSE
+```
+zypper install hwdata
 ```
 
 But without hwdata, it won't show such information.

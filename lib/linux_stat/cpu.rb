@@ -314,12 +314,18 @@ module LinuxStat
 				physical_cores = []
 				hyperthreaded = {}
 
-				Dir.children("/sys/devices/system/cpu/").each do |x|
+				entries = Dir.entries('/sys/devices/system/cpu/')
+				entries.delete('.')
+				entries.delete('..')
+
+				entries.each do |x|
 					if x[0..2] == "cpu" && LinuxStat::Misc.integer?(x[3..-1])
 						file = "/sys/devices/system/cpu/#{x}/topology/thread_siblings_list"
 						next unless File.readable?(file)
 
-						val = IO.read(file).strip
+						val = IO.read(file)
+						val.strip!
+
 						splitted = val.split(?,.freeze)
 						val = splitted.map(&:to_i)
 
@@ -347,12 +353,18 @@ module LinuxStat
 			def hyperthreaded_core_list
 				hyperthreaded = {}
 
-				Dir.children("/sys/devices/system/cpu/").each do |x|
+				entries = Dir.entries('/sys/devices/system/cpu/')
+				entries.delete('.')
+				entries.delete('..')
+
+				entries.each do |x|
 					if x[0..2] == "cpu" && LinuxStat::Misc.integer?(x[3..-1])
 						file = "/sys/devices/system/cpu/#{x}/topology/thread_siblings_list"
 						next unless File.readable?(file)
 
-						val = IO.read(file).strip
+						val = IO.read(file)
+						val.strip!
+
 						splitted = val.split(?,.freeze)
 						val = splitted.map(&:to_i)
 

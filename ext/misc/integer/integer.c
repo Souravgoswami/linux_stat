@@ -33,7 +33,7 @@ VALUE isNumber(volatile VALUE obj, volatile VALUE val) {
 
 	# pragma GCC unroll 4
 	while((ch = str[i++])) {
-		if (ch < 48 || ch > 57)
+		if (ch < 45 || ch > 57)
 			return Qfalse ;
 
 		if (i == max) return Qnil ;

@@ -18,7 +18,7 @@ VALUE isNumber(volatile VALUE obj, volatile VALUE val) {
 		}
 
 		if (i == max) {
-			rb_raise(rb_eRuntimeError, "String is too big. Max size is %d", max) ;
+			return Qnil ;
 		}
 	}
 

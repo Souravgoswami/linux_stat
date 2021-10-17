@@ -11,7 +11,7 @@ end
 T_FMT = '%d'.freeze
 
 # Check the number of iterations
-iterations = (ARGV.find { |x| x.to_i.to_s == x } || 1).to_i
+iterations = (ARGV.find { |x| LinuxStat::Misc.integer?(x) } || 1).to_i
 
 Integer.class_exec do
 	define_method(:clamp) { |min, max|

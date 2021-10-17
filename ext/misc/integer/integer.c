@@ -8,8 +8,8 @@
 	#pragma intel optimization_level 3
 #endif
 
+#include <limits.h>
 #include "ruby.h"
-#include "limits.h"
 
 VALUE isNumber(volatile VALUE obj, volatile VALUE val) {
 	// If the argument is T_FIXNUM or T_BIGNUM, they are of course, Integer

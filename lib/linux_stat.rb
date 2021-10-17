@@ -15,6 +15,7 @@
 
 # Miscellaneous Modules
 # Independed and LinuxStat's miscellaneous modules
+require 'linux_stat/misc/integer'
 require 'linux_stat/prettify_bytes'
 require "linux_stat/version"
 

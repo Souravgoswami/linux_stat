@@ -303,8 +303,71 @@ module LinuxStat
 				h
 			end
 
+			##
+			# Returns the number of physical cores on the system.
+			#
+			# The return value is an Array of Integers. Each number denoting the physical processor number.
+			# You can later use this to schedule tasks or something else (not provided by LinuxStat).
+			#
+			# However, if the information isn't available on /sys/devices/system/cpu[0-9]*/topology/thread_siblings_list, it will return an empty Array.
+			def physical_core_list
+				physical_cores = []
+				hyperthreaded = {}
+
+				Dir.children("/sys/devices/system/cpu/").each do |x|
+					if x[0..2] == "cpu" && LinuxStat::Misc.integer?(x[3..-1])
+						file = "/sys/devices/system/cpu/#{x}/topology/thread_siblings_list"
+						next unless File.readable?(file)
+
+						val = IO.read(file).strip
+						splitted = val.split(?,.freeze)
+						val = splitted.map(&:to_i)
+
+						# Add items has for fast lookup.
+						# This hash includes all hyper threaded cores that doesn't map to anything.
+						# But this hash has the purpose to look up for items and not include in the list of physical_cores
+						# This is just an array, but can look for keys in O(1), so it's faster than ary.find() { ... }.
+						val.tap(&:shift).each { |x| hyperthreaded.merge!(x => nil) }
+
+						key = x[3..-1].to_i
+						physical_cores << key unless hyperthreaded.key?(key)
+					end
+				end
+
+				physical_cores
+			end
+
+			##
+			# Returns the number of physical cores on the system.
+			#
+			# The return value is an Array of Integers. Each number denoting the hyperthreaded processor number.
+			# You can later use this to schedule tasks or something else (not provided by LinuxStat).
+			#
+			# However, if the information isn't available on /sys/devices/system/cpu[0-9]*/topology/thread_siblings_list, it will return an empty Array.
+			def hyperthreaded_core_list
+				hyperthreaded = {}
+
+				Dir.children("/sys/devices/system/cpu/").each do |x|
+					if x[0..2] == "cpu" && LinuxStat::Misc.integer?(x[3..-1])
+						file = "/sys/devices/system/cpu/#{x}/topology/thread_siblings_list"
+						next unless File.readable?(file)
+
+						val = IO.read(file).strip
+						splitted = val.split(?,.freeze)
+						val = splitted.map(&:to_i)
+
+						# Add items has for fast lookup to get rid of duplicate items.
+						val.tap(&:shift).each { |x| hyperthreaded.merge!(x => nil) unless hyperthreaded.key?(x) }
+					end
+				end
+
+				hyperthreaded.keys
+			end
+
 			alias usages stat
 			alias usage total_usage
+			alias physical_cores physical_core_list
+			alias hyperthreaded_cores hyperthreaded_core_list
 
 			private
 			def cpuinfo

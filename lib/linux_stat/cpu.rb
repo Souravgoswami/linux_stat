@@ -314,26 +314,26 @@ module LinuxStat
 				physical_cores = []
 				hyperthreaded = {}
 
-				entries = Dir.entries('/sys/devices/system/cpu/')
-				entries.delete('.')
-				entries.delete('..')
+				entries = Dir.entries('/sys/devices/system/cpu/'.freeze)
+				entries.delete(?..freeze)
+				entries.delete('..'.freeze)
 
 				entries.each do |x|
-					if x[0..2] == "cpu" && LinuxStat::Misc.integer?(x[3..-1])
+					if x[0..2] == 'cpu'.freeze && LinuxStat::Misc.integer?(x[3..-1])
 						file = "/sys/devices/system/cpu/#{x}/topology/thread_siblings_list"
 						next unless File.readable?(file)
 
-						val = IO.read(file)
-						val.strip!
+						data = IO.read(file)
+						data.strip!
 
-						splitted = val.split(?,.freeze)
-						val = splitted.map(&:to_i)
+						val = data.split(?,.freeze).map(&:to_i)
+						val.shift
 
 						# Add items has for fast lookup.
 						# This hash includes all hyper threaded cores that doesn't map to anything.
 						# But this hash has the purpose to look up for items and not include in the list of physical_cores
 						# This is just an array, but can look for keys in O(1), so it's faster than ary.find() { ... }.
-						val.tap(&:shift).each { |x| hyperthreaded.merge!(x => nil) }
+						val.each { |x| hyperthreaded.store(x, nil) }
 
 						key = x[3..-1].to_i
 						physical_cores << key unless hyperthreaded.key?(key)
@@ -353,23 +353,23 @@ module LinuxStat
 			def hyperthreaded_core_list
 				hyperthreaded = {}
 
-				entries = Dir.entries('/sys/devices/system/cpu/')
-				entries.delete('.')
-				entries.delete('..')
+				entries = Dir.entries('/sys/devices/system/cpu/'.freeze)
+				entries.delete(?..freeze)
+				entries.delete('..'.freeze)
 
 				entries.each do |x|
-					if x[0..2] == "cpu" && LinuxStat::Misc.integer?(x[3..-1])
+					if x[0..2] == 'cpu'.freeze && LinuxStat::Misc.integer?(x[3..-1])
 						file = "/sys/devices/system/cpu/#{x}/topology/thread_siblings_list"
 						next unless File.readable?(file)
 
-						val = IO.read(file)
-						val.strip!
+						data = IO.read(file)
+						data.strip!
 
-						splitted = val.split(?,.freeze)
-						val = splitted.map(&:to_i)
+						val = data.split(?,.freeze).map(&:to_i)
+						val.shift
 
 						# Add items has for fast lookup to get rid of duplicate items.
-						val.tap(&:shift).each { |x| hyperthreaded.merge!(x => nil) unless hyperthreaded.key?(x) }
+						val.each { |x| hyperthreaded.store(x, nil) unless hyperthreaded.key?(x) }
 					end
 				end
 

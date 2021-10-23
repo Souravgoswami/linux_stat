@@ -21,22 +21,52 @@ module LinuxStat
 			#
 			#    => {0=>84.38, 1=>100.0, 2=>50.0, 3=>87.5, 4=>87.5}
 			#
+			# It discards any offline CPU or disabled CPU.
+			# For example, if your system CPU has 4 cores, and you disabled core 3, the output will be:
+			#    LinuxStat::CPU.stat
+			#
+			#    => {0=>26.67, 1=>0.0, 2=>20.0, 4=>20.0}
+			#
 			# If the information is not available, it will return an empty Hash
 			def stat(sleep = ticks_to_ms_t5)
 				return {} unless stat?
 
-				data = IO.readlines('/proc/stat'.freeze).select { |x| x[/^cpu\d*/] }.map! { |x| x.split.map!(&:to_f) }
+				data = IO.readlines('/proc/stat'.freeze).select { |x| x[/^cpu\d*/] }
+				# cpu = data.map(&:first)
+				cpu_names1 = []
+				data.map! { |x|
+					splitted = x.split
+					name = splitted[0][/\d*$/]
+					cpu_names1.push(name.empty? ? 0 : name.to_i + 1)
+					splitted.map!(&:to_f)
+				}
+
 				sleep(sleep)
-				data2 = IO.readlines('/proc/stat'.freeze).select { |x| x[/^cpu\d*/] }.map! { |x| x.split.map!(&:to_f) }
+				data2 = IO.readlines('/proc/stat'.freeze).select { |x| x[/^cpu\d*/] }
+
+				cpu_names2 = []
+				data2.map! { |x|
+					splitted = x.split
+					name = splitted[0][/\d*$/]
+					cpu_names2.push(name.empty? ? 0 : name.to_i + 1)
+					splitted.map!(&:to_f)
+				}
 
 				# On devices like android, the core count can change anytime (hotplugging).
 				# I had crashes on Termux.
 				# So better just count the min number of CPU and iterate over that
 				# If data.length is smaller than data2.length, we don't have enough data to compare.
-				dl, d2l = data.length, data2.length
-				min = dl > d2l ? d2l : dl
+				dl, d2l = cpu_names1.length, cpu_names2.length
+				if dl > d2l
+					min = d2l
+					cpu_cores = cpu_names2
+				else
+					min = dl
+					cpu_cores = cpu_names1
+				end
 
 				min.times.reduce({}) do |h, x|
+					cpu_core = cpu_cores[x]
 					user, nice, sys, idle, iowait, irq, softirq, steal = *data[x].drop(1)
 					user2, nice2, sys2, idle2, iowait2, irq2, softirq2, steal2 = *data2[x].drop(1)
 
@@ -46,7 +76,7 @@ module LinuxStat
 					res = totald.-(idle_now - idle_then).fdiv(totald).abs.*(100)
 					res = res.nan? ? 0.0 : res > 100 ? 100.0 : res.round(2)
 
-					h.store(x, res)
+					h.store(cpu_core, res)
 					h
 				end
 			end

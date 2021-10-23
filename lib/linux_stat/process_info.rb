@@ -36,7 +36,7 @@ module LinuxStat
 
 					if x[/^(read|write)_bytes:\s*\d*$/]
 						splitted = x.split
-						out.merge!(splitted[0].split(?:)[0].to_sym => splitted[-1].to_i)
+						out.store(splitted[0].split(?:)[0].to_sym, splitted[-1].to_i)
 					end
 				}
 

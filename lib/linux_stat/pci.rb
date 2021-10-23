@@ -76,7 +76,7 @@ module LinuxStat
 						kernel_driver: kernel_driver
 					}
 
-					ret.merge!(hwdata: query) unless query.empty?
+					ret.store(:hwdata, query) unless query.empty?
 
 					ret
 				}
@@ -186,14 +186,14 @@ module LinuxStat
 							vendor: vendor, device: device
 						}
 
-						ret.merge!(sub_vendor: sub_vendor) if sub_vendor
-						ret.merge!(sub_device: sub_device) if sub_device
+						ret.store(:sub_vendor, sub_vendor) if sub_vendor
+						ret.store(:sub_device, sub_device) if sub_device
 
-						ret.merge!(kernel_driver: kernel_driver) if kernel_driver
-						ret.merge!(revision: revision) unless revision.empty?
-						ret.merge!(irq: irq) if irq
-						ret.merge!(enable: enable) unless enable.nil?
-						ret.merge!(hwdata: query) unless query.empty?
+						ret.store(:kernel_driver, kernel_driver) if kernel_driver
+						ret.store(:revision, revision) unless revision.empty?
+						ret.store(:irq, irq) if irq
+						ret.store(:enable, enable) unless enable.nil?
+						ret.store(:hwdata, query) unless query.empty?
 
 						ret
 					rescue StandardError
@@ -355,7 +355,7 @@ module LinuxStat
 
 					if sub_vendor_id && sub_device_id
 						sub_product = vendor.dig(1, product_id, 1, sub_vendor_id, sub_device_id)
-						ret.merge!(sub_system: sub_product) if sub_product
+						ret.store(:sub_system, sub_product) if sub_product
 					end
 
 					ret

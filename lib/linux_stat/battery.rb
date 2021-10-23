@@ -308,7 +308,7 @@ module LinuxStat
 					ret[:charge_full_wh] = c_f_wh if c_f_wh
 					ret[:charge_percentage] = charge_percentage if charge_percentage
 
-					h.merge!(File.split(x)[-1].to_sym => ret)
+					h.store(File.split(x)[-1].to_sym, ret)
 				end
 				h
 			end

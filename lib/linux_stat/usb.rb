@@ -102,20 +102,20 @@ module LinuxStat
 							vendor_id: id_vendor, product_id: id_product
 						}
 
-						ret.merge!(bus_num: bus_num.to_i) unless bus_num.empty?
-						ret.merge!(dev_num: dev_num.to_i) unless dev_num.empty?
+						ret.store(:bus_num, bus_num.to_i) unless bus_num.empty?
+						ret.store(:dev_num, dev_num.to_i) unless dev_num.empty?
 
-						ret.merge!(serial: serial) unless serial.empty?
+						ret.store(:serial, serial) unless serial.empty?
 
-						ret.merge!(hwdata: query) unless query.empty?
-						ret.merge!(product: product) unless product.empty?
-						ret.merge!(manufacturer: manufacturer) unless manufacturer.empty?
+						ret.store(:hwdata, query) unless query.empty?
+						ret.store(:product, product) unless product.empty?
+						ret.store(:manufacturer, manufacturer) unless manufacturer.empty?
 
-						ret.merge!(removable: is_removable) unless is_removable.nil?
-						ret.merge!(authorized: authorized == 1)
+						ret.store(:removable, is_removable) unless is_removable.nil?
+						ret.store(:authorized, authorized == 1)
 
-						ret.merge!(b_max_power: b_max_power) unless b_max_power.empty?
-						ret.merge!(b_max_packet_size0: b_max_packet_size0) if b_max_packet_size0
+						ret.store(:b_max_power, b_max_power) unless b_max_power.empty?
+						ret.store(:b_max_packet_size0, b_max_packet_size0) if b_max_packet_size0
 
 						ret
 					rescue StandardError

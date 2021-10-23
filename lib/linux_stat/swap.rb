@@ -13,7 +13,8 @@ module LinuxStat
 				file = IO.readlines('/proc/swaps'.freeze).drop(1)
 				file.reduce({}) do |h, x|
 					name, *stats = x.strip.split
-					h.merge!(name => stats.map! { |v| LinuxStat::Misc.integer?(v) ? v.to_i : v.to_sym })
+					h.store(name, stats.map! { |v| LinuxStat::Misc.integer?(v) ? v.to_i : v.to_sym })
+					h
 				end
 			end
 

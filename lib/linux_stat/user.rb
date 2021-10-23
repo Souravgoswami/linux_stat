@@ -25,9 +25,11 @@ module LinuxStat
 			def ids
 				return {} unless passwd_readable?
 				passwd_splitted.reduce({}) { |h, x|
-					h.merge!(x[0].to_sym => {
+					h.store(x[0].to_sym, {
 						uid: x[2].to_i, gid: x[3].to_i
 					})
+
+					h
 				}
 			end
 
@@ -42,8 +44,10 @@ module LinuxStat
 			def uids
 				return {} unless passwd_readable?
 				passwd_splitted.reduce({}) { |h, x|
-					h.merge!(x[0].to_sym => x[2].to_i)
+					h.store(x[0].to_sym, x[2].to_i)
+					h
 				}
+
 			end
 
 			##
@@ -59,7 +63,8 @@ module LinuxStat
 				return {} unless passwd_readable?
 
 				passwd_splitted.reduce({}) { |h, x|
-					h.merge!(x[0].to_sym => x[3].to_i)
+					h.store(x[0].to_sym, x[3].to_i)
+					h
 				}
 			end
 
@@ -76,7 +81,8 @@ module LinuxStat
 				return {} unless passwd_readable?
 				passwd.reduce({}) { |h, x|
 					splitted = x.split(?:)
-					h.merge!(splitted[0].to_sym => splitted[5])
+					h.store(splitted[0].to_sym, splitted[5])
+					h
 				}
 			end
 

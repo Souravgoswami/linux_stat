@@ -107,10 +107,10 @@ module LinuxStat
 
 					h = {path: path, name: name}
 
-					h.merge!(label: label) if label
-					h.merge!(key => value)
-					h.merge!(temp_crit: temp_crit) if temp_crit
-					h.merge!(temp_crit: temp_max) if temp_max
+					h.store(:label, label) if label
+					h.store(key, value)
+					h.store(:temp_crit, temp_crit) if temp_crit
+					h.store(:temp_crit, temp_max) if temp_max
 
 					ret.push(h)
 				end

@@ -234,7 +234,8 @@ module LinuxStat
 					value[0] = ''.freeze if value[0] == ?".freeze
 					value[-1] = ''.freeze if value[-1] == ?".freeze
 
-					h.merge!( key.to_sym => value )
+					h.store(key.to_sym, value)
+					h
 				}
 			end
 		end

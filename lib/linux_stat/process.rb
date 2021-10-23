@@ -33,7 +33,7 @@ module LinuxStat
 					x = l[i]
 
 					begin
-						h.merge!( x => IO.read("/proc/#{x}/comm").strip)
+						h.store(x, IO.read("/proc/#{x}/comm").strip)
 					rescue StandardError
 					end
 				end
@@ -56,7 +56,7 @@ module LinuxStat
 					begin
 						cmdlines = IO.read("/proc/#{x}/cmdline").strip
 						cmdlines.gsub!(?\u0000.freeze, ?\s.freeze)
-						h.merge!(x => cmdlines)
+						h.store(x, cmdlines)
 					rescue StandardError
 					end
 				end
@@ -75,7 +75,7 @@ module LinuxStat
 					x = l[i]
 
 					begin
-						h.merge!(x =>
+						h.store(x,
 							case LinuxStat::ProcFS.ps_state(x)
 								when ?S.freeze then :sleeping
 								when ?I.freeze then :idle

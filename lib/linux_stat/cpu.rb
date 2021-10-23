@@ -46,7 +46,8 @@ module LinuxStat
 					res = totald.-(idle_now - idle_then).fdiv(totald).abs.*(100)
 					res = res.nan? ? 0.0 : res > 100 ? 100.0 : res.round(2)
 
-					h.merge!( x => res )
+					h.store(x, res)
+					h
 				end
 			end
 
@@ -203,7 +204,7 @@ module LinuxStat
 
 				h = {}
 				@@cur_f.each { |id, file|
-					h.merge!(id => IO.read(file).to_i) if File.readable?(file)
+					h.store(id, IO.read(file).to_i) if File.readable?(file)
 				}
 
 				h
@@ -229,7 +230,7 @@ module LinuxStat
 
 				h = {}
 				@@min_f.each { |id, file|
-					h.merge!(id => IO.read(file).to_i) if File.readable?(file)
+					h.store(id, IO.read(file).to_i) if File.readable?(file)
 				}
 
 				h
@@ -251,7 +252,7 @@ module LinuxStat
 
 				h = {}
 				@@min_f.each { |id, file|
-					h.merge!(id => IO.read(file).to_i) if File.readable?(file)
+					h.store(id, IO.read(file).to_i) if File.readable?(file)
 				}
 
 				h
@@ -275,7 +276,7 @@ module LinuxStat
 
 				h = {}
 				@@scaling_g.each { |id, file|
-					h.merge!(id => IO.read(file).tap(&:strip!)) if File.readable?(file)
+					h.store(id, IO.read(file).tap(&:strip!)) if File.readable?(file)
 				}
 
 				h
@@ -297,7 +298,7 @@ module LinuxStat
 
 				h = {}
 				@@scaling_av_g.each { |id, file|
-					h.merge!(id => IO.read(file).split.each(&:strip!)) if File.readable?(file)
+					h.store(id, IO.read(file).split.each(&:strip!)) if File.readable?(file)
 				}
 
 				h

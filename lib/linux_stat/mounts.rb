@@ -58,7 +58,7 @@ module LinuxStat
 			def tmpfs
 				ret = {}
 				mounts.each { |x|
-					ret.merge!({x.split[1] => x}) if x.start_with?('tmpfs '.freeze)
+					ret.store(x.split[1], x) if x.start_with?('tmpfs '.freeze)
 				}
 				ret
 			end
@@ -115,7 +115,7 @@ module LinuxStat
 
 					unless x.empty?
 						_x = x.split
-						m.merge!(_x[0] => _x[1])
+						m.store(_x[0], _x[1])
 					end
 				end
 				m
@@ -146,7 +146,7 @@ module LinuxStat
 						_x = x.split
 						total, free, available, used = fs_info(_x[1])
 
-						m.merge!(_x[0] => {
+						m.store(_x[0], {
 							mountpoint: _x[1],
 
 							total: total,

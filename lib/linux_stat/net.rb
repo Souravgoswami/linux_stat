@@ -120,8 +120,8 @@ module LinuxStat
 
 					r.each_with_index { |x, i|
 						downcased = x.downcase
-						h.merge!(:r => i) if downcased.start_with?('receive'.freeze)
-						h.merge!(:t => i) if downcased.start_with?('transmit'.freeze)
+						h.store(:r, i) if downcased.start_with?('receive'.freeze)
+						h.store(:t, i) if downcased.start_with?('transmit'.freeze)
 					}
 
 					data_0 = data.next.gsub(?|.freeze, ' %'.freeze)

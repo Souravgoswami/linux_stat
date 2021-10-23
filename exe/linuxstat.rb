@@ -73,14 +73,14 @@ conflicting.each do |x, y, z|
 		rev = ARGV.reverse
 
 		if rev.index { |_x| _x[y] } < rev.index { |_x| _x[z] }
-			hash.merge!(o1 => true)
+			hash.store(o1, true)
 		else
-			hash.merge!(o2 => true)
+			hash.store(o2, true)
 		end
 	elsif m1
-		hash.merge!(o1 => true)
+		hash.store(o1, true)
 	elsif m2
-		hash.merge!(o2 => true)
+		hash.store(o2, true)
 	end
 end
 

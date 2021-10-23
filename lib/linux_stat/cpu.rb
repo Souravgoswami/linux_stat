@@ -32,11 +32,10 @@ module LinuxStat
 				return {} unless stat?
 
 				data = IO.readlines('/proc/stat'.freeze).select { |x| x[/^cpu\d*/] }
-				# cpu = data.map(&:first)
 				cpu_names1 = []
 				data.map! { |x|
 					splitted = x.split
-					name = splitted[0][/\d*$/]
+					name = splitted.shift[/\d*$/]
 					cpu_names1.push(name.empty? ? 0 : name.to_i + 1)
 					splitted.map!(&:to_f)
 				}
@@ -47,7 +46,7 @@ module LinuxStat
 				cpu_names2 = []
 				data2.map! { |x|
 					splitted = x.split
-					name = splitted[0][/\d*$/]
+					name = splitted.shift[/\d*$/]
 					cpu_names2.push(name.empty? ? 0 : name.to_i + 1)
 					splitted.map!(&:to_f)
 				}
@@ -67,8 +66,8 @@ module LinuxStat
 
 				min.times.reduce({}) do |h, x|
 					cpu_core = cpu_cores[x]
-					user, nice, sys, idle, iowait, irq, softirq, steal = *data[x].drop(1)
-					user2, nice2, sys2, idle2, iowait2, irq2, softirq2, steal2 = *data2[x].drop(1)
+					user, nice, sys, idle, iowait, irq, softirq, steal = *data[x]
+					user2, nice2, sys2, idle2, iowait2, irq2, softirq2, steal2 = *data2[x]
 
 					idle_then, idle_now  = idle + iowait, idle2 + iowait2
 					totald = idle_now.+(user2 + nice2 + sys2 + irq2 + softirq2 + steal2) - idle_then.+(user + nice + sys + irq + softirq + steal)

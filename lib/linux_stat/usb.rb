@@ -47,7 +47,7 @@ module LinuxStat
 			# Also note that if there's no info available or no USB devices, it will return an empty
 			# Hash.
 			def devices_stat(hwdata: true)
-				@@sys_usb_readable ||= File.readable?('/sys/bus/usb/devices/')
+				@@sys_usb_readable ||= File.executable?('/sys/bus/usb/devices/')
 				return [] unless @@sys_usb_readable
 
 				Dir['/sys/bus/usb/devices/*/'.freeze].sort!.map! { |x|
@@ -137,7 +137,7 @@ module LinuxStat
 			#
 			# But if the information isn't available, it will return nil.
 			def count
-				@@sys_usb_readable ||= File.readable?('/sys/bus/usb/devices/')
+				@@sys_usb_readable ||= File.executable?('/sys/bus/usb/devices/')
 				return nil unless @@sys_usb_readable
 
 				Dir['/sys/bus/usb/devices/*/'.freeze].count { |x|

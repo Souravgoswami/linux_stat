@@ -128,7 +128,7 @@ module LinuxStat
 			# Also note that if there's no info available or no PCI enabled devices, it will return an empty
 			# Hash.
 			def devices_stat(hwdata: true)
-				@@sys_pci_readable ||= File.readable?('/sys/bus/pci/devices/')
+				@@sys_pci_readable ||= File.executable?('/sys/bus/pci/devices/')
 				return devices_info(hwdata: hwdata) unless @@sys_pci_readable
 
 				Dir['/sys/bus/pci/devices/*/'.freeze].sort!.map! { |x|
@@ -215,7 +215,7 @@ module LinuxStat
 			# But if the information isn't available, it will return nil.
 			def count
 				@@proc_pci_readable ||= File.readable?('/proc/bus/pci/devices')
-				@@sys_pci_readable ||= File.readable?('/sys/bus/pci/devices/')
+				@@sys_pci_readable ||= File.executable?('/sys/bus/pci/devices/')
 
 				if @@proc_pci_readable
 					IO.readlines('/proc/bus/pci/devices'.freeze).length

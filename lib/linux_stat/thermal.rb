@@ -64,7 +64,7 @@ module LinuxStat
 
 			private
 			def hwmon_readable?
-				@@hwmon_readable ||= File.readable?("/sys/class/hwmon/")
+				@@hwmon_readable ||= File.executable?("/sys/class/hwmon/")
 			end
 
 			def query_hwmon(mon, key, div = false)

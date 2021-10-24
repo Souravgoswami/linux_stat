@@ -344,7 +344,7 @@ module LinuxStat
 				physical_cores = []
 				hyperthreaded = {}
 
-				return [] unless File.readable?('/sys/devices/system/cpu/'.freeze)
+				return [] unless File.executable?('/sys/devices/system/cpu/'.freeze)
 				entries = Dir.entries('/sys/devices/system/cpu/'.freeze)
 				entries.delete(?..freeze)
 				entries.delete('..'.freeze)
@@ -384,7 +384,7 @@ module LinuxStat
 			def hyperthreaded_core_list
 				hyperthreaded = {}
 
-				return [] unless File.readable?('/sys/devices/system/cpu/'.freeze)
+				return [] unless File.executable?('/sys/devices/system/cpu/'.freeze)
 				entries = Dir.entries('/sys/devices/system/cpu/'.freeze)
 				entries.delete(?..freeze)
 				entries.delete('..'.freeze)

@@ -91,7 +91,12 @@ module LinuxStat
 					temp_max_f = "#{path}/#{n}max"
 					temp_max = File.readable?(temp_max_f) ? IO.read(temp_max_f, encoding: 'ASCII-8BIT'.freeze).to_i : nil
 
-					value = File.readable?(x) ? IO.read(x).to_i : nil
+
+					begin
+						value = File.readable?(x) ? IO.read(x).to_i : nil
+					rescue Errno::ENODATA => e
+						value = nil
+					end
 
 					if dir != path
 						dir = path
@@ -100,7 +105,7 @@ module LinuxStat
 					end
 
 					if div
-						value /= 1000.0
+						value /= 1000.0 if value
 						temp_max /= 1000.0 if temp_max
 						temp_crit /= 1000.0 if temp_crit
 					end

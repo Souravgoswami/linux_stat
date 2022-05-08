@@ -78,24 +78,45 @@ module LinuxStat
 
 				while x = files[i += 1]
 					splitted = File.split(x)
-					path = File.join(splitted[0..-2])
-
-					n = splitted[-1][/.*_/]
+					n = splitted.pop[/.*_/]
+					path = File.join(splitted)
 
 					label_f = "#{path}/#{n}label"
-					label = File.readable?(label_f) ? IO.read(label_f, encoding: 'ASCII-8BIT'.freeze).strip : nil
+
+					# Some of the files may have no content
+					# They can also raise Errno::EIO, Errno::ENODATA as well.
+					label = if File.readable?(label_f)
+						begin
+							IO.read(label_f, encoding: 'ASCII-8BIT'.freeze).strip
+						rescue Errno::EIO, Errno::ENODEV, Errno::ENODATA
+							nil
+						end
+					end
 
 					temp_crit_f = "#{path}/#{n}crit"
-					temp_crit = File.readable?(temp_crit_f) ? IO.read(temp_crit_f, encoding: 'ASCII-8BIT'.freeze).to_i : nil
+					temp_crit = if File.readable?(temp_crit_f)
+						begin
+							IO.read(temp_crit_f, encoding: 'ASCII-8BIT'.freeze).to_i
+						rescue Errno::EIO, Errno::ENODEV, Errno::ENODATA
+							nil
+						end
+					end
 
 					temp_max_f = "#{path}/#{n}max"
-					temp_max = File.readable?(temp_max_f) ? IO.read(temp_max_f, encoding: 'ASCII-8BIT'.freeze).to_i : nil
+					temp_max = if File.readable?(temp_max_f)
+						begin
+							IO.read(temp_max_f, encoding: 'ASCII-8BIT'.freeze).to_i
+						rescue Errno::EIO, Errno::ENODEV, Errno::ENODATA
+							nil
+						end
+					end
 
-
-					begin
-						value = File.readable?(x) ? IO.read(x).to_i : nil
-					rescue Errno::ENODATA => e
-						value = nil
+					value = if File.readable?(x)
+						begin
+							IO.read(x).to_i
+						rescue Errno::EIO, Errno::ENODEV, Errno::ENODATA
+							nil
+						end
 					end
 
 					if dir != path
@@ -112,10 +133,10 @@ module LinuxStat
 
 					h = {path: path, name: name}
 
-					h.store(:label, label) if label
+					h.store(:label, label)
 					h.store(key, value)
-					h.store(:temp_crit, temp_crit) if temp_crit
-					h.store(:temp_crit, temp_max) if temp_max
+					h.store(:temp_crit, temp_crit)
+					h.store(:temp_crit, temp_max)
 
 					ret.push(h)
 				end

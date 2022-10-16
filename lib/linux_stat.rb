@@ -24,6 +24,7 @@ require "linux_stat/version"
 # But might be required by other module functions in "Dependent Modules" section
 require "linux_stat/battery"
 require "linux_stat/bios"
+require "linux_stat/nftw"
 require "linux_stat/net"
 require "linux_stat/pci"
 require "linux_stat/thermal"

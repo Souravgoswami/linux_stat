@@ -61,19 +61,19 @@ static int storeInfo(const char *fpath, const struct stat *sb, int tflag, struct
 		return 0 ;					 // To tell nftw() to continue
 }
 
-static int countFiles(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf) {
+static int countChildren(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf) {
 		TOTAL_FILES++ ;
 		return 0 ;					 // To tell nftw() to continue
 }
 
-VALUE getFilesCount(volatile VALUE obj, volatile VALUE rb_dir, volatile VALUE rb_flags) {
+VALUE getChildrenCount(volatile VALUE obj, volatile VALUE rb_dir, volatile VALUE rb_flags) {
 		rb_ary_clear(LIST) ;
 
 		int flags = FIX2INT(rb_flags);
 		char *dir = StringValuePtr(rb_dir) ;
 		VALUE returnValue = rb_hash_new() ;
 
-		if (nftw(dir, countFiles, 20, flags) == -1) {
+		if (nftw(dir, countChildren, 20, flags) == -1) {
 			rb_hash_aset(returnValue, ID2SYM(rb_intern("value")), ULL2NUM(TOTAL_FILES)) ;
 			rb_hash_aset(returnValue, ID2SYM(rb_intern("error")), Qtrue) ;
 		} else {
@@ -155,7 +155,7 @@ void Init_nftw() {
 
 		// Methods
 		rb_define_module_function(nftw, "stat", getStat, 2) ;
-		rb_define_module_function(nftw, "count_files", getFilesCount, 2) ;
+		rb_define_module_function(nftw, "count_children", getChildrenCount, 2) ;
 
 		// Constants
 		rb_define_const(nftw, "FLAGS", flags_hash(nftw)) ;

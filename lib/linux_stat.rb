@@ -24,7 +24,6 @@ require "linux_stat/version"
 # But might be required by other module functions in "Dependent Modules" section
 require "linux_stat/battery"
 require "linux_stat/bios"
-require "linux_stat/nftw"
 require "linux_stat/net"
 require "linux_stat/pci"
 require "linux_stat/thermal"
@@ -60,6 +59,10 @@ require "linux_stat/sysconf"
 require "linux_stat/kernel"
 require 'linux_stat/user'
 require "linux_stat/process_info"
+
+# LinuxStat::NFTW dependent modules
+require "linux_stat/nftw"
+require "linux_stat/ftw"
 
 # A short alias to LinuxStat
 LS = LinuxStat

@@ -1,3 +1,13 @@
+#if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER)
+	#pragma GCC optimize ("O3")
+	#pragma GCC diagnostic warning "-Wall"
+#elif defined(__clang__)
+	#pragma clang optimize on
+	#pragma clang diagnostic warning "-Wall"
+#elif defined(__INTEL_COMPILER)
+	#pragma intel optimization_level 3
+#endif
+
 #define _GNU_SOURCE 1
 
 #include <ftw.h>

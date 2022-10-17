@@ -51,14 +51,14 @@ static int storeInfo(const char *fpath, const struct stat *sb, int tflag, struct
 		// Path
 		rb_hash_aset(
 			hash,
-			ID2SYM(rb_intern("file_path")),
+			ID2SYM(rb_intern("path")),
 			rb_str_new_cstr(fpath)
 		);
 
-		// Path without base
+		// Basename
 		rb_hash_aset(
 			hash,
-			ID2SYM(rb_intern("base")),
+			ID2SYM(rb_intern("basename")),
 			rb_str_new_cstr(fpath + ftwbuf->base)
 		);
 
@@ -100,14 +100,25 @@ static int storeFilesInfo(const char *fpath, const struct stat *sb, int tflag, s
 		// Path
 		rb_hash_aset(
 			hash,
-			ID2SYM(rb_intern("file_path")),
+			ID2SYM(rb_intern("path")),
 			rb_str_new_cstr(fpath)
 		);
 
-		// Path without base
+		// Dirname
+		char dirname[ftwbuf->base] ;
+		*dirname = '\0' ;
+		strncat(dirname, fpath, ftwbuf->base - 1) ;
+
 		rb_hash_aset(
 			hash,
-			ID2SYM(rb_intern("base")),
+			ID2SYM(rb_intern("dirname")),
+			rb_str_new_cstr(dirname)
+		);
+
+		// Basename
+		rb_hash_aset(
+			hash,
+			ID2SYM(rb_intern("basename")),
 			rb_str_new_cstr(fpath + ftwbuf->base)
 		);
 

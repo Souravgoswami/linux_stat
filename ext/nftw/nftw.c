@@ -12,6 +12,7 @@
 
 #include <ftw.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "ruby.h"
 
@@ -52,13 +53,6 @@ static int storeInfo(const char *fpath, const struct stat *sb, int tflag, struct
 			hash,
 			ID2SYM(rb_intern("file_path")),
 			rb_str_new_cstr(fpath)
-		);
-
-		// Base
-		rb_hash_aset(
-			hash,
-			ID2SYM(rb_intern("basename")),
-			INT2FIX(ftwbuf->base)
 		);
 
 		// Path without base
@@ -108,13 +102,6 @@ static int storeFilesInfo(const char *fpath, const struct stat *sb, int tflag, s
 			hash,
 			ID2SYM(rb_intern("file_path")),
 			rb_str_new_cstr(fpath)
-		);
-
-		// Base
-		rb_hash_aset(
-			hash,
-			ID2SYM(rb_intern("basename")),
-			INT2FIX(ftwbuf->base)
 		);
 
 		// Path without base

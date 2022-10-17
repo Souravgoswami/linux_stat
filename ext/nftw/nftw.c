@@ -168,10 +168,7 @@ VALUE getFilesCount(volatile VALUE obj, volatile VALUE rb_dir) {
 		flags |= FTW_CONTINUE ;
 	#endif
 
-	char *dir = StringValuePtr(rb_dir) ;
-	VALUE returnValue = rb_hash_new() ;
-
-	if (nftw(dir, countFiles, 20, flags) == -1)
+	if (nftw(StringValuePtr(rb_dir), countFiles, 20, flags) == -1)
 		return Qnil ;
 
 	return ULL2NUM(TOTAL_FILES) ;
@@ -180,15 +177,12 @@ VALUE getFilesCount(volatile VALUE obj, volatile VALUE rb_dir) {
 VALUE getDirectoriesCount(volatile VALUE obj, volatile VALUE rb_dir) {
 	TOTAL_FILES = 0 ;
 
-	char *dir = StringValuePtr(rb_dir) ;
-	VALUE returnValue = rb_hash_new() ;
-
 	int flags = FTW_PHYS ;
 	#ifdef FTW_CONTINUE
 		flags |= FTW_CONTINUE ;
 	#endif
 
-	if (nftw(dir, countDirectories, 20, flags) == -1)
+	if (nftw(StringValuePtr(rb_dir), countDirectories, 20, flags) == -1)
 		return Qnil ;
 
 	return ULL2NUM(--TOTAL_FILES) ;

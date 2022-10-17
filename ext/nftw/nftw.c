@@ -66,6 +66,72 @@ static int countChildren(const char *fpath, const struct stat *sb, int tflag, st
 		return 0 ;					 // To tell nftw() to continue
 }
 
+static int storeFilesInfo(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf) {
+		if (!(tflag == FTW_F || tflag == FTW_SL || tflag == FTW_SLN))
+			return 0 ;					 // To tell nftw() to continue
+
+		VALUE hash = rb_hash_new() ;
+
+		// Raw type flag
+		 VALUE typeFlag = (tflag == FTW_F)   ? ID2SYM(rb_intern("FTW_F"))   :
+							(tflag == FTW_SL)  ? ID2SYM(rb_intern("FTW_SL"))  :
+							(tflag == FTW_SLN) ? ID2SYM(rb_intern("FTW_SLN")) : Qnil ;
+
+		rb_hash_aset(
+			hash,
+			ID2SYM(rb_intern("type_flag")),
+			typeFlag
+		);
+
+		// Depth
+		rb_hash_aset(
+			hash,
+			ID2SYM(rb_intern("level")),
+			INT2FIX(ftwbuf -> level)
+		);
+
+		// Size
+		rb_hash_aset(
+			hash,
+			ID2SYM(rb_intern("st_size")),
+			INT2FIX((intmax_t) sb->st_size)
+		);
+
+		// Path
+		rb_hash_aset(
+			hash,
+			ID2SYM(rb_intern("file_path")),
+			rb_str_new_cstr(fpath)
+		);
+
+		// Base
+		rb_hash_aset(
+			hash,
+			ID2SYM(rb_intern("basename")),
+			INT2FIX(ftwbuf->base)
+		);
+
+		// Path without base
+		rb_hash_aset(
+			hash,
+			ID2SYM(rb_intern("base")),
+			rb_str_new_cstr(fpath + ftwbuf->base)
+		);
+
+		rb_ary_push(LIST, hash) ;
+		return 0 ;					 // To tell nftw() to continue
+}
+
+static int countFiles(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf) {
+		if(tflag == FTW_F || tflag == FTW_SL || tflag == FTW_SLN) TOTAL_FILES++ ;
+		return 0 ;					 // To tell nftw() to continue
+}
+
+static int countDirectories(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf) {
+		if(tflag == FTW_D || tflag == FTW_DNR) TOTAL_FILES++ ;
+		return 0 ;					 // To tell nftw() to continue
+}
+
 VALUE getChildrenCount(volatile VALUE obj, volatile VALUE rb_dir, volatile VALUE rb_flags) {
 		TOTAL_FILES = 0 ;
 		rb_ary_clear(LIST) ;
@@ -85,6 +151,40 @@ VALUE getChildrenCount(volatile VALUE obj, volatile VALUE rb_dir, volatile VALUE
 		return returnValue ;
 }
 
+VALUE getFilesCount(volatile VALUE obj, volatile VALUE rb_dir) {
+		TOTAL_FILES = 0 ;
+
+		int flags = FTW_PHYS ;
+		#ifdef FTW_CONTINUE
+			flags |= FTW_CONTINUE ;
+		#endif
+
+		char *dir = StringValuePtr(rb_dir) ;
+		VALUE returnValue = rb_hash_new() ;
+
+		if (nftw(dir, countFiles, 20, flags) == -1)
+			return Qnil ;
+
+		return ULL2NUM(TOTAL_FILES) ;
+}
+
+VALUE getDirectoriesCount(volatile VALUE obj, volatile VALUE rb_dir) {
+		TOTAL_FILES = 0 ;
+
+		char *dir = StringValuePtr(rb_dir) ;
+		VALUE returnValue = rb_hash_new() ;
+
+		int flags = FTW_PHYS ;
+		#ifdef FTW_CONTINUE
+			flags |= FTW_CONTINUE ;
+		#endif
+
+		if (nftw(dir, countDirectories, 20, flags) == -1)
+			return Qnil ;
+
+		return ULL2NUM(--TOTAL_FILES) ;
+}
+
 VALUE getStat(volatile VALUE obj, volatile VALUE rb_dir, volatile VALUE rb_flags) {
 		rb_ary_clear(LIST) ;
 
@@ -93,6 +193,28 @@ VALUE getStat(volatile VALUE obj, volatile VALUE rb_dir, volatile VALUE rb_flags
 		VALUE returnValue = rb_hash_new() ;
 
 		if (nftw(dir, storeInfo, 20, flags) == -1) {
+			rb_hash_aset(returnValue, ID2SYM(rb_intern("value")), LIST) ;
+			rb_hash_aset(returnValue, ID2SYM(rb_intern("error")), Qtrue) ;
+		} else {
+			rb_hash_aset(returnValue, ID2SYM(rb_intern("value")), LIST) ;
+			rb_hash_aset(returnValue, ID2SYM(rb_intern("error")), Qfalse) ;
+		}
+
+		return returnValue ;
+}
+
+VALUE getFilesStat(volatile VALUE obj, volatile VALUE rb_dir) {
+		rb_ary_clear(LIST) ;
+
+		int flags = FTW_PHYS ;
+		#ifdef FTW_CONTINUE
+			flags |= FTW_CONTINUE ;
+		#endif
+
+		char *dir = StringValuePtr(rb_dir) ;
+		VALUE returnValue = rb_hash_new() ;
+
+		if (nftw(dir, storeFilesInfo, 20, flags) == -1) {
 			rb_hash_aset(returnValue, ID2SYM(rb_intern("value")), LIST) ;
 			rb_hash_aset(returnValue, ID2SYM(rb_intern("error")), Qtrue) ;
 		} else {
@@ -155,7 +277,10 @@ void Init_nftw() {
 
 		// Methods
 		rb_define_module_function(nftw, "stat", getStat, 2) ;
+		rb_define_module_function(nftw, "stat_files", getFilesStat, 1) ;
 		rb_define_module_function(nftw, "count_children", getChildrenCount, 2) ;
+		rb_define_module_function(nftw, "count_files", getFilesCount, 1) ;
+		rb_define_module_function(nftw, "count_directories", getDirectoriesCount, 1) ;
 
 		// Constants
 		rb_define_const(nftw, "FLAGS", flags_hash(nftw)) ;

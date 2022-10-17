@@ -1,7 +1,8 @@
 #define _GNU_SOURCE 1
+
 #include <ftw.h>
-#include <stdio.h>
 #include <stdint.h>
+
 #include "ruby.h"
 
 VALUE LIST ;
@@ -58,17 +59,12 @@ static int storeInfo(const char *fpath, const struct stat *sb, int tflag, struct
 		);
 
 		rb_ary_push(LIST, hash) ;
-		return 0 ;					 // To tell nftw() to continue
-}
-
-static int countChildren(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf) {
-		TOTAL_FILES++ ;
-		return 0 ;					 // To tell nftw() to continue
+		return 0 ;
 }
 
 static int storeFilesInfo(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf) {
 		if (!(tflag == FTW_F || tflag == FTW_SL || tflag == FTW_SLN))
-			return 0 ;					 // To tell nftw() to continue
+			return 0 ;
 
 		VALUE hash = rb_hash_new() ;
 
@@ -119,17 +115,22 @@ static int storeFilesInfo(const char *fpath, const struct stat *sb, int tflag, s
 		);
 
 		rb_ary_push(LIST, hash) ;
-		return 0 ;					 // To tell nftw() to continue
+		return 0 ;
+}
+
+static int countChildren(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf) {
+		TOTAL_FILES++ ;
+		return 0 ;
 }
 
 static int countFiles(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf) {
 		if(tflag == FTW_F || tflag == FTW_SL || tflag == FTW_SLN) TOTAL_FILES++ ;
-		return 0 ;					 // To tell nftw() to continue
+		return 0 ;
 }
 
 static int countDirectories(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf) {
 		if(tflag == FTW_D || tflag == FTW_DNR) TOTAL_FILES++ ;
-		return 0 ;					 // To tell nftw() to continue
+		return 0 ;
 }
 
 VALUE getChildrenCount(volatile VALUE obj, volatile VALUE rb_dir, volatile VALUE rb_flags) {
@@ -147,7 +148,7 @@ VALUE getChildrenCount(volatile VALUE obj, volatile VALUE rb_dir, volatile VALUE
 			rb_hash_aset(returnValue, ID2SYM(rb_intern("value")), ULL2NUM(TOTAL_FILES)) ;
 			rb_hash_aset(returnValue, ID2SYM(rb_intern("error")), Qfalse) ;
 		}
-		// return ULL2NUM(TOTAL_FILES) ;
+
 		return returnValue ;
 }
 

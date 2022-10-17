@@ -67,6 +67,7 @@ static int countChildren(const char *fpath, const struct stat *sb, int tflag, st
 }
 
 VALUE getChildrenCount(volatile VALUE obj, volatile VALUE rb_dir, volatile VALUE rb_flags) {
+		TOTAL_FILES = 0 ;
 		rb_ary_clear(LIST) ;
 
 		int flags = FIX2INT(rb_flags);
@@ -86,7 +87,6 @@ VALUE getChildrenCount(volatile VALUE obj, volatile VALUE rb_dir, volatile VALUE
 
 VALUE getStat(volatile VALUE obj, volatile VALUE rb_dir, volatile VALUE rb_flags) {
 		rb_ary_clear(LIST) ;
-		TOTAL_FILES = 0 ;
 
 		int flags = FIX2INT(rb_flags);
 		char *dir = StringValuePtr(rb_dir) ;

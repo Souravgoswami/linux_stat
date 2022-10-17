@@ -22,16 +22,15 @@ module LinuxStat
 			#           Having an error means not all values are listed in the `value` array.
 			#    * value: Is an array, it can or cannot be empty regardless of errors.
 			#      The `value` key contains an array of Hashes. Each hash contains the following information about a file:
-			#          1. type_flag: Type of file.
-			#          2. level: Depth of file.
+			#          1. type_flag: Type of the file.
+			#          2. level: Depth of the file.
 			#          3. st_size: Size of the file in bytes.
-			#          4. file_path: Full path of the file.
-			#          5. basename:  Offset of the filename (basename component).
-			#          6. base:  basename of file.
+			#          4. path: Full path of the file.
+			#          5. basename: basename of the file.
 			#
 			# Usage Example:
 			#  	 LinuxStat::FTW.stat_all(File.expand_path '~/.rvm/lib/')
-			#    => [{:type_flag=>:FTW_F, :level=>1, :st_size=>278, :file_path=>"/home/sourav/.rvm/lib/rvm.rb", :basename=>22, :base=>"rvm.rb"}, {:type_flag=>:FTW_F, :level=>2, :st_size=>286, :file_path=>"/home/sourav/.rvm/lib/rvm/capistrano.rb", :basename=>26, :base=>"capistrano.rb"}, {:type_flag=>:FTW_DP, :level=>1, :st_size=>27, :file_path=>"/home/sourav/.rvm/lib/rvm", :basename=>22, :base=>"rvm"}, {:type_flag=>:FTW_DP, :level=>0, :st_size=>31, :file_path=>"/home/sourav/.rvm/lib", :basename=>18, :base=>"lib"}]
+			#    => {:value=>[{:type_flag=>:FTW_F, :level=>1, :st_size=>278, :path=>"/home/sourav/.rvm/lib/rvm.rb", :basename=>"rvm.rb"}, {:type_flag=>:FTW_F, :level=>2, :st_size=>286, :path=>"/home/sourav/.rvm/lib/rvm/capistrano.rb", :basename=>"capistrano.rb"}, {:type_flag=>:FTW_DP, :level=>1, :st_size=>27, :path=>"/home/sourav/.rvm/lib/rvm", :basename=>"rvm"}, {:type_flag=>:FTW_DP, :level=>0, :st_size=>31, :path=>"/home/sourav/.rvm/lib", :basename=>"lib"}], :error=>false}
 			#
 			# Internally calls LinuxStat::NFTW.stat(path, flag).
 			def stat_all(path = __dir__, flags = nil)
@@ -52,16 +51,16 @@ module LinuxStat
 			#           Having an error means not all values are listed in the `value` array.
 			#    * value: Is an array, it can or cannot be empty regardless of errors.
 			#      The `value` key contains an array of Hashes. Each hash contains the following information about a file:
-			#          1. type_flag: Type of file.
-			#          2. level: Depth of file.
+			#          1. type_flag: Type of the file.
+			#          2. level: Depth of the file.
 			#          3. st_size: Size of the file in bytes.
-			#          4. file_path: Full path of the file.
-			#          5. basename:  Offset of the filename (basename component).
-			#          6. base:  basename of file.
+			#          4. path: Full path of the file.
+			#          5. dirname: directory where the file is present.
+			#          5. basename: basename of the file.
 			#
 			# Usage Example:
 			#  	 LinuxStat::FTW.stat_all(File.expand_path '~/.rvm/lib/')
-			#    {:value=>[{:type_flag=>:FTW_F, :level=>1, :st_size=>278, :file_path=>"/home/sourav/.rvm/lib/rvm.rb", :basename=>22, :base=>"rvm.rb"}, {:type_flag=>:FTW_F, :level=>2, :st_size=>286, :file_path=>"/home/sourav/.rvm/lib/rvm/capistrano.rb", :basename=>26, :base=>"capistrano.rb"}], :error=>false}
+			#    => {:value=>[{:type_flag=>:FTW_F, :level=>1, :st_size=>278, :path=>"/home/sourav/.rvm/lib/rvm.rb", :dirname=>"/home/sourav/.rvm/lib", :basename=>"rvm.rb"}, {:type_flag=>:FTW_F, :level=>2, :st_size=>286, :path=>"/home/sourav/.rvm/lib/rvm/capistrano.rb", :dirname=>"/home/sourav/.rvm/lib/rvm", :basename=>"capistrano.rb"}], :error=>false}
 			#
 			# Internally calls LinuxStat::NFTW.stat_files(path).
 			def stat_files(path = __dir__)

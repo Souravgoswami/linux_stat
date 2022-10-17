@@ -97,6 +97,7 @@ constants = LinuxStat.constants
 # Modules to delete from documentation and testing
 %i(
 	Nproc
+	NFTW
 ).each(&constants.method(:delete))
 
 execute = constants.map(&:downcase).map.with_index { |x, i|

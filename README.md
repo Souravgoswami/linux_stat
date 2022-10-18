@@ -147,6 +147,7 @@ So LinuxStat::USB can be replaced with LS::USB for example.
 | [LinuxStat::CPU](https://github.com/Souravgoswami/linux_stat/blob/master/Usages.md#linuxstatcpu) | System's CPU usage and other related information |
 | [LinuxStat::FS](https://github.com/Souravgoswami/linux_stat/blob/master/Usages.md#linuxstatfs) | System's file system related information. It's used by Filesystem module. |
 | [LinuxStat::Filesystem](https://github.com/Souravgoswami/linux_stat/blob/master/Usages.md#linuxstatfilesystem) | System's file system usage and other related information |
+| [LinuxStat::FTW](https://github.com/Souravgoswami/linux_stat/blob/master/Usages.md#linuxstatftw) | File Tree Walk: Walks through a file and gives you data related to it's own and sub files and directories |
 | [LinuxStat::Kernel](https://github.com/Souravgoswami/linux_stat/blob/master/Usages.md#linuxstatkernel) | System's kernel related information |
 | [LinuxStat::Memory](https://github.com/Souravgoswami/linux_stat/blob/master/Usages.md#linuxstatmemory) | System's memory (RAM) usage and other related information |
 | [LinuxStat::Mounts](https://github.com/Souravgoswami/linux_stat/blob/master/Usages.md#linuxstatmounts) | System's mount point related information |

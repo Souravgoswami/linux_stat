@@ -29,7 +29,7 @@ module LinuxStat
 			#          5. basename: basename of the file.
 			#
 			# Usage Example:
-			#  	 LinuxStat::FTW.stat_all(File.expand_path '~/.rvm/lib/')
+			#  	 LinuxStat::FTW.stat_all(File.expand_path('~/.rvm/lib/'), LS::NFTW::FTW_DEPTH | LS::NFTW::FTW_CONTINUE)
 			#    => {:value=>[{:type_flag=>:FTW_F, :level=>1, :st_size=>278, :path=>"/home/user/.rvm/lib/rvm.rb", :basename=>"rvm.rb"}, {:type_flag=>:FTW_F, :level=>2, :st_size=>286, :path=>"/home/user/.rvm/lib/rvm/capistrano.rb", :basename=>"capistrano.rb"}, {:type_flag=>:FTW_DP, :level=>1, :st_size=>27, :path=>"/home/user/.rvm/lib/rvm", :basename=>"rvm"}, {:type_flag=>:FTW_DP, :level=>0, :st_size=>31, :path=>"/home/user/.rvm/lib", :basename=>"lib"}], :error=>false}
 			#
 			# Internally calls LinuxStat::NFTW.stat(path, flag).
@@ -59,7 +59,7 @@ module LinuxStat
 			#          6. basename: basename of the file.
 			#
 			# Usage Example:
-			#  	 LinuxStat::FTW.stat_all(File.expand_path '~/.rvm/lib/')
+			#  	 LinuxStat::FTW.stat_files(File.expand_path('~/.rvm/lib/'))
 			#    => {:value=>[{:type_flag=>:FTW_F, :level=>1, :st_size=>278, :path=>"/home/user/.rvm/lib/rvm.rb", :dirname=>"/home/user/.rvm/lib", :basename=>"rvm.rb"}, {:type_flag=>:FTW_F, :level=>2, :st_size=>286, :path=>"/home/user/.rvm/lib/rvm/capistrano.rb", :dirname=>"/home/user/.rvm/lib/rvm", :basename=>"capistrano.rb"}], :error=>false}
 			#
 			# Internally calls LinuxStat::NFTW.stat_files(path).

@@ -30,7 +30,7 @@ module LinuxStat
 			#
 			# Usage Example:
 			#  	 LinuxStat::FTW.stat_all(File.expand_path '~/.rvm/lib/')
-			#    => {:value=>[{:type_flag=>:FTW_F, :level=>1, :st_size=>278, :path=>"/home/sourav/.rvm/lib/rvm.rb", :basename=>"rvm.rb"}, {:type_flag=>:FTW_F, :level=>2, :st_size=>286, :path=>"/home/sourav/.rvm/lib/rvm/capistrano.rb", :basename=>"capistrano.rb"}, {:type_flag=>:FTW_DP, :level=>1, :st_size=>27, :path=>"/home/sourav/.rvm/lib/rvm", :basename=>"rvm"}, {:type_flag=>:FTW_DP, :level=>0, :st_size=>31, :path=>"/home/sourav/.rvm/lib", :basename=>"lib"}], :error=>false}
+			#    => {:value=>[{:type_flag=>:FTW_F, :level=>1, :st_size=>278, :path=>"/home/user/.rvm/lib/rvm.rb", :basename=>"rvm.rb"}, {:type_flag=>:FTW_F, :level=>2, :st_size=>286, :path=>"/home/user/.rvm/lib/rvm/capistrano.rb", :basename=>"capistrano.rb"}, {:type_flag=>:FTW_DP, :level=>1, :st_size=>27, :path=>"/home/user/.rvm/lib/rvm", :basename=>"rvm"}, {:type_flag=>:FTW_DP, :level=>0, :st_size=>31, :path=>"/home/user/.rvm/lib", :basename=>"lib"}], :error=>false}
 			#
 			# Internally calls LinuxStat::NFTW.stat(path, flag).
 			def stat_all(path = __dir__, flags = nil)
@@ -60,7 +60,7 @@ module LinuxStat
 			#
 			# Usage Example:
 			#  	 LinuxStat::FTW.stat_all(File.expand_path '~/.rvm/lib/')
-			#    => {:value=>[{:type_flag=>:FTW_F, :level=>1, :st_size=>278, :path=>"/home/sourav/.rvm/lib/rvm.rb", :dirname=>"/home/sourav/.rvm/lib", :basename=>"rvm.rb"}, {:type_flag=>:FTW_F, :level=>2, :st_size=>286, :path=>"/home/sourav/.rvm/lib/rvm/capistrano.rb", :dirname=>"/home/sourav/.rvm/lib/rvm", :basename=>"capistrano.rb"}], :error=>false}
+			#    => {:value=>[{:type_flag=>:FTW_F, :level=>1, :st_size=>278, :path=>"/home/user/.rvm/lib/rvm.rb", :dirname=>"/home/user/.rvm/lib", :basename=>"rvm.rb"}, {:type_flag=>:FTW_F, :level=>2, :st_size=>286, :path=>"/home/user/.rvm/lib/rvm/capistrano.rb", :dirname=>"/home/user/.rvm/lib/rvm", :basename=>"capistrano.rb"}], :error=>false}
 			#
 			# Internally calls LinuxStat::NFTW.stat_files(path).
 			def stat_files(path = __dir__)

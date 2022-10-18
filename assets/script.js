@@ -29,5 +29,5 @@ window.onscroll = () => {
 		topButton.style.bottom = `24px`
 	}
 
-	topButton.style.opacity = window.scrollY > 100 ? 1 : 0
+	topButton.style.opacity = window.scrollY > 300 ? 1 : 0
 }

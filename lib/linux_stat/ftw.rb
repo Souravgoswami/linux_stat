@@ -55,8 +55,8 @@ module LinuxStat
 			#          2. level: Depth of the file.
 			#          3. st_size: Size of the file in bytes.
 			#          4. path: Full path of the file.
-			#          5. dirname: directory where the file is present.
-			#          5. basename: basename of the file.
+			#          5. dirname: directory of the file.
+			#          6. basename: basename of the file.
 			#
 			# Usage Example:
 			#  	 LinuxStat::FTW.stat_all(File.expand_path '~/.rvm/lib/')

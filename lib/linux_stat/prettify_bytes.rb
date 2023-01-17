@@ -48,27 +48,35 @@ module LinuxStat
 					"#{"%.#{precision}f" % n} byte#{?s.freeze if n != 1}"
 				elsif n < MEGA
 					n /= KILO
+					n = n.round(precision)
 					%(#{"%.#{precision}f" % n} kilobyte#{?s.freeze if n. != 1})
 				elsif n < GIGA
 					n /= MEGA
+					n = n.round(precision)
 					%(#{"%.#{precision}f" % n} megabyte#{?s.freeze if n != 1})
 				elsif n < TERA
 					n /= GIGA
+					n = n.round(precision)
 					%(#{"%.#{precision}f" % n} gigabyte#{?s.freeze if n != 1})
 				elsif n < PETA
 					n /= TERA
+					n = n.round(precision)
 					%(#{"%.#{precision}f" % n} terabyte#{?s.freeze if n != 1})
 				elsif n < EXA
 					n /= PETA
+					n = n.round(precision)
 					%(#{"%.#{precision}f" % n} petabyte#{?s.freeze if n != 1})
 				elsif n < ZETTA
 					n /= EXA
+					n = n.round(precision)
 					%(#{"%.#{precision}f" % n} exabyte#{?s.freeze if n != 1})
 				elsif n < YOTTA
 					n /= ZETTA
+					n = n.round(precision)
 					%(#{"%.#{precision}f" % n} zettabyte#{?s.freeze if n != 1})
 				else
 					n /= YOTTA
+					n = n.round(precision)
 					%(#{"%.#{precision}f" % n} yottabyte#{?s.freeze if n != 1})
 				end
 			end
@@ -92,27 +100,35 @@ module LinuxStat
 					%Q(#{"%.#{precision}f" % n} byte#{?s.freeze if n != 1})
 				elsif n < MEBI
 					n /= KIBI
+					n = n.round(precision)
 					%Q(#{"%.#{precision}f" % n} kibibyte#{?s.freeze if n != 1})
 				elsif n < GIBI
 					n /= MEBI
+					n = n.round(precision)
 					%Q(#{"%.#{precision}f" % n} mebibyte#{?s.freeze if n != 1})
 				elsif n < TEBI
 					n /= GIBI
+					n = n.round(precision)
 					%Q(#{"%.#{precision}f" % n} gibibyte#{?s.freeze if n != 1})
 				elsif n < PEBI
 					n /= TEBI
+					n = n.round(precision)
 					%Q(#{"%.#{precision}f" % n} tebibyte#{?s.freeze if n != 1})
 				elsif n < EXBI
 					n /= PEBI
+					n = n.round(precision)
 					%Q(#{"%.#{precision}f" % n} pebibyte#{?s.freeze if n != 1})
 				elsif n < ZEBI
 					n /= EXBI
+					n = n.round(precision)
 					%Q(#{"%.#{precision}f" % n} exbiyte#{?s.freeze if n != 1})
 				elsif n < YOBI
 					n /= ZEBI
+					n = n.round(precision)
 					%Q(#{"%.#{precision}f" % n} zebibyte#{?s.freeze if n != 1})
 				else
 					n /= YOBI
+					n = n.round(precision)
 					%Q(#{"%.#{precision}f" % n} yobibyte#{?s.freeze if n != 1})
 				end
 			end

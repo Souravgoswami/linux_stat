@@ -8,26 +8,24 @@ module LinuxStat
 
 	module PrettifyBytes
 		# Kilo = Kilobyte (1000 - 1), and so on...
-		# 8.times { |x| puts 1000.**(x.next).to_s << '.00' }
-		KILO = 1000.00
-		MEGA = 1000000.00
-		GIGA = 1000000000.00
-		TERA = 1000000000000.00
-		PETA = 1000000000000000.00
-		EXA = 1000000000000000000.00
-		ZETTA = 1000000000000000000000.00
-		YOTTA = 1000000000000000000000000.00
+		KILO = 1e3
+		MEGA = 1e6
+		GIGA = 1e9
+		TERA = 1e12
+		PETA = 1e15
+		EXA = 1e18
+		ZETTA = 1e21
+		YOTTA = 1e24
 
 		# Binary suffixes
-		# 8.times { |x| puts 1024.**(x.next).to_s << '.00' }
-		KIBI = 1024.00
-		MEBI = 1048576.00
-		GIBI = 1073741824.00
-		TEBI = 1099511627776.00
-		PEBI = 1125899906842624.00
-		EXBI = 1152921504606846976.00
-		ZEBI = 1180591620717411303424.00
-		YOBI = 1208925819614629174706176.00
+		KIBI = 1024.0
+		MEBI = KIBI ** 2
+		GIBI = KIBI ** 3
+		TEBI = KIBI ** 4
+		PEBI = KIBI ** 5
+		EXBI = KIBI ** 6
+		ZEBI = KIBI ** 7
+		YOBI = KIBI ** 8
 
 		class << self
 			##
@@ -50,28 +48,28 @@ module LinuxStat
 					"#{"%.#{precision}f" % n} byte#{?s.freeze if n != 1}"
 				elsif n < MEGA
 					n /= KILO
-					"#{"%.#{precision}f" % n} kilobyte#{?s.freeze if n != 1}"
+					%(#{"%.#{precision}f" % n} kilobyte#{?s.freeze if n. != 1})
 				elsif n < GIGA
 					n /= MEGA
-					"#{"%.#{precision}f" % n} megabyte#{?s.freeze if n != 1}"
+					%(#{"%.#{precision}f" % n} megabyte#{?s.freeze if n != 1})
 				elsif n < TERA
 					n /= GIGA
-					"#{"%.#{precision}f" % n} gigabyte#{?s.freeze if n != 1}"
+					%(#{"%.#{precision}f" % n} gigabyte#{?s.freeze if n != 1})
 				elsif n < PETA
 					n /= TERA
-					"#{"%.#{precision}f" % n} terabyte#{?s.freeze if n != 1}"
+					%(#{"%.#{precision}f" % n} terabyte#{?s.freeze if n != 1})
 				elsif n < EXA
 					n /= PETA
-					"#{"%.#{precision}f" % n} petabyte#{?s.freeze if n != 1}"
+					%(#{"%.#{precision}f" % n} petabyte#{?s.freeze if n != 1})
 				elsif n < ZETTA
 					n /= EXA
-					"#{"%.#{precision}f" % n} exabyte#{?s.freeze if n != 1}"
+					%(#{"%.#{precision}f" % n} exabyte#{?s.freeze if n != 1})
 				elsif n < YOTTA
 					n /= ZETTA
-					"#{"%.#{precision}f" % n} zettabyte#{?s.freeze if n != 1}"
+					%(#{"%.#{precision}f" % n} zettabyte#{?s.freeze if n != 1})
 				else
 					n /= YOTTA
-					"#{"%.#{precision}f" % n} yottabyte#{?s.freeze if n != 1}"
+					%(#{"%.#{precision}f" % n} yottabyte#{?s.freeze if n != 1})
 				end
 			end
 
@@ -91,31 +89,31 @@ module LinuxStat
 			# => "1.0 gibibyte"
 			def convert_binary(n, precision: 2)
 				if n < KIBI
-					"#{"%.#{precision}f" % n} byte#{?s.freeze if n != 1}"
+					%Q(#{"%.#{precision}f" % n} byte#{?s.freeze if n != 1})
 				elsif n < MEBI
 					n /= KIBI
-					"#{"%.#{precision}f" % n} kibibyte#{?s.freeze if n != 1}"
+					%Q(#{"%.#{precision}f" % n} kibibyte#{?s.freeze if n != 1})
 				elsif n < GIBI
 					n /= MEBI
-					"#{"%.#{precision}f" % n} mebibyte#{?s.freeze if n != 1}"
+					%Q(#{"%.#{precision}f" % n} mebibyte#{?s.freeze if n != 1})
 				elsif n < TEBI
 					n /= GIBI
-					"#{"%.#{precision}f" % n} gibibyte#{?s.freeze if n != 1}"
+					%Q(#{"%.#{precision}f" % n} gibibyte#{?s.freeze if n != 1})
 				elsif n < PEBI
 					n /= TEBI
-					"#{"%.#{precision}f" % n} tebibyte#{?s.freeze if n != 1}"
+					%Q(#{"%.#{precision}f" % n} tebibyte#{?s.freeze if n != 1})
 				elsif n < EXBI
 					n /= PEBI
-					"#{"%.#{precision}f" % n} pebibyte#{?s.freeze if n != 1}"
+					%Q(#{"%.#{precision}f" % n} pebibyte#{?s.freeze if n != 1})
 				elsif n < ZEBI
 					n /= EXBI
-					"#{"%.#{precision}f" % n} exbiyte#{?s.freeze if n != 1}"
+					%Q(#{"%.#{precision}f" % n} exbiyte#{?s.freeze if n != 1})
 				elsif n < YOBI
 					n /= ZEBI
-					"#{"%.#{precision}f" % n} zebibyte#{?s.freeze if n != 1}"
+					%Q(#{"%.#{precision}f" % n} zebibyte#{?s.freeze if n != 1})
 				else
 					n /= YOBI
-					"#{"%.#{precision}f" % n} yobibyte#{?s.freeze if n != 1}"
+					%Q(#{"%.#{precision}f" % n} yobibyte#{?s.freeze if n != 1})
 				end
 			end
 
@@ -137,29 +135,21 @@ module LinuxStat
 				if n < KILO
 					"#{"%.#{precision}f" % n} B"
 				elsif n < MEGA
-					n /= KILO
-					"#{"%.#{precision}f" % n} kB"
+					%(#{"%.#{precision}f" % n.fdiv(KILO)} kB)
 				elsif n < GIGA
-					n /= MEGA
-					"#{"%.#{precision}f" % n} MB"
+					%(#{"%.#{precision}f" % n.fdiv(MEGA)} MB)
 				elsif n < TERA
-					n /= GIGA
-					"#{"%.#{precision}f" % n} GB"
+					%(#{"%.#{precision}f" % n.fdiv(GIGA)} GB)
 				elsif n < PETA
-					n /= TERA
-					"#{"%.#{precision}f" % n} TB"
+					%(#{"%.#{precision}f" % n.fdiv(TERA)} TB)
 				elsif n < EXA
-					n /= PETA
-					"#{"%.#{precision}f" % n} PB"
+					%(#{"%.#{precision}f" % n.fdiv(PETA)} PB)
 				elsif n < ZETTA
-					n /= EXA
-					"#{"%.#{precision}f" % n} EB"
+					%(#{"%.#{precision}f" % n.fdiv(EXA)} EB)
 				elsif n < YOTTA
-					n /= ZETTA
-					"#{"%.#{precision}f" % n} ZB"
+					%(#{"%.#{precision}f" % n.fdiv(ZETTA)} ZB)
 				else
-					n /= YOTTA
-					"#{"%.#{precision}f" % n} YB"
+					%(#{"%.#{precision}f" % n.fdiv(YOTTA)} YB)
 				end
 			end
 
@@ -181,31 +171,23 @@ module LinuxStat
 			# => "1.0 GiB"
 			def convert_short_binary(n, precision: 2)
 				if n < KIBI
-					"#{"%.#{precision}f" % n} B"
+					%(#{"%.#{precision}f" % n} B)
 				elsif n < MEBI
-					n /= KIBI
-					"#{"%.#{precision}f" % n} KiB"
+					%(#{"%.#{precision}f" % n.fdiv(KIBI)} KiB)
 				elsif n < GIBI
-					n /= MEBI
-					"#{"%.#{precision}f" % n} MiB"
+					%(#{"%.#{precision}f" % n.fdiv(MEBI)} MiB)
 				elsif n < TEBI
-					n /= GIBI
-					"#{"%.#{precision}f" % n} GiB"
+					%(#{"%.#{precision}f" % n.fdiv(GIBI)} GiB)
 				elsif n < PEBI
-					n /= TEBI
-					"#{"%.#{precision}f" % n} TiB"
+					%(#{"%.#{precision}f" % n.fdiv(TEBI)} TiB)
 				elsif n < EXBI
-					n /= PEBI
-					"#{"%.#{precision}f" % n} PiB"
+					%(#{"%.#{precision}f" % n.fdiv(PEBI)} PiB)
 				elsif n < ZEBI
-					n /= EXBI
-					"#{"%.#{precision}f" % n} EiB"
+					%(#{"%.#{precision}f" % n.fdiv(EXBI)} EiB)
 				elsif n < YOBI
-					n /= ZEBI
-					"#{"%.#{precision}f" % n} ZiB"
+					%(#{"%.#{precision}f" % n.fdiv(ZEBI)} ZiB)
 				else
-					n /= YOBI
-					"#{"%.#{precision}f" % n} YiB"
+					%(#{"%.#{precision}f" % n.fdiv(YOBI)} YiB)
 				end
 			end
 		end

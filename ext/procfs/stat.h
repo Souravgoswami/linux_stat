@@ -3,7 +3,7 @@ static VALUE ps_state(VALUE obj, VALUE pid) {
 	if (_pid < 0) return rb_str_new_cstr("");
 
 	char _path[22];
-	sprintf(_path, "/proc/%d/stat", _pid);
+
 
 	FILE *f = fopen(_path, "r");
 	if (!f) return rb_str_new_cstr("");
@@ -45,7 +45,7 @@ static VALUE ps_times(VALUE obj, VALUE pid) {
 	if (_pid < 0) return Qnil;
 
 	char _path[22];
-	sprintf(_path, "/proc/%d/stat", _pid);
+	snprintf(_path, sizeof(_path), "/proc/%d/stat", _pid);
 
 	FILE *f = fopen(_path, "r");
 	if (!f) return Qnil;
@@ -66,7 +66,7 @@ static VALUE ps_stat(VALUE obj, VALUE pid) {
 	if (_pid < 0) return rb_str_new_cstr("");
 
 	char _path[22];
-	sprintf(_path, "/proc/%d/stat", _pid);
+	snprintf(_path, sizeof(_path), "/proc/%d/stat", _pid);
 
 	FILE *f = fopen(_path, "r");
 

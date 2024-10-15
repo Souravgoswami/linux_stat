@@ -41,7 +41,7 @@ static VALUE listProcess(VALUE obj) {
 }
 
 static VALUE ps_times(VALUE obj, VALUE pid) {
-	int _pid = FIX2INT(pid);
+	pid_t _pid = (pid_t)NUM2LONG(pid);
 	if (_pid < 0) return Qnil;
 
 	char _path[22];
@@ -62,7 +62,7 @@ static VALUE ps_times(VALUE obj, VALUE pid) {
 }
 
 static VALUE ps_stat(VALUE obj, VALUE pid) {
-	int _pid = FIX2INT(pid);
+	pid_t _pid = (pid_t)NUM2LONG(pid);
 	if (_pid < 0) return rb_str_new_cstr("");
 
 	char _path[22];

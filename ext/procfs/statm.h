@@ -3,7 +3,7 @@
 static VALUE statm(VALUE obj, VALUE pid) {
 	VALUE hash = rb_hash_new();
 
-	int _pid = FIX2INT(pid);
+	pid_t _pid = (pid_t)NUM2LONG(pid);
 	if (_pid < 0) return hash;
 
 	char _path[22];
@@ -35,7 +35,7 @@ static VALUE statm(VALUE obj, VALUE pid) {
 }
 
 static VALUE statm_virtual(VALUE obj, VALUE pid) {
-	int _pid = FIX2INT(pid);
+	pid_t _pid = (pid_t)NUM2LONG(pid);
 	if (_pid < 0) return Qnil;
 
 	char _path[22];
@@ -53,7 +53,7 @@ static VALUE statm_virtual(VALUE obj, VALUE pid) {
 }
 
 static VALUE statm_resident(VALUE obj, VALUE pid) {
-	int _pid = FIX2INT(pid);
+	pid_t _pid = (pid_t)NUM2LONG(pid);
 	if (_pid < 0) return Qnil;
 
 	char _path[22];
@@ -71,7 +71,7 @@ static VALUE statm_resident(VALUE obj, VALUE pid) {
 }
 
 static VALUE statm_shared(VALUE obj, VALUE pid) {
-	int _pid = FIX2INT(pid);
+	pid_t _pid = (pid_t)NUM2LONG(pid);
 	if (_pid < 0) return Qnil;
 
 	char _path[22];
@@ -89,7 +89,7 @@ static VALUE statm_shared(VALUE obj, VALUE pid) {
 }
 
 static VALUE statm_memory(VALUE obj, VALUE pid) {
-	int _pid = FIX2INT(pid);
+	pid_t _pid = (pid_t)NUM2LONG(pid);
 	if (_pid < 0) return Qnil;
 
 	char _path[22];

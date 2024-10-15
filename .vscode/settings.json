@@ -5,6 +5,6 @@
 	"editor.trimAutoWhitespace": true,
 	"editor.comments.insertSpace": true,
 	"editor.detectIndentation": true,
-	"editor.renderFinalNewline": true,
+	"editor.renderFinalNewline": "on",
 	"files.insertFinalNewline": true
 }

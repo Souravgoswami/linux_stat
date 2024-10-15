@@ -141,7 +141,7 @@ static int countDirectories(const char *fpath, const struct stat *sb, int tflag,
 	return 0 ;
 }
 
-VALUE getChildrenCount(volatile VALUE obj, volatile VALUE rb_dir, volatile VALUE rb_flags) {
+VALUE getChildrenCount(VALUE obj, VALUE rb_dir, VALUE rb_flags) {
 	TOTAL_FILES = 0 ;
 	rb_ary_clear(LIST) ;
 
@@ -160,7 +160,7 @@ VALUE getChildrenCount(volatile VALUE obj, volatile VALUE rb_dir, volatile VALUE
 	return returnValue ;
 }
 
-VALUE getFilesCount(volatile VALUE obj, volatile VALUE rb_dir) {
+VALUE getFilesCount(VALUE obj, VALUE rb_dir) {
 	TOTAL_FILES = 0 ;
 
 	int flags = FTW_PHYS ;
@@ -174,7 +174,7 @@ VALUE getFilesCount(volatile VALUE obj, volatile VALUE rb_dir) {
 	return ULL2NUM(TOTAL_FILES) ;
 }
 
-VALUE getDirectoriesCount(volatile VALUE obj, volatile VALUE rb_dir) {
+VALUE getDirectoriesCount(VALUE obj, VALUE rb_dir) {
 	TOTAL_FILES = 0 ;
 
 	int flags = FTW_PHYS ;
@@ -188,7 +188,7 @@ VALUE getDirectoriesCount(volatile VALUE obj, volatile VALUE rb_dir) {
 	return ULL2NUM(--TOTAL_FILES) ;
 }
 
-VALUE getStat(volatile VALUE obj, volatile VALUE rb_dir, volatile VALUE rb_flags) {
+VALUE getStat(VALUE obj, VALUE rb_dir, VALUE rb_flags) {
 	rb_ary_clear(LIST) ;
 
 	int flags = FIX2INT(rb_flags);
@@ -206,7 +206,7 @@ VALUE getStat(volatile VALUE obj, volatile VALUE rb_dir, volatile VALUE rb_flags
 	return returnValue ;
 }
 
-VALUE getFilesStat(volatile VALUE obj, volatile VALUE rb_dir) {
+VALUE getFilesStat(VALUE obj, VALUE rb_dir) {
 	rb_ary_clear(LIST) ;
 
 	int flags = FTW_PHYS ;

@@ -1,4 +1,4 @@
-static VALUE getSectorSize(volatile VALUE obj, volatile VALUE path) {
+static VALUE getSectorSize(VALUE obj, VALUE path) {
 	char *dev = StringValuePtr(path) ;
 
 	unsigned int fd = open(dev, O_RDONLY | O_NONBLOCK) ;

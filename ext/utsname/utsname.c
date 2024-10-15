@@ -28,23 +28,23 @@ void init_buf() {
 	}
 }
 
-static VALUE getSysname(volatile VALUE obj) {
+static VALUE getSysname(VALUE obj) {
 	return rb_str_new_cstr(sysname) ;
 }
 
-static VALUE getNodename(volatile VALUE obj) {
+static VALUE getNodename(VALUE obj) {
 	return rb_str_new_cstr(nodename) ;
 }
 
-static VALUE getRelease(volatile VALUE obj) {
+static VALUE getRelease(VALUE obj) {
 	return rb_str_new_cstr(release) ;
 }
 
-static VALUE getVersion(volatile VALUE obj) {
+static VALUE getVersion(VALUE obj) {
 	return rb_str_new_cstr(version) ;
 }
 
-static VALUE getMachine(volatile VALUE obj) {
+static VALUE getMachine(VALUE obj) {
 	return rb_str_new_cstr(machine) ;
 }
 

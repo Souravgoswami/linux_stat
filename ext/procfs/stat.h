@@ -1,4 +1,4 @@
-static VALUE ps_state(volatile VALUE obj, volatile VALUE pid) {
+static VALUE ps_state(VALUE obj, VALUE pid) {
 	int _pid = FIX2INT(pid) ;
 	if (_pid < 0) return rb_str_new_cstr("") ;
 
@@ -17,7 +17,7 @@ static VALUE ps_state(volatile VALUE obj, volatile VALUE pid) {
 	return rb_str_new_cstr(_s) ;
 }
 
-static VALUE listProcess(volatile VALUE obj) {
+static VALUE listProcess(VALUE obj) {
 	VALUE ary = rb_ary_new() ;
 
 	glob_t globlist ;
@@ -40,7 +40,7 @@ static VALUE listProcess(volatile VALUE obj) {
 	return ary ;
 }
 
-static VALUE ps_times(volatile VALUE obj, volatile VALUE pid) {
+static VALUE ps_times(VALUE obj, VALUE pid) {
 	int _pid = FIX2INT(pid) ;
 	if (_pid < 0) return Qnil ;
 
@@ -61,7 +61,7 @@ static VALUE ps_times(volatile VALUE obj, volatile VALUE pid) {
 	return DBL2NUM(total_time) ;
 }
 
-static VALUE ps_stat(volatile VALUE obj, volatile VALUE pid) {
+static VALUE ps_stat(VALUE obj, VALUE pid) {
 	int _pid = FIX2INT(pid) ;
 	if (_pid < 0) return rb_str_new_cstr("") ;
 
@@ -141,7 +141,7 @@ static VALUE ps_stat(volatile VALUE obj, volatile VALUE pid) {
 	) ;
 }
 
-static VALUE cpuTimes(volatile VALUE obj) {
+static VALUE cpuTimes(VALUE obj) {
 	VALUE ary = rb_ary_new() ;
 	FILE *f = fopen("/proc/stat", "r") ;
 

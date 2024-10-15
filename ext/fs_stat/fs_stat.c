@@ -18,7 +18,7 @@
 	#pragma intel optimization_level 3
 #endif
 
-static VALUE statfs(volatile VALUE obj, volatile VALUE dir) {
+static VALUE statfs(VALUE obj, VALUE dir) {
 	struct statvfs buf ;
 	char *d = StringValuePtr(dir) ;
 	VALUE hash = rb_hash_new() ;

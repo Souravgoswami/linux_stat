@@ -25,7 +25,7 @@
 #include <limits.h>
 #include "ruby.h"
 
-VALUE isNumber(volatile VALUE obj, volatile VALUE val) {
+VALUE isNumber(VALUE obj, VALUE val) {
 	// But we don't expect anything other than String though as Argument.
 	// Note that raising ArgumentError or any kind of Error shouldn't be done here
 	// Otherwise Integer(n) is the best method in Ruby.

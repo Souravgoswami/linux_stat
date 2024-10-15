@@ -1,77 +1,77 @@
 static VALUE ps_state(VALUE obj, VALUE pid) {
-	int _pid = FIX2INT(pid) ;
-	if (_pid < 0) return rb_str_new_cstr("") ;
+	int _pid = FIX2INT(pid);
+	if (_pid < 0) return rb_str_new_cstr("");
 
-	char _path[22] ;
-	sprintf(_path, "/proc/%d/stat", _pid) ;
+	char _path[22];
+	sprintf(_path, "/proc/%d/stat", _pid);
 
-	FILE *f = fopen(_path, "r") ;
-	if (!f) return rb_str_new_cstr("") ;
+	FILE *f = fopen(_path, "r");
+	if (!f) return rb_str_new_cstr("");
 
-	char _s[1] ;
+	char _s[1];
 
-	char status = fscanf(f, "%*llu (%*[^)]%*[)] %s", _s) ;
-	fclose(f) ;
+	char status = fscanf(f, "%*llu (%*[^)]%*[)] %s", _s);
+	fclose(f);
 
-	if (status != 1) return rb_str_new_cstr("") ;
-	return rb_str_new_cstr(_s) ;
+	if (status != 1) return rb_str_new_cstr("");
+	return rb_str_new_cstr(_s);
 }
 
 static VALUE listProcess(VALUE obj) {
-	VALUE ary = rb_ary_new() ;
+	VALUE ary = rb_ary_new();
 
-	glob_t globlist ;
-	int status = glob("/proc/[0-9]*/", GLOB_NOSORT, NULL, &globlist) ;
+	glob_t globlist;
+	int status = glob("/proc/[0-9]*/", GLOB_NOSORT, NULL, &globlist);
 
 	if (status == GLOB_NOSPACE || status == GLOB_ABORTED || status == GLOB_NOMATCH) {
-		globfree(&globlist) ;
-		return ary ;
+		globfree(&globlist);
+		return ary;
 	}
 
-	char *v, *token ;
-	unsigned int i = 0 ;
-	unsigned int num ;
+	char *v, *token;
+	unsigned int i = 0;
+	unsigned int num;
 
 	while(v = globlist.gl_pathv[i++]) {
-		if (sscanf(v, "/proc/%u", &num) == 1) rb_ary_push(ary, UINT2NUM(num)) ;
+		if (sscanf(v, "/proc/%u", &num) == 1) rb_ary_push(ary, UINT2NUM(num));
 	}
 
-	globfree(&globlist) ;
-	return ary ;
+	globfree(&globlist);
+	return ary;
 }
 
 static VALUE ps_times(VALUE obj, VALUE pid) {
-	int _pid = FIX2INT(pid) ;
-	if (_pid < 0) return Qnil ;
+	int _pid = FIX2INT(pid);
+	if (_pid < 0) return Qnil;
 
-	char _path[22] ;
-	sprintf(_path, "/proc/%d/stat", _pid) ;
+	char _path[22];
+	sprintf(_path, "/proc/%d/stat", _pid);
 
-	FILE *f = fopen(_path, "r") ;
-	if (!f) return Qnil ;
+	FILE *f = fopen(_path, "r");
+	if (!f) return Qnil;
 
-	unsigned long utime, stime ;
+	unsigned long utime, stime;
 
-	char status = fscanf(f, "%*llu (%*[^)]%*[)] %*c %*d %*d %*d %*d %*d %*u %*lu %*lu %*lu %*lu %lu %lu", &utime, &stime) ;
-	fclose(f) ;
+	char status = fscanf(f, "%*llu (%*[^)]%*[)] %*c %*d %*d %*d %*d %*d %*u %*lu %*lu %*lu %*lu %lu %lu", &utime, &stime);
+	fclose(f);
 
-	if (status != 2) return Qnil ;
+	if (status != 2) return Qnil;
 	double total_time = (utime + stime) / (float)sysconf(_SC_CLK_TCK);
 
-	return DBL2NUM(total_time) ;
+	return DBL2NUM(total_time);
 }
 
 static VALUE ps_stat(VALUE obj, VALUE pid) {
-	int _pid = FIX2INT(pid) ;
-	if (_pid < 0) return rb_str_new_cstr("") ;
+	int _pid = FIX2INT(pid);
+	if (_pid < 0) return rb_str_new_cstr("");
 
-	char _path[22] ;
-	sprintf(_path, "/proc/%d/stat", _pid) ;
+	char _path[22];
+	sprintf(_path, "/proc/%d/stat", _pid);
 
-	FILE *f = fopen(_path, "r") ;
+	FILE *f = fopen(_path, "r");
 
 	if (!f)
-		return rb_ary_new() ;
+		return rb_ary_new();
 
 	// ?? JEEZ !!
 	// We need to do this because the datatypes are different
@@ -80,23 +80,23 @@ static VALUE ps_stat(VALUE obj, VALUE pid) {
 	//
 	// For this struct,
 	// follow https://man7.org/linux/man-pages/man5/proc.5.html
-	int ppid, pgrp, session, tty_nr, tpgid ;
-	unsigned flags ;
-	long unsigned minflt, cminflt, majflt, cmajflt, utime, stime ;
-	long cutime, cstime, priority, nice, num_threads, itrealvalue ;
-	long long unsigned starttime ;
-	long unsigned vsize ;
-	long rss ;
-	long unsigned rsslim, startcode, endcode, startstack, kstkesp, kstkeip ;
-	long unsigned signal, blocked, sigignore, sigcatch, wchan, nswap, cnswap ;
-	int exit_signal, processor ;
-	unsigned rt_priority, policy ;
-	long long unsigned delayacct_blkio_ticks ;
-	long unsigned guest_time ;
-	long cguest_time ;
-	long unsigned start_data, end_data, start_brk, arg_start, arg_end ;
-	long unsigned env_start, env_end ;
-	int exit_code ;
+	int ppid, pgrp, session, tty_nr, tpgid;
+	unsigned flags;
+	long unsigned minflt, cminflt, majflt, cmajflt, utime, stime;
+	long cutime, cstime, priority, nice, num_threads, itrealvalue;
+	long long unsigned starttime;
+	long unsigned vsize;
+	long rss;
+	long unsigned rsslim, startcode, endcode, startstack, kstkesp, kstkeip;
+	long unsigned signal, blocked, sigignore, sigcatch, wchan, nswap, cnswap;
+	int exit_signal, processor;
+	unsigned rt_priority, policy;
+	long long unsigned delayacct_blkio_ticks;
+	long unsigned guest_time;
+	long cguest_time;
+	long unsigned start_data, end_data, start_brk, arg_start, arg_end;
+	long unsigned env_start, env_end;
+	int exit_code;
 
 	char status = fscanf(
 		f, "%*llu (%*[^)]%*[)] %*c "
@@ -111,12 +111,12 @@ static VALUE ps_stat(VALUE obj, VALUE pid) {
 		&sigcatch, &wchan, &nswap, &cnswap, &exit_signal, &processor, &rt_priority, &policy,
 		&delayacct_blkio_ticks, &guest_time, &cguest_time, &start_data, &end_data,
 		&start_brk, &arg_start, &arg_end, &env_start, &env_end, &exit_code
-	) ;
+	);
 
-	fclose(f) ;
+	fclose(f);
 
 	if (status != 49)
-		return rb_ary_new() ;
+		return rb_ary_new();
 
 	return rb_ary_new_from_args(49,
 	INT2NUM(ppid), INT2NUM(pgrp), INT2NUM(session), INT2NUM(tty_nr), INT2NUM(tpgid),
@@ -138,48 +138,48 @@ static VALUE ps_stat(VALUE obj, VALUE pid) {
 	ULONG2NUM(end_data), ULONG2NUM(start_brk), ULONG2NUM(arg_start), ULONG2NUM(arg_end),
 	ULONG2NUM(env_start), ULONG2NUM(env_end),
 	INT2NUM(exit_code)
-	) ;
+	);
 }
 
 static VALUE cpuTimes(VALUE obj) {
-	VALUE ary = rb_ary_new() ;
-	FILE *f = fopen("/proc/stat", "r") ;
+	VALUE ary = rb_ary_new();
+	FILE *f = fopen("/proc/stat", "r");
 
-	if (!f) return ary ;
+	if (!f) return ary;
 
-	unsigned long user, nice, system, idle, iowait, irq, softirq, steal, guest, guest_nice ;
-	char line[1024] ;
-	char cpuCode[7] ;
-	float ticks = sysconf(_SC_CLK_TCK) ;
-	char scanStatus ;
+	unsigned long user, nice, system, idle, iowait, irq, softirq, steal, guest, guest_nice;
+	char line[1024];
+	char cpuCode[7];
+	float ticks = sysconf(_SC_CLK_TCK);
+	char scanStatus;
 
 	while(fgets(line, 1023, f)) {
-		if (!(line[0] == 'c' && line[1] == 'p' && line[2] == 'u')) break ;
+		if (!(line[0] == 'c' && line[1] == 'p' && line[2] == 'u')) break;
 
 		scanStatus = sscanf(line,
 			"%7[cpu0-9] %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu",
 			cpuCode, &user, &nice, &system, &idle, &iowait, &irq, &softirq, &steal, &guest, &guest_nice
-		) ;
+		);
 
-		if (scanStatus != 11) break ;
+		if (scanStatus != 11) break;
 
-		VALUE innerHash = rb_hash_new() ;
-		rb_hash_aset(innerHash, ID2SYM(rb_intern("cpu")), rb_str_new_cstr(cpuCode)) ;
-		rb_hash_aset(innerHash, ID2SYM(rb_intern("user")), rb_float_new(user / ticks)) ;
-		rb_hash_aset(innerHash, ID2SYM(rb_intern("nice")), rb_float_new(nice / ticks)) ;
-		rb_hash_aset(innerHash, ID2SYM(rb_intern("system")), rb_float_new(system / ticks)) ;
-		rb_hash_aset(innerHash, ID2SYM(rb_intern("idle")), rb_float_new(idle / ticks)) ;
-		rb_hash_aset(innerHash, ID2SYM(rb_intern("iowait")), rb_float_new(iowait / ticks)) ;
-		rb_hash_aset(innerHash, ID2SYM(rb_intern("irq")), rb_float_new(irq / ticks)) ;
-		rb_hash_aset(innerHash, ID2SYM(rb_intern("softirq")), rb_float_new(softirq / ticks)) ;
-		rb_hash_aset(innerHash, ID2SYM(rb_intern("steal")), rb_float_new(steal / ticks)) ;
-		rb_hash_aset(innerHash, ID2SYM(rb_intern("guest")), rb_float_new(guest / ticks)) ;
-		rb_hash_aset(innerHash, ID2SYM(rb_intern("guest_nice")), rb_float_new(guest_nice / ticks)) ;
+		VALUE innerHash = rb_hash_new();
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("cpu")), rb_str_new_cstr(cpuCode));
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("user")), rb_float_new(user / ticks));
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("nice")), rb_float_new(nice / ticks));
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("system")), rb_float_new(system / ticks));
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("idle")), rb_float_new(idle / ticks));
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("iowait")), rb_float_new(iowait / ticks));
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("irq")), rb_float_new(irq / ticks));
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("softirq")), rb_float_new(softirq / ticks));
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("steal")), rb_float_new(steal / ticks));
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("guest")), rb_float_new(guest / ticks));
+		rb_hash_aset(innerHash, ID2SYM(rb_intern("guest_nice")), rb_float_new(guest_nice / ticks));
 
-		rb_ary_push(ary, innerHash) ;
+		rb_ary_push(ary, innerHash);
 	}
 
-	fclose(f) ;
+	fclose(f);
 
-	return ary ;
+	return ary;
 }

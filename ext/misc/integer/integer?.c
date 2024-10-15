@@ -28,38 +28,38 @@
 VALUE isNumber(VALUE obj, VALUE val) {
 	// Expecting a String as input, return Qnil for any other type
 	if (!RB_TYPE_P(val, T_STRING))
-		return Qnil ;
+		return Qnil;
 
-	char *str = StringValuePtr(val) ;
-	size_t len = RSTRING_LEN(val) ;
+	char *str = StringValuePtr(val);
+	size_t len = RSTRING_LEN(val);
 
 	// If the string is empty, return false
-	if (len == 0) return Qfalse ;
+	if (len == 0) return Qfalse;
 
-	size_t i = 0 ;
-	char ch = str[0] ;
+	size_t i = 0;
+	char ch = str[0];
 
 	// If the string starts with '-', skip it but ensure there are digits after it
 	if (ch == '-') {
-		i = 1 ;
-		if (i == len) return Qfalse ;
+		i = 1;
+		if (i == len) return Qfalse;
 	}
 
 	// Iterate through each character to check if it's a digit
 	for (; i < len; i++) {
-		ch = str[i] ;
+		ch = str[i];
 
 		if (ch < '0' || ch > '9') {
-			return Qfalse ;
+			return Qfalse;
 		}
 	}
 
-	return Qtrue ;
+	return Qtrue;
 }
 
 void Init_integer() {
-	VALUE linuxStat = rb_define_module("LinuxStat") ;
-	VALUE misc = rb_define_module_under(linuxStat, "Misc") ;
+	VALUE linuxStat = rb_define_module("LinuxStat");
+	VALUE misc = rb_define_module_under(linuxStat, "Misc");
 
-	rb_define_module_function(misc, "integer?", isNumber, 1) ;
+	rb_define_module_function(misc, "integer?", isNumber, 1);
 }

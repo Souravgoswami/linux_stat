@@ -1,16 +1,6 @@
 #include <sys/utsname.h>
 #include "ruby.h"
 
-#if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER)
-	#pragma GCC optimize ("O3")
-	#pragma GCC diagnostic warning "-Wall"
-#elif defined(__clang__)
-	#pragma clang optimize on
-	#pragma clang diagnostic warning "-Wall"
-#elif defined(__INTEL_COMPILER)
-	#pragma intel optimization_level 3
-#endif
-
 // Function to return the sysname, or nil if uname fails
 static VALUE getSysname(VALUE obj) {
 	struct utsname buf;

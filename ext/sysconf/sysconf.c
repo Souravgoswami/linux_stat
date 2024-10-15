@@ -1,16 +1,6 @@
 #include <unistd.h>
 #include "ruby.h"
 
-#if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER)
-	#pragma GCC optimize ("O3")
-	#pragma GCC diagnostic warning "-Wall"
-#elif defined(__clang__)
-	#pragma clang optimize on
-	#pragma clang diagnostic warning "-Wall"
-#elif defined(__INTEL_COMPILER)
-	#pragma intel optimization_level 3
-#endif
-
 static VALUE getTick(VALUE obj) {
 	int val = sysconf(_SC_CLK_TCK);
 	if (val < 0) return Qnil;

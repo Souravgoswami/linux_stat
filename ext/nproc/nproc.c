@@ -5,16 +5,6 @@
 #include <sched.h>
 #include "ruby.h"
 
-#if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER)
-	#pragma GCC optimize ("O3")
-	#pragma GCC diagnostic warning "-Wall"
-#elif defined(__clang__)
-	#pragma clang optimize on
-	#pragma clang diagnostic warning "-Wall"
-#elif defined(__INTEL_COMPILER)
-	#pragma intel optimization_level 3
-#endif
-
 static VALUE count_cpu_for_pid(VALUE obj, VALUE pid) {
 	cpu_set_t set;
 	CPU_ZERO(&set);

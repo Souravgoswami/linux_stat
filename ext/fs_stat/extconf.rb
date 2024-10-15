@@ -9,4 +9,6 @@ unless have_header('sys/statvfs.h') && have_header('sys/ioctl.h') &&
 	abort('Missing header')
 end
 
+$CFLAGS << ' -O3 -march=native -mtune=native'
+
 create_makefile 'linux_stat/fs_stat'

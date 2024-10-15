@@ -8,4 +8,6 @@ unless have_header('unistd.h') && have_header('ruby.h')
 	abort('Missing header')
 end
 
+$CFLAGS << ' -O3 -march=native -mtune=native'
+
 create_makefile 'linux_stat/sysconf'

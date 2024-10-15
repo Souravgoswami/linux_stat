@@ -7,7 +7,7 @@ static VALUE statm(VALUE obj, VALUE pid) {
 	if (_pid < 0) return hash;
 
 	char _path[22];
-	sprintf(_path, "/proc/%d/statm", _pid);
+	snprintf(_path, sizeof(_path), "/proc/%d/statm", _pid);
 
 	FILE *f = fopen(_path, "r");
 	if (!f) return hash;
@@ -39,7 +39,7 @@ static VALUE statm_virtual(VALUE obj, VALUE pid) {
 	if (_pid < 0) return Qnil;
 
 	char _path[22];
-	sprintf(_path, "/proc/%d/statm", _pid);
+	snprintf(_path, sizeof(_path), "/proc/%d/statm", _pid);
 
 	FILE *f = fopen(_path, "r");
 	if (!f) return Qnil;
@@ -57,7 +57,7 @@ static VALUE statm_resident(VALUE obj, VALUE pid) {
 	if (_pid < 0) return Qnil;
 
 	char _path[22];
-	sprintf(_path, "/proc/%d/statm", _pid);
+	snprintf(_path, sizeof(_path), "/proc/%d/statm", _pid);
 
 	FILE *f = fopen(_path, "r");
 	if (!f) return Qnil;
@@ -75,7 +75,7 @@ static VALUE statm_shared(VALUE obj, VALUE pid) {
 	if (_pid < 0) return Qnil;
 
 	char _path[22];
-	sprintf(_path, "/proc/%d/statm", _pid);
+	snprintf(_path, sizeof(_path), "/proc/%d/statm", _pid);
 
 	FILE *f = fopen(_path, "r");
 	if (!f) return Qnil;
@@ -93,7 +93,7 @@ static VALUE statm_memory(VALUE obj, VALUE pid) {
 	if (_pid < 0) return Qnil;
 
 	char _path[22];
-	sprintf(_path, "/proc/%d/statm", _pid);
+	snprintf(_path, sizeof(_path), "/proc/%d/statm", _pid);
 
 	FILE *f = fopen(_path, "r");
 	if (!f) return Qnil;

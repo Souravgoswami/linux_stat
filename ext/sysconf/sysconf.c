@@ -19,73 +19,73 @@ static VALUE getTick(VALUE obj) {
 }
 
 static VALUE getChildMax(VALUE obj) {
-	long long int val = sysconf(_SC_CHILD_MAX);
+	long int val = sysconf(_SC_CHILD_MAX);
 	if (val < 0) return Qnil;
 
-	return LL2NUM(val);
+	return LONG2NUM(val);
 }
 
 static VALUE getHostnameMax(VALUE obj) {
-	long long val = sysconf(_SC_HOST_NAME_MAX);
+	long val = sysconf(_SC_HOST_NAME_MAX);
 	if (val < 0) return Qnil;
 
-	return LL2NUM(val);
+	return LONG2NUM(val);
 }
 
 static VALUE getLoginNameMax(VALUE obj) {
-	long long val = sysconf(_SC_LOGIN_NAME_MAX);
+	long val = sysconf(_SC_LOGIN_NAME_MAX);
 	if (val < 0) return Qnil;
 
-	return LL2NUM(val);
+	return LONG2NUM(val);
 }
 
 static VALUE getOpenMax(VALUE obj) {
-	long long val = sysconf(_SC_OPEN_MAX);
+	long val = sysconf(_SC_OPEN_MAX);
 	if (val < 0) return Qnil;
 
-	return LL2NUM(val);
+	return LONG2NUM(val);
 }
 
 static VALUE getPageSize(VALUE obj) {
-	int val = sysconf(_SC_PAGESIZE);
+	long val = sysconf(_SC_PAGESIZE);
 	if (val < 0) return Qnil;
 
-	return INT2FIX(val);
+	return LONG2NUM(val);
 }
 
 static VALUE getStreamMax(VALUE obj) {
-	long long val = sysconf(_SC_STREAM_MAX);
+	long val = sysconf(_SC_STREAM_MAX);
 	if (val < 0) return Qnil;
 
-	return LL2NUM(val);
+	return LONG2NUM(val);
 }
 
 static VALUE getTTYNameMax(VALUE obj) {
-	long long val = sysconf(_SC_TTY_NAME_MAX);
+	long val = sysconf(_SC_TTY_NAME_MAX);
 	if (val < 0) return Qnil;
 
-	return LL2NUM(val);
+	return LONG2NUM(val);
 }
 
 static VALUE getPosixVersion(VALUE obj) {
-	long long val = sysconf(_SC_VERSION);
+	long val = sysconf(_SC_VERSION);
 	if (val < 0) return Qnil;
 
-	return LL2NUM(val);
+	return LONG2NUM(val);
 }
 
 static VALUE getLineMax(VALUE obj) {
-	long long val = sysconf(_SC_LINE_MAX);
+	long val = sysconf(_SC_LINE_MAX);
 	if (val < 0) return Qnil;
 
-	return LL2NUM(val);
+	return LONG2NUM(val);
 }
 
 static VALUE getExprNestMax(VALUE obj) {
-	long long val = sysconf(_SC_EXPR_NEST_MAX);
+	long val = sysconf(_SC_EXPR_NEST_MAX);
 	if (val < 0) return Qnil;
 
-	return LL2NUM(val);
+	return LONG2NUM(val);
 }
 
 static VALUE getProcessorConfigured(VALUE obj) {

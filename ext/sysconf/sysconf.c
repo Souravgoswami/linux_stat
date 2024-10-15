@@ -121,7 +121,7 @@ static VALUE getEUID(VALUE obj) {
 
 static VALUE getHostname(VALUE obj) {
 	int h_max = sysconf(_SC_HOST_NAME_MAX) + 1;
-	char hostname[h_max];
+	char hostname[h_max + 1];
 
 	char status = gethostname(hostname, h_max);
 

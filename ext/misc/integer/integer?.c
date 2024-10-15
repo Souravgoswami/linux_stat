@@ -26,30 +26,32 @@
 #include "ruby.h"
 
 VALUE isNumber(VALUE obj, VALUE val) {
-	// But we don't expect anything other than String though as Argument.
-	// Note that raising ArgumentError or any kind of Error shouldn't be done here
-	// Otherwise Integer(n) is the best method in Ruby.
+	// Expecting a String as input, return Qnil for any other type
 	if (!RB_TYPE_P(val, T_STRING))
 		return Qnil ;
 
 	char *str = StringValuePtr(val) ;
-	char ch = str[0] ;
+	size_t len = RSTRING_LEN(val) ;
 
 	// If the string is empty, return false
-	if (!ch) return Qfalse ;
+	if (len == 0) return Qfalse ;
 
-	unsigned char i = ch == '-' ? 1 : 0 ;
-	if (!str[i]) return Qfalse ;
+	size_t i = 0 ;
+	char ch = str[0] ;
 
-	unsigned char max = UCHAR_MAX ;
+	// If the string starts with '-', skip it but ensure there are digits after it
+	if (ch == '-') {
+		i = 1 ;
+		if (i == len) return Qfalse ;
+	}
 
-	# pragma GCC unroll 4
-	while((ch = str[i++])) {
-		if (ch < 48 || ch > 57)
+	// Iterate through each character to check if it's a digit
+	for (; i < len; i++) {
+		ch = str[i] ;
+
+		if (ch < '0' || ch > '9') {
 			return Qfalse ;
-
-		if (i == max)
-			return Qnil ;
+		}
 	}
 
 	return Qtrue ;

@@ -105,16 +105,12 @@ static VALUE loads(VALUE obj) {
 	char status = sysinfo(&info);
 	if(status < 0) return rb_ary_new();
 
-	long double load = 1.f / (1 << SI_LOAD_SHIFT);
-
-	float l_1 = info.loads[0] * load;
-	float l_5 = info.loads[1] * load;
-	float l_15 = info.loads[2] * load;
-
-	return rb_ary_new_from_args(3,
-		rb_float_new(l_1),
-		rb_float_new(l_5),
-		rb_float_new(l_15)
+	double scale = 1.0 / (double) (1 << SI_LOAD_SHIFT);
+	return rb_ary_new_from_args(
+		3,
+		rb_float_new(info.loads[0] * scale),
+		rb_float_new(info.loads[1] * scale),
+		rb_float_new(info.loads[2] * scale)
 	);
 }
 
@@ -138,16 +134,11 @@ static VALUE sysinfoStat(VALUE obj) {
 	unsigned long long _freehigh = info.freehigh;
 	unsigned long long _uptime = info.uptime;
 
-	long double load = 1.f / (1 << SI_LOAD_SHIFT);
-
-	float l_1 = info.loads[0] * load;
-	float l_5 = info.loads[1] * load;
-	float l_15 = info.loads[2] * load;
-
+	double scale = 1.0 / (double)(1 << SI_LOAD_SHIFT);
 	VALUE loads = rb_ary_new_from_args(3,
-		rb_float_new(l_1),
-		rb_float_new(l_5),
-		rb_float_new(l_15)
+		rb_float_new(info.loads[0] * scale),
+		rb_float_new(info.loads[1] * scale),
+		rb_float_new(info.loads[2] * scale)
 	);
 
 	VALUE mul = rb_intern("*");

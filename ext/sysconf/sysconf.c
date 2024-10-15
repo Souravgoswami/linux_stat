@@ -103,8 +103,16 @@ static VALUE getProcessorOnline(VALUE obj) {
 }
 
 static VALUE getUser(VALUE obj) {
-	char *name = getlogin();
-	return name ? rb_str_new_cstr(name) : rb_str_new_cstr("");
+	long login_max = sysconf(_SC_LOGIN_NAME_MAX);
+	if (login_max <= 0) return rb_str_new_cstr("");
+
+	char name[login_max + 1];
+
+	if (getlogin_r(name, sizeof(name)) != 0) {
+		return rb_str_new_cstr("");
+	}
+
+	return rb_str_new_cstr(name);
 }
 
 static VALUE getUID(VALUE obj) {

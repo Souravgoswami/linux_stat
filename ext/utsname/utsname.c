@@ -11,46 +11,52 @@
 	#pragma intel optimization_level 3
 #endif
 
-static struct utsname buf;
-
-static char *sysname = "", *nodename = "";
-static char *release = "", *version = "", *machine = "";
-
-void init_buf() {
-	char status = uname(&buf);
-
-	if (status > -1) {
-		sysname = buf.sysname;
-		nodename = buf.nodename;
-		release = buf.release;
-		version = buf.version;
-		machine = buf.machine;
-	}
-}
-
+// Function to return the sysname, or nil if uname fails
 static VALUE getSysname(VALUE obj) {
-	return rb_str_new_cstr(sysname);
+	struct utsname buf;
+	if (uname(&buf) == -1)
+		return Qnil;
+
+	return rb_str_new_cstr(buf.sysname);
 }
 
+// Function to return the nodename, or nil if uname fails
 static VALUE getNodename(VALUE obj) {
-	return rb_str_new_cstr(nodename);
+	struct utsname buf;
+	if (uname(&buf) == -1)
+		return Qnil;
+
+	return rb_str_new_cstr(buf.nodename);
 }
 
+// Function to return the release, or nil if uname fails
 static VALUE getRelease(VALUE obj) {
-	return rb_str_new_cstr(release);
+	struct utsname buf;
+	if (uname(&buf) == -1)
+		return Qnil;
+
+	return rb_str_new_cstr(buf.release);
 }
 
+// Function to return the version, or nil if uname fails
 static VALUE getVersion(VALUE obj) {
-	return rb_str_new_cstr(version);
+	struct utsname buf;
+	if (uname(&buf) == -1)
+		return Qnil;
+
+	return rb_str_new_cstr(buf.version);
 }
 
+// Function to return the machine type, or nil if uname fails
 static VALUE getMachine(VALUE obj) {
-	return rb_str_new_cstr(machine);
+	struct utsname buf;
+	if (uname(&buf) == -1)
+		return Qnil;
+
+	return rb_str_new_cstr(buf.machine);
 }
 
 void Init_utsname() {
-	init_buf();
-
 	VALUE _linux_stat = rb_define_module("LinuxStat");
 	VALUE _uname = rb_define_module_under(_linux_stat, "Uname");
 

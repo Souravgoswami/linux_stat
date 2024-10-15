@@ -11,9 +11,8 @@
 	#pragma intel optimization_level 3
 #endif
 
-static struct sysinfo info;
-
 static VALUE totalram(VALUE obj) {
+	struct sysinfo info;
 	char status = sysinfo(&info);
 	if (status < 0) return Qnil;
 
@@ -23,6 +22,7 @@ static VALUE totalram(VALUE obj) {
 }
 
 static VALUE freeram(VALUE obj) {
+	struct sysinfo info;
 	char status = sysinfo(&info);
 	if (status < 0) return Qnil;
 
@@ -32,6 +32,7 @@ static VALUE freeram(VALUE obj) {
 }
 
 static VALUE sharedram(VALUE obj) {
+	struct sysinfo info;
 	char status = sysinfo(&info);
 	if (status < 0) return Qnil;
 
@@ -41,6 +42,7 @@ static VALUE sharedram(VALUE obj) {
 }
 
 static VALUE bufferram(VALUE obj) {
+	struct sysinfo info;
 	char status = sysinfo(&info);
 	if (status < 0) return Qnil;
 
@@ -50,7 +52,7 @@ static VALUE bufferram(VALUE obj) {
 }
 
 static VALUE totalswap(VALUE obj) {
-	static struct sysinfo info;
+	struct sysinfo info;
 	char status = sysinfo(&info);
 	if (status < 0) return Qnil;
 
@@ -60,6 +62,7 @@ static VALUE totalswap(VALUE obj) {
 }
 
 static VALUE freeswap(VALUE obj) {
+	struct sysinfo info;
 	char status = sysinfo(&info);
 	if (status < 0) return Qnil;
 
@@ -69,6 +72,7 @@ static VALUE freeswap(VALUE obj) {
 }
 
 static VALUE totalhigh(VALUE obj) {
+	struct sysinfo info;
 	char status = sysinfo(&info);
 	if (status < 0) return Qnil;
 
@@ -78,6 +82,7 @@ static VALUE totalhigh(VALUE obj) {
 }
 
 static VALUE freehigh(VALUE obj) {
+	struct sysinfo info;
 	char status = sysinfo(&info);
 	if (status < 0) return Qnil;
 
@@ -87,6 +92,7 @@ static VALUE freehigh(VALUE obj) {
 }
 
 static VALUE uptime(VALUE obj) {
+	struct sysinfo info;
 	char status = sysinfo(&info);
 	if (status < 0) return Qnil;
 
@@ -95,6 +101,7 @@ static VALUE uptime(VALUE obj) {
 }
 
 static VALUE loads(VALUE obj) {
+	struct sysinfo info;
 	char status = sysinfo(&info);
 	if(status < 0) return rb_ary_new();
 
@@ -113,6 +120,7 @@ static VALUE loads(VALUE obj) {
 
 // Some people may need this function, just keep it to not make unnecessary calls
 static VALUE sysinfoStat(VALUE obj) {
+	struct sysinfo info;
 	char status = sysinfo(&info);
 	VALUE hash = rb_hash_new();
 	if (status < 0) return hash;

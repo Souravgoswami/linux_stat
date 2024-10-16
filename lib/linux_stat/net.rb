@@ -47,7 +47,7 @@ module LinuxStat
 
 				data = IO.readlines(DEV).drop(2)
 				index = find_index_of_bytes[0]
-				data.reject! { |x| x.strip.start_with?('lo:') }
+				data.reject! { |x| x.strip.start_with?('lo:'.freeze) }
 				data.map { |x| x.split[index].to_i }.reduce(:+)
 			end
 
@@ -60,7 +60,7 @@ module LinuxStat
 
 				data = IO.readlines(DEV).drop(2)
 				index = find_index_of_bytes[-1]
-				data.reject! { |x| x.strip.start_with?('lo:') }
+				data.reject! { |x| x.strip.start_with?('lo:'.freeze) }
 				data.map { |x| x.split[index].to_i }.reduce(:+)
 			end
 

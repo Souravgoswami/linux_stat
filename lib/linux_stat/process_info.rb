@@ -28,10 +28,11 @@ module LinuxStat
 			#
 			# If the info isn't available it will return an empty Hash.
 			def total_io(pid = $$)
-				return {} unless File.readable?("/proc/#{pid}/io".freeze)
+				io_file = "/proc/#{pid}/io"
+				return {} unless File.readable?(io_file)
 				out = {}
 
-				IO.readlines("/proc/#{pid}/io".freeze).each { |x|
+				IO.readlines(io_file).each { |x|
 					x.strip!
 
 					if x[/^(read|write)_bytes:\s*\d*$/]
@@ -59,7 +60,7 @@ module LinuxStat
 			#
 			# If the info isn't available it will return an empty frozen String.
 			def cmdline(pid = $$)
-				file = "/proc/#{pid}/cmdline".freeze
+				file = "/proc/#{pid}/cmdline"
 				return ''.freeze unless File.readable?(file)
 
 				_cmdline = IO.read(file)
@@ -110,7 +111,7 @@ module LinuxStat
 			#
 			# If the info isn't available it will return an empty frozen String.
 			def process_name(pid = $$)
-				file = "/proc/#{pid}/stat".freeze
+				file = "/proc/#{pid}/stat"
 				return command_name unless File.readable?(file)
 
 				name = IO.read(file).split(/(\(.*\))/) &.[](1) &.[](1..-2)
@@ -424,7 +425,7 @@ module LinuxStat
 			#
 			# If the info isn't available it returns an empty Array.
 			def uid(pid = $$)
-				file = "/proc/#{pid}/status".freeze
+				file = "/proc/#{pid}/status"
 				return nil unless File.readable?(file)
 
 				data = IO.foreach(file.freeze).find { |x|
@@ -448,7 +449,7 @@ module LinuxStat
 			#
 			# If the info isn't available or the argument passed doesn't exist as a process ID, it will return an empty Hash.
 			def gid(pid = $$)
-				file = "/proc/#{pid}/status".freeze
+				file = "/proc/#{pid}/status"
 				return nil unless File.readable?(file)
 
 				data = IO.foreach(file.freeze).find { |x|
@@ -469,7 +470,7 @@ module LinuxStat
 			# Returns the owner of the process
 			# But if the status is not available, it will return an empty frozen String.
 			def owner(pid = $$)
-				file = "/proc/#{pid}/status".freeze
+				file = "/proc/#{pid}/status"
 				return ''.freeze unless File.readable?(file)
 
 				gid = IO.foreach(file.freeze).find { |x|
